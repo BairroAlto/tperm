@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Confirmação de Disponibilidade</title>
   <style>
-    /* --- CSS Completo (Layout 2 Colunas, Dia/Hora Separados, Fonte do Dia Ajustada) --- */
+    /* --- CSS Completo (Ajustes Mobile) --- */
     * { box-sizing: border-box; }
 
     body {
@@ -17,17 +17,16 @@
       flex-direction: column;
       align-items: center;
       padding-bottom: 40px;
+      /* Melhor renderização de texto em mobile */
+       -webkit-font-smoothing: antialiased;
+       -moz-osx-font-smoothing: grayscale;
+       text-rendering: optimizeLegibility;
     }
 
     header {
-      background: #2d89ef;
-      color: white;
-      width: 100%;
-      padding: 20px 0;
-      text-align: center;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      background: #2d89ef; color: white; width: 100%; padding: 20px 0;
+      text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
-
     h1 { margin: 0; font-size: 2em; font-weight: 600; }
 
     /* Containers */
@@ -35,98 +34,68 @@
       margin-top: 40px; width: 100%; max-width: 900px; padding: 0 20px;
       display: flex; flex-direction: column; align-items: center;
     }
-    #cards-container { align-items: flex-start; }
+    #cards-container { align-items: stretch; } /* Alterado para stretch para largura total em mobile */
 
-    /* Seleção de Nome */
+    /* Seleção de Nome - Base */
     #selecao-container h2 { color: #333; margin-bottom: 15px; }
-    select#nomeSelect { padding: 12px 15px; border-radius: 8px; border: 1px solid #ccc; font-size: 1em; margin-bottom: 20px; width: 100%; max-width: 350px; background-color: white; cursor: pointer; }
-    select#nomeSelect:disabled { background-color: #e9ecef; cursor: not-allowed; }
+    select#nomeSelect {
+      padding: 12px 15px; border-radius: 8px; border: 1px solid #ccc; font-size: 1em;
+      margin-bottom: 20px; width: 100%; max-width: 350px; background-color: white; cursor: pointer;
+      /* Aparência mais nativa */
+      appearance: none; -webkit-appearance: none; -moz-appearance: none;
+      background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007AFF%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E');
+      background-repeat: no-repeat; background-position: right 15px center; background-size: 10px auto;
+      padding-right: 40px; /* Espaço para a seta */
+    }
+    select#nomeSelect:disabled { background-color: #e9ecef; cursor: not-allowed; opacity: 0.7; }
 
     /* Grupo Semana */
     .grupo-semana { margin-bottom: 40px; width: 100%; }
     .semana-titulo { font-size: 1.2em; font-weight: 600; margin-bottom: 20px; color: #1a4a7a; border-bottom: 2px solid #a0c4f0; padding-bottom: 8px; text-align: left; }
 
-    /* Grid Principal da Semana */
-    .cards-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr); /* Mantém 2 colunas */
-      gap: 25px;
-    }
+    /* Grid Principal da Semana - Base (2 colunas) */
+    .cards-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 25px; }
 
-    /* Media Query para Telas Pequenas */
-    @media (max-width: 700px) {
-      .cards-grid { grid-template-columns: 1fr; } /* Empilha */
-      .dia-agrupado { flex-wrap: wrap; } /* Permite quebrar dentro do dia */
-    }
+    /* Agrupador de Cards do Mesmo Dia - Base */
+    .dia-agrupado { display: flex; flex-wrap: nowrap; gap: 15px; width: 100%; }
 
-    /* Agrupador de Cards do Mesmo Dia */
-    .dia-agrupado {
-      display: flex;
-      flex-wrap: nowrap; /* Tenta não quebrar linha por padrão */
-      gap: 15px;
-      width: 100%;
-    }
-
-    /* Cards Dentro do Agrupador Diário */
+    /* Cards Dentro do Agrupador Diário - Base */
     .dia-agrupado > .card {
        flex: 1 1 auto; min-width: 0; width: auto; margin: 0;
-       padding: 15px; /* Reduzido um pouco mais */
-       box-shadow: 0 4px 10px rgba(45, 137, 239, 0.1);
+       padding: 15px; box-shadow: 0 4px 10px rgba(45, 137, 239, 0.1);
        background: white; border-radius: 16px; border: 2px solid transparent; position: relative;
        display: flex; flex-direction: column; align-items: center; text-align: center;
        transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.3s ease;
     }
-    /* Conteúdo DENTRO do card agrupado */
+    /* Conteúdo DENTRO do card agrupado - Base */
     .dia-agrupado > .card .dia-semana { font-size: 1.25em; margin-bottom: 12px; line-height: 1.25; }
     .dia-agrupado > .card .dia-semana .hora-texto { font-size: 0.85em; font-weight: normal; color: #555; }
     .dia-agrupado > .card .data-pequena { font-size: 0.8em; margin-bottom: 5px;}
     .dia-agrupado > .card .btn-confirmar { padding: 10px 15px; font-size: 0.9em;}
 
-
-    /* Estilo do Card Individual (dias com 1 evento) */
-    .cards-grid > .card { /* Seletor mais específico */
+    /* Estilo do Card Individual (dias com 1 evento) - Base */
+    .cards-grid > .card {
        background: white; border-radius: 16px; padding: 25px;
        box-shadow: 0 8px 20px rgba(45, 137, 239, 0.15);
        display: flex; flex-direction: column; align-items: center; text-align: center;
        transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.3s ease;
        border: 2px solid transparent; position: relative;
     }
-     /* Tamanho da fonte do dia para cards individuais */
+    /* Tamanho da fonte do dia para cards individuais - Base */
     .cards-grid > .card .dia-semana { font-size: 1.45em; }
 
-
-    /* Resto dos estilos (card:hover, card.confirmado, conteúdo, botões, etc.) */
+    /* Estilos Gerais de Card e Conteúdo - Base */
      .card:hover { transform: translateY(-5px); box-shadow: 0 12px 25px rgba(45, 137, 239, 0.2); }
      .card.confirmado { background-color: #e0f8e7; border: 2px solid #28a745; }
      .card.confirmado .dia-semana { color: #1c7430; }
      .card.confirmado .dia-semana .hora-texto { color: #208139; }
      .card.confirmado .btn-confirmar { background-color: #6c757d; cursor: pointer; opacity: 0.9; }
      .card.confirmado .btn-confirmar:hover { background-color: #5a6268; }
+     .data-pequena { font-size: 0.9em; color: #555; margin-bottom: 8px; }
+     .dia-semana { font-weight: bold; color: #2d89ef; text-transform: capitalize; margin-bottom: 20px; line-height: 1.3; }
+     .dia-semana .hora-texto { font-size: 0.8em; font-weight: normal; color: #555; display: block; margin-top: 4px; }
 
-     .data-pequena { /* Estilo base */
-         font-size: 0.9em;
-         color: #555;
-         margin-bottom: 8px;
-     }
-
-     .dia-semana { /* Estilo base para o dia e container da hora */
-         font-weight: bold;
-         color: #2d89ef;
-         text-transform: capitalize;
-         margin-bottom: 20px;
-         line-height: 1.3;
-     }
-
-     .dia-semana .hora-texto { /* Estilo específico para a hora */
-         font-size: 0.8em; /* Menor que o dia */
-         font-weight: normal;
-         color: #555;
-         display: block;
-         margin-top: 4px;
-     }
-
-
-    /* Botões */
+    /* Botões - Base */
      .btn-confirmar, .btn-continuar, .btn-voltar { padding: 12px 25px; background: #2d89ef; color: white; border: none; border-radius: 10px; font-size: 1em; font-weight: 500; cursor: pointer; transition: background-color 0.2s ease, transform 0.1s ease, opacity 0.2s ease; margin-top: auto; }
      .btn-confirmar:hover, .btn-continuar:hover, .btn-voltar:hover { background-color: #1b5dbf; }
      .btn-confirmar:active, .btn-continuar:active, .btn-voltar:active { transform: scale(0.98); }
@@ -139,6 +108,63 @@
      .emoji-burst { position: absolute; font-size: 24px; pointer-events: none; z-index: 1000; }
      .loading-spinner { position: absolute; top: 10px; right: 10px; width: 20px; height: 20px; border: 3px solid rgba(45, 137, 239, 0.3); border-radius: 50%; border-top-color: #2d89ef; animation: spin 1s ease-in-out infinite; z-index: 5; }
      @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* --- AJUSTES ESPECÍFICOS PARA MOBILE --- */
+    @media (max-width: 700px) {
+      /* Layout: Uma coluna */
+      .cards-grid { grid-template-columns: 1fr; }
+      .dia-agrupado { flex-wrap: wrap; } /* Permite quebrar dentro do dia */
+
+      /* Dropdown Maior */
+      select#nomeSelect {
+        padding: 16px 20px; /* Mais padding */
+        font-size: 1.1em;  /* Texto maior */
+        max-width: 95%; /* Ocupa quase toda a largura */
+        padding-right: 45px; /* Ajustar espaço da seta */
+        background-position: right 20px center; /* Ajustar posição da seta */
+      }
+
+      /* Cards Maiores (todos) */
+      .card {
+        padding: 30px 20px; /* Mais padding vertical */
+        /* Garante que o card ocupa a largura disponível na coluna única */
+        width: 100%;
+      }
+
+      /* Textos Maiores Dentro dos Cards */
+      .card .data-pequena {
+        font-size: 1em;
+        margin-bottom: 10px;
+      }
+      .card .dia-semana {
+        font-size: 1.7em; /* Dia da semana bem legível */
+        line-height: 1.35;
+        margin-bottom: 25px;
+      }
+      .card .dia-semana .hora-texto {
+        font-size: 0.9em; /* Hora proporcionalmente maior */
+        margin-top: 5px;
+      }
+
+       /* Botão Maior Dentro dos Cards */
+      .card .btn-confirmar {
+        padding: 15px 30px; /* Botão bem maior para toque */
+        font-size: 1.15em;
+        width: 80%; /* Ocupa boa parte da largura do card */
+        max-width: 250px; /* Limite máximo */
+      }
+
+      /* Remover/Ajustar estilos específicos de .dia-agrupado > .card se conflitarem */
+      /* Estes estilos de card mais gerais devem aplicar-se a todos no mobile */
+       .dia-agrupado > .card {
+           padding: 25px 15px; /* Um pouco menos que o individual talvez */
+       }
+        .dia-agrupado > .card .dia-semana { font-size: 1.6em;}
+        .dia-agrupado > .card .dia-semana .hora-texto { font-size: 0.85em;}
+        .dia-agrupado > .card .data-pequena { font-size: 0.9em;}
+        .dia-agrupado > .card .btn-confirmar { width: auto; max-width: none; padding: 12px 20px; font-size: 1em; } /* Botão menor nos agrupados */
+
+    }
     /* --- Fim do CSS --- */
   </style>
 </head>
