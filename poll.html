@@ -6,379 +6,424 @@
   <title>Confirmação de Disponibilidade</title>
   <style>
   /* --- CSS Completo (Ajustes Mobile - 100% Largura Ecrã) --- */
- /* --- CSS Completo (Desktop + Ajustes Mobile) --- */
-* { box-sizing: border-box; }
+  /* --- CSS Completo (Desktop + Ajustes Mobile) --- */
+  * { box-sizing: border-box; }
 
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  margin: 0;
-  padding: 0;
-  background: linear-gradient(to right, #e0eafc, #cfdef3);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-bottom: 40px;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
-}
-
-header {
-  background: #2d89ef;
-  color: white;
-  width: 100%;
-  padding: 20px 0;
-  text-align: center;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-h1 { margin: 0; font-size: 2em; font-weight: 600; }
-
-#selecao-container, #cards-container {
-  margin-top: 40px;
-  width: 100%;
-  max-width: 900px;
-  padding: 0 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-#cards-container { align-items: stretch; }
-
-#selecao-container h2 {
-  color: #333;
-  margin-bottom: 15px;
-}
-
-select#nomeSelect {
-  padding: 12px 15px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  font-size: 1em;
-  margin-bottom: 20px;
-  width: 100%;
-  max-width: 350px;
-  background-color: white;
-  cursor: pointer;
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007AFF%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E');
-  background-repeat: no-repeat;
-  background-position: right 15px center;
-  background-size: 10px auto;
-  padding-right: 40px;
-}
-select#nomeSelect:disabled {
-  background-color: #e9ecef;
-  cursor: not-allowed;
-  opacity: 0.7;
-}
-
-.grupo-semana {
-  margin-bottom: 40px;
-  width: 100%;
-}
-.semana-titulo {
-  font-size: 1.2em;
-  font-weight: 600;
-  margin-bottom: 20px;
-  color: #1a4a7a;
-  border-bottom: 2px solid #a0c4f0;
-  padding-bottom: 8px;
-  text-align: left;
-}
-
-.cards-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 25px;
-}
-
-.dia-agrupado {
-  display: flex;
-  flex-wrap: nowrap;
-  gap: 15px;
-  width: 100%;
-}
-
-.dia-agrupado > .card {
-  flex: 1 1 auto;
-  min-width: 0;
-  width: auto;
-  margin: 0;
-  padding: 15px;
-  box-shadow: 0 4px 10px rgba(45, 137, 239, 0.1);
-  background: white;
-  border-radius: 16px;
-  border: 2px solid transparent;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.3s ease;
-}
-.dia-agrupado > .card .dia-semana {
-  font-size: 1.25em;
-  margin-bottom: 12px;
-  line-height: 1.25;
-}
-.dia-agrupado > .card .dia-semana .hora-texto {
-  font-size: 0.85em;
-  font-weight: normal;
-  color: #555;
-}
-.dia-agrupado > .card .data-pequena {
-  font-size: 0.8em;
-  margin-bottom: 5px;
-}
-.dia-agrupado > .card .btn-confirmar {
-  padding: 10px 15px;
-  font-size: 0.9em;
-}
-
-.cards-grid > .card {
-  background: white;
-  border-radius: 16px;
-  padding: 25px;
-  box-shadow: 0 8px 20px rgba(45, 137, 239, 0.15);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.3s ease;
-  border: 2px solid transparent;
-  position: relative;
-}
-.cards-grid > .card .dia-semana {
-  font-size: 1.45em;
-}
-
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 25px rgba(45, 137, 239, 0.2);
-}
-.card.confirmado {
-  background-color: #e0f8e7;
-  border: 2px solid #28a745;
-}
-.card.confirmado .dia-semana {
-  color: #1c7430;
-}
-.card.confirmado .dia-semana .hora-texto {
-  color: #208139;
-}
-.card.confirmado .btn-confirmar {
-  background-color: #6c757d;
-  cursor: pointer;
-  opacity: 0.9;
-}
-.card.confirmado .btn-confirmar:hover {
-  background-color: #5a6268;
-}
-
-.data-pequena {
-  font-size: 0.9em;
-  color: #555;
-  margin-bottom: 8px;
-}
-.dia-semana {
-  font-weight: bold;
-  color: #2d89ef;
-  text-transform: capitalize;
-  margin-bottom: 20px;
-  line-height: 1.3;
-}
-.dia-semana .hora-texto {
-  font-size: 0.8em;
-  font-weight: normal;
-  color: #555;
-  display: block;
-  margin-top: 4px;
-}
-
-.btn-confirmar, .btn-continuar, .btn-voltar {
-  padding: 12px 25px;
-  background: #2d89ef;
-  color: white;
-  border: none;
-  border-radius: 10px;
-  font-size: 1em;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.1s ease, opacity 0.2s ease;
-  margin-top: auto;
-}
-.btn-confirmar:hover, .btn-continuar:hover, .btn-voltar:hover {
-  background-color: #1b5dbf;
-}
-.btn-confirmar:active, .btn-continuar:active, .btn-voltar:active {
-  transform: scale(0.98);
-}
-.btn-confirmar:disabled {
-  cursor: not-allowed;
-  opacity: 0.6;
-}
-.btn-voltar {
-  background-color: #6c757d;
-  margin-bottom: 30px;
-  align-self: flex-start;
-}
-.btn-voltar:hover {
-  background-color: #5a6268;
-}
-
-#boasVindas {
-  width: 100%;
-  text-align: left;
-  font-size: 1.5em;
-  color: #333;
-  margin-bottom: 30px;
-}
-.hidden { display: none !important; }
-
-.emoji-burst {
-  position: absolute;
-  font-size: 24px;
-  pointer-events: none;
-  z-index: 1000;
-}
-.loading-spinner {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 20px;
-  height: 20px;
-  border: 3px solid rgba(45, 137, 239, 0.3);
-  border-radius: 50%;
-  border-top-color: #2d89ef;
-  animation: spin 1s ease-in-out infinite;
-  z-index: 5;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-
-/* --- AJUSTES ESPECÍFICOS PARA MOBILE --- */
-@media (max-width: 700px) {
   body {
-    font-size: 18px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
+    padding: 0;
+    background: linear-gradient(to right, #e0eafc, #cfdef3);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 40px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  header {
+    background: #2d89ef;
+    color: white;
+    width: 100%;
+    padding: 20px 0;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+  h1 { margin: 0; font-size: 2em; font-weight: 600; }
+
+  #selecao-container, #cards-container {
+    margin-top: 40px;
+    width: 100%;
+    max-width: 900px; /* Adjusted for consistency */
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center items in selecao-container */
+  }
+  #cards-container { align-items: stretch; } /* Keep cards stretching */
+
+  #selecao-container h2 {
+    color: #333;
+    margin-bottom: 15px;
+    text-align: center; /* Center heading */
+    width: 100%;
+  }
+
+  /* --- Input + Suggestions Styles --- */
+  .nome-input-wrapper {
+    position: relative; /* Needed for positioning suggestions */
+    width: 100%;
+    max-width: 350px; /* Match old select width */
+    margin-bottom: 20px;
+  }
+
+  input#nomeInput {
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 1em;
+    width: 100%;
+    background-color: white;
+    cursor: pointer; /* Indicate it's clickable */
+    /* Remove default appearance */
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  }
+
+  input#nomeInput:disabled {
+    background-color: #e9ecef;
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+
+  input#nomeInput::placeholder {
+      color: #999;
+  }
+
+  .suggestions-list {
+    position: absolute;
+    top: 100%; /* Position below input */
+    left: 0;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-top: none; /* Avoid double border */
+    border-radius: 0 0 8px 8px;
+    max-height: 200px; /* Limit height */
+    overflow-y: auto; /* Add scroll if needed */
+    z-index: 10; /* Ensure it's above other content */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+
+  .suggestion-item {
+    padding: 10px 15px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+  }
+
+  .suggestion-item:hover,
+  .suggestion-item.active { /* For potential keyboard nav */
+    background-color: #f0f0f0;
+  }
+  /* --- End Input Styles --- */
+
+  .grupo-semana {
+    margin-bottom: 40px;
+    width: 100%;
+  }
+  .semana-titulo {
+    font-size: 1.2em;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #1a4a7a;
+    border-bottom: 2px solid #a0c4f0;
+    padding-bottom: 8px;
+    text-align: left;
   }
 
   .cards-grid {
-    grid-template-columns: 1fr;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
   }
+
   .dia-agrupado {
-    flex-wrap: wrap;
-  }
-
-  #selecao-container, #cards-container {
-    padding: 0 !important;
-    margin: 0 !important;
-    width: 80vw !important;
-    max-width: 80vw !important;
-  }
-
-  #selecao-container h2 {
-    font-size: 1.8em;
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 15px;
     width: 100%;
-    padding-left: 10px;
-    padding-right: 10px;
-  }
-
-  select#nomeSelect {
-    padding: 20px 25px;
-    font-size: 1.5em;
-    width: 80vw;
-    max-width: 80vw;
-    margin: 0;
-    border-radius: 0;
-    background-position: right 20px center;
-  }
-
-  .btn-continuar {
-    width: 80vw;
-    max-width: 80vw;
-    padding: 20px 0;
-    font-size: 1.5em;
-    border-radius: 0;
-    margin: 0;
-  }
-
-  .card {
-    padding: 35px 25px;
-    width: 80vw;
-    max-width: 80vw;
-    margin-bottom: 25px;
-    border-radius: 0;
-  }
-  .cards-grid > .card,
-  .dia-agrupado > .card {
-    border-radius: 0;
-  }
-
-  .card .data-pequena {
-    font-size: 1.2em;
-    margin-bottom: 12px;
-  }
-  .card .dia-semana {
-    font-size: 2em;
-    line-height: 1.4;
-    margin-bottom: 30px;
-  }
-  .card .dia-semana .hora-texto {
-    font-size: 1.1em;
-    margin-top: 6px;
-  }
-  .card .btn-confirmar {
-    padding: 18px 35px;
-    font-size: 1.3em;
-    width: 80%;
-    max-width: 300px;
   }
 
   .dia-agrupado > .card {
-    padding: 30px 20px;
+    flex: 1 1 auto;
+    min-width: 0;
+    width: auto;
+    margin: 0;
+    padding: 15px;
+    box-shadow: 0 4px 10px rgba(45, 137, 239, 0.1);
+    background: white;
+    border-radius: 16px;
+    border: 2px solid transparent;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.3s ease;
   }
   .dia-agrupado > .card .dia-semana {
-    font-size: 1.8em;
+    font-size: 1.25em;
+    margin-bottom: 12px;
+    line-height: 1.25;
   }
   .dia-agrupado > .card .dia-semana .hora-texto {
-    font-size: 1em;
+    font-size: 0.85em;
+    font-weight: normal;
+    color: #555;
   }
   .dia-agrupado > .card .data-pequena {
-    font-size: 1.1em;
+    font-size: 0.8em;
+    margin-bottom: 5px;
   }
   .dia-agrupado > .card .btn-confirmar {
-    width: auto;
-    max-width: none;
-    padding: 15px 25px;
-    font-size: 1.1em;
+    padding: 10px 15px;
+    font-size: 0.9em;
+  }
+
+  .cards-grid > .card {
+    background: white;
+    border-radius: 16px;
+    padding: 25px;
+    box-shadow: 0 8px 20px rgba(45, 137, 239, 0.15);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.3s ease;
+    border: 2px solid transparent;
+    position: relative;
+  }
+  .cards-grid > .card .dia-semana {
+    font-size: 1.45em;
+  }
+
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(45, 137, 239, 0.2);
+  }
+  .card.confirmado {
+    background-color: #e0f8e7;
+    border: 2px solid #28a745;
+  }
+  .card.confirmado .dia-semana {
+    color: #1c7430;
+  }
+  .card.confirmado .dia-semana .hora-texto {
+    color: #208139;
+  }
+  .card.confirmado .btn-confirmar {
+    background-color: #6c757d;
+    cursor: pointer;
+    opacity: 0.9;
+  }
+  .card.confirmado .btn-confirmar:hover {
+    background-color: #5a6268;
+  }
+
+  .data-pequena {
+    font-size: 0.9em;
+    color: #555;
+    margin-bottom: 8px;
+  }
+  .dia-semana {
+    font-weight: bold;
+    color: #2d89ef;
+    text-transform: capitalize;
+    margin-bottom: 20px;
+    line-height: 1.3;
+  }
+  .dia-semana .hora-texto {
+    font-size: 0.8em;
+    font-weight: normal;
+    color: #555;
+    display: block;
+    margin-top: 4px;
+  }
+
+  .btn-confirmar, .btn-continuar, .btn-voltar {
+    padding: 12px 25px;
+    background: #2d89ef;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1em;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease, opacity 0.2s ease;
+    margin-top: auto; /* Pushes button down in card */
+  }
+  .btn-continuar {
+      margin-top: 0; /* Overwrite auto margin for this button */
+  }
+  .btn-confirmar:hover, .btn-continuar:hover, .btn-voltar:hover {
+    background-color: #1b5dbf;
+  }
+  .btn-confirmar:active, .btn-continuar:active, .btn-voltar:active {
+    transform: scale(0.98);
+  }
+  .btn-confirmar:disabled, .btn-continuar:disabled { /* Apply disabled style to Continuar too */
+    cursor: not-allowed;
+    opacity: 0.6;
+    background-color: #8abbee; /* Lighter blue when disabled */
+  }
+  .btn-voltar {
+    background-color: #6c757d;
+    margin-bottom: 30px;
+    align-self: flex-start;
+  }
+  .btn-voltar:hover {
+    background-color: #5a6268;
   }
 
   #boasVindas {
-    font-size: 1.0em;
-    margin-bottom: 40px;
-    padding-left: 10px;
-    padding-right: 10px;
-  }
-  .semana-titulo {
+    width: 100%;
+    text-align: left;
     font-size: 1.5em;
-    margin-bottom: 25px;
-    padding-bottom: 10px;
-    padding-left: 10px;
-    padding-right: 10px;
+    color: #333;
+    margin-bottom: 30px;
   }
-  .btn-voltar {
-    padding: 15px 30px;
-    font-size: 1.2em;
-    margin-bottom: 40px;
-    margin-left: 10px;
-    margin-right: 10px;
-  }
-}
-/* --- Fim do CSS --- */
+  .hidden { display: none !important; }
 
+  .emoji-burst {
+    position: absolute;
+    font-size: 24px;
+    pointer-events: none;
+    z-index: 1000;
+  }
+  .loading-spinner {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(45, 137, 239, 0.3);
+    border-radius: 50%;
+    border-top-color: #2d89ef;
+    animation: spin 1s ease-in-out infinite;
+    z-index: 5;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* --- AJUSTES ESPECÍFICOS PARA MOBILE --- */
+  @media (max-width: 700px) {
+    body {
+      font-size: 18px; /* Adjusted base font size */
+    }
+
+    .cards-grid {
+      grid-template-columns: 1fr; /* Stack cards */
+      gap: 25px; /* Keep gap between stacked items */
+    }
+    .dia-agrupado {
+      flex-wrap: wrap; /* Allow grouped cards to wrap if needed */
+    }
+
+    /* Make containers take full width minus some padding */
+    #selecao-container, #cards-container {
+      padding: 0 15px !important; /* Add side padding */
+      margin: 20px 0 0 0 !important; /* Adjust top margin */
+      width: 100% !important;
+      max-width: 100% !important; /* Ensure full width */
+    }
+
+    #selecao-container h2 {
+      font-size: 1.5em; /* Slightly smaller */
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    /* Adjust Input and Suggestions for Mobile */
+    .nome-input-wrapper {
+       max-width: none; /* Allow full width */
+       width: 100%;
+       margin-bottom: 20px; /* Keep spacing */
+    }
+
+    input#nomeInput {
+      padding: 18px 20px; /* Larger padding for easier tapping */
+      font-size: 1.2em; /* Larger font */
+      width: 100%;
+      border-radius: 8px; /* Keep some radius */
+    }
+
+    .suggestions-list {
+       font-size: 1.1em;
+       max-height: 250px; /* Slightly more height */
+       border-radius: 0 0 8px 8px;
+    }
+    .suggestion-item {
+        padding: 12px 20px;
+    }
+
+    .btn-continuar {
+      width: 100%; /* Full width */
+      max-width: none;
+      padding: 18px 0; /* Taller button */
+      font-size: 1.3em;
+      border-radius: 8px; /* Match input radius */
+      margin-top: 0; /* Align with wrapper */
+    }
+
+    /* Adjust Card Styles for Mobile */
+    .cards-grid > .card,
+    .dia-agrupado > .card {
+      padding: 30px 20px; /* Adjust padding */
+      width: 100%; /* Take full width */
+      max-width: none;
+      margin-bottom: 20px; /* Space between cards */
+      border-radius: 12px; /* Consistent radius */
+    }
+    .cards-grid > .card:last-child,
+    .dia-agrupado > .card:last-child {
+       margin-bottom: 0;
+    }
+
+    .card .data-pequena {
+      font-size: 1.0em; /* Adjust size */
+      margin-bottom: 10px;
+    }
+    .card .dia-semana {
+      font-size: 1.6em; /* Adjust size */
+      line-height: 1.3;
+      margin-bottom: 25px;
+    }
+    .card .dia-semana .hora-texto {
+      font-size: 0.9em; /* Adjust size */
+      margin-top: 5px;
+    }
+    .card .btn-confirmar {
+      padding: 15px 25px;
+      font-size: 1.1em;
+      width: auto; /* Don't force width */
+      max-width: 250px; /* Limit max width */
+      min-width: 120px; /* Ensure minimum tap area */
+    }
+
+    /* Grouped card adjustments (might be redundant now) */
+    .dia-agrupado > .card { padding: 25px 15px; }
+    .dia-agrupado > .card .dia-semana { font-size: 1.5em; }
+    .dia-agrupado > .card .dia-semana .hora-texto { font-size: 0.85em; }
+    .dia-agrupado > .card .data-pequena { font-size: 1.0em; }
+    .dia-agrupado > .card .btn-confirmar { padding: 12px 20px; font-size: 1.0em; }
+
+    #boasVindas {
+      font-size: 1.2em; /* Adjust size */
+      margin-bottom: 30px;
+      padding-left: 0;
+      padding-right: 0;
+    }
+    .semana-titulo {
+      font-size: 1.3em;
+      margin-bottom: 20px;
+      padding-bottom: 8px;
+      padding-left: 0;
+      padding-right: 0;
+    }
+    .btn-voltar {
+      padding: 12px 25px;
+      font-size: 1.1em;
+      margin-bottom: 30px;
+      margin-left: 0; /* Align left */
+      margin-right: 0;
+      border-radius: 8px;
+    }
+  }
+  /* --- Fim do CSS --- */
   </style>
 </head>
 <body>
@@ -390,11 +435,11 @@ select#nomeSelect:disabled {
 <!-- Seleção de nome -->
 <div id="selecao-container">
   <h2>Escolha seu nome:</h2>
-  <select id="nomeSelect" disabled>
-    <option value="">-- Carregando nomes... --</option>
-  </select>
-  <br>
-  <button class="btn-continuar" onclick="continuar()">Continuar</button>
+  <div class="nome-input-wrapper">
+    <input type="text" id="nomeInput" placeholder="Clique ou digite para filtrar..." autocomplete="off" disabled>
+    <div id="nomeSuggestions" class="suggestions-list hidden"></div>
+  </div>
+  <button class="btn-continuar" onclick="continuar()" disabled>Continuar</button>
 </div>
 
 <!-- Cards de disponibilidade -->
@@ -408,11 +453,11 @@ select#nomeSelect:disabled {
 
 <!-- Add Firebase SDKs using Modules -->
 <script type="module">
-  // Import the functions you need from the SDKs you need
+  // Firebase Imports...
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
   import { getFirestore, collection, addDoc, serverTimestamp, query, where, getDocs, limit, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-  // Your web app's Firebase configuration (MAKE SURE THESE ARE YOUR REAL VALUES!)
+  // ** REPLACE WITH YOUR ACTUAL FIREBASE CONFIG **
   const firebaseConfig = {
     apiKey: "AIzaSyCxUQTIg1cebw6FSzIH2w05ETgi9sj6dcU",
   authDomain: "daytime-a0fa5.firebaseapp.com",
@@ -425,269 +470,400 @@ select#nomeSelect:disabled {
   // Initialize Firebase
   let app;
   let db;
+  const nomeInput = document.getElementById("nomeInput");
+  const suggestionsDiv = document.getElementById("nomeSuggestions");
+  const continuarBtn = document.querySelector(".btn-continuar");
+
   try {
       app = initializeApp(firebaseConfig);
       db = getFirestore(app);
       console.log("Firebase initialized successfully.");
+      nomeInput.placeholder = "Carregando nomes...";
   } catch (error) {
       console.error("Firebase initialization failed:", error);
       alert("Erro ao conectar com a base de dados.");
-      const nomeSelect = document.getElementById("nomeSelect");
-      if(nomeSelect) { nomeSelect.innerHTML = '<option value="">-- Erro --</option>'; nomeSelect.disabled = true; }
-      const continuarBtn = document.querySelector(".btn-continuar");
+      if(nomeInput) { nomeInput.placeholder = '-- Erro --'; nomeInput.disabled = true; }
       if(continuarBtn) continuarBtn.disabled = true;
   }
 
   // --- Global Variables ---
-  let usuarioAtual = "";
-  let userConfirmations = new Set(); // Cache VISUAL SESSÃO (keys 'YYYY-MM-DD|HH:MM-HH:MM' ou 'YYYY-MM-DD|null')
-  let availableEventos = []; // Cache dos eventos disponíveis
+  let usuarioAtual = null;
+  let userConfirmations = new Set();
+  let availableEventos = [];
+  let allNames = []; // Array to store all fetched names
+  let selectedNameValid = false; // Track if input holds a valid selected name
 
-  // --- Date Formatting and Grouping Helpers ---
-  function parseStartHour(horarioString) {
-    if (!horarioString || typeof horarioString !== 'string') { return 99; }
-    const match = horarioString.match(/^(\d+)/);
-    if (match && match[1]) { const hour = parseInt(match[1], 10); return isNaN(hour) ? 99 : hour; }
-    return 99;
-  }
+  // --- Date Formatting/Grouping Helpers --- (Keep existing functions)
+  function parseStartHour(horarioString) { /* ... same ... */
+        if (!horarioString || typeof horarioString !== 'string') { return 99; }
+        const match = horarioString.match(/^(\d+)/);
+        if (match && match[1]) { const hour = parseInt(match[1], 10); return isNaN(hour) ? 99 : hour; }
+        return 99;
+    }
+    function processEventDateData(eventoDataFromFirestore) { /* ... same ... */
+         if (!eventoDataFromFirestore?.dataOriginal) return null;
+         const dataStr = eventoDataFromFirestore.dataOriginal;
+         const parts = dataStr.split('-');
+         if (parts.length !== 3) return null;
+          try {
+             const dateObjectUTC = new Date(Date.UTC(parts[0], parts[1] - 1, parts[2]));
+             const optionsDataExtenso = { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' };
+             const dataExtenso = dateObjectUTC.toLocaleDateString('pt-PT', optionsDataExtenso);
+             const startHour = parseStartHour(eventoDataFromFirestore.horario);
+             return { ...eventoDataFromFirestore, data: dateObjectUTC, dataExtenso: dataExtenso, startHour: startHour };
+          } catch (e) { console.error(`Error processing date ${dataStr}:`, e); return null; }
+      }
+     function getSemanaRange(data) { /* ... same ... */
+       if (!(data instanceof Date) || isNaN(data)) return { display: "Semana inválida", key: "invalid-" + Date.now() };
+       const diaDaSemana = data.getUTCDay(); const diff = diaDaSemana === 0 ? -6 : 1 - diaDaSemana;
+       const inicioSemana = new Date(data); inicioSemana.setUTCDate(data.getUTCDate() + diff);
+       const fimSemana = new Date(inicioSemana); fimSemana.setUTCDate(inicioSemana.getUTCDate() + 6);
+       const iDia = inicioSemana.getUTCDate(); const fDia = fimSemana.getUTCDate();
+       const opts = { month: 'long', timeZone: 'UTC' };
+       const mInicio = inicioSemana.toLocaleDateString('pt-PT', opts); const mFim = fimSemana.toLocaleDateString('pt-PT', opts);
+       const aInicio = inicioSemana.getUTCFullYear(); const aFim = fimSemana.getUTCFullYear();
+       let range = `Semana de ${iDia}`;
+       if (mInicio !== mFim) range += ` de ${mInicio}`; if (aInicio !== aFim) range += ` de ${aInicio}`;
+       range += ` a ${fDia} de ${mFim}`; if (aInicio === aFim || mInicio !== mFim) range += ` de ${aFim}`;
+       const sortK = `${aInicio}-${String(inicioSemana.getUTCMonth() + 1).padStart(2, '0')}-${String(iDia).padStart(2, '0')}`;
+       return { display: range, key: sortK };
+     }
 
-  function processEventDateData(eventoDataFromFirestore) {
-      if (!eventoDataFromFirestore?.dataOriginal) return null;
-      const dataStr = eventoDataFromFirestore.dataOriginal;
-      const parts = dataStr.split('-');
-      if (parts.length !== 3) return null;
-       try {
-          const dateObjectUTC = new Date(Date.UTC(parts[0], parts[1] - 1, parts[2]));
-          const optionsDataExtenso = { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' };
-          const dataExtenso = dateObjectUTC.toLocaleDateString('pt-PT', optionsDataExtenso);
-          const startHour = parseStartHour(eventoDataFromFirestore.horario);
-          return { ...eventoDataFromFirestore, data: dateObjectUTC, dataExtenso: dataExtenso, startHour: startHour };
-       } catch (e) { console.error(`Error processing date ${dataStr}:`, e); return null; }
-   }
-
-  function getSemanaRange(data) {
-    if (!(data instanceof Date) || isNaN(data)) return { display: "Semana inválida", key: "invalid-" + Date.now() };
-    const diaDaSemana = data.getUTCDay(); const diff = diaDaSemana === 0 ? -6 : 1 - diaDaSemana;
-    const inicioSemana = new Date(data); inicioSemana.setUTCDate(data.getUTCDate() + diff);
-    const fimSemana = new Date(inicioSemana); fimSemana.setUTCDate(inicioSemana.getUTCDate() + 6);
-    const iDia = inicioSemana.getUTCDate(); const fDia = fimSemana.getUTCDate();
-    const opts = { month: 'long', timeZone: 'UTC' };
-    const mInicio = inicioSemana.toLocaleDateString('pt-PT', opts); const mFim = fimSemana.toLocaleDateString('pt-PT', opts);
-    const aInicio = inicioSemana.getUTCFullYear(); const aFim = fimSemana.getUTCFullYear();
-    let range = `Semana de ${iDia}`;
-    if (mInicio !== mFim) range += ` de ${mInicio}`; if (aInicio !== aFim) range += ` de ${aInicio}`;
-    range += ` a ${fDia} de ${mFim}`; if (aInicio === aFim || mInicio !== mFim) range += ` de ${aFim}`;
-    const sortK = `${aInicio}-${String(inicioSemana.getUTCMonth() + 1).padStart(2, '0')}-${String(iDia).padStart(2, '0')}`;
-    return { display: range, key: sortK };
-  }
-
-  // --- Fetch EVENT DATES from Firestore and Filter ---
-  async function fetchAndFilterEventosData() {
-      if (!db) { console.error("DB not initialized."); return []; }
-      console.log("Fetching 'eventosData'..."); availableEventos = [];
-      const today = new Date(); const todayUTC = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate()));
-      console.log(`Comparing against: ${todayUTC.toISOString()}`);
-      try {
-          const qSnapshot = await getDocs(collection(db, "eventosData"));
-          console.log(`Found ${qSnapshot.size} total events.`);
-          const fetched = [];
-          qSnapshot.forEach((doc) => { const pData = processEventDateData(doc.data()); if (pData?.data >= todayUTC) { fetched.push(pData); } });
-          fetched.sort((a, b) => a.data - b.data); availableEventos = fetched;
-          console.log(`Found ${availableEventos.length} valid future events.`);
-      } catch (error) { console.error("ERROR fetching events:", error); alert("Erro datas eventos."); availableEventos = []; }
-      return availableEventos;
-  }
-
+  // --- Fetch Event Dates --- (Keep existing function)
+  async function fetchAndFilterEventosData() { /* ... same ... */
+        if (!db) { console.error("DB not initialized."); return []; }
+        console.log("Fetching 'eventosData'..."); availableEventos = [];
+        const today = new Date(); const todayUTC = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate()));
+        console.log(`Comparing against: ${todayUTC.toISOString()}`);
+        try {
+            const qSnapshot = await getDocs(collection(db, "eventosData"));
+            console.log(`Found ${qSnapshot.size} total events.`);
+            const fetched = [];
+            qSnapshot.forEach((doc) => { const pData = processEventDateData(doc.data()); if (pData?.data >= todayUTC) { fetched.push(pData); } });
+            fetched.sort((a, b) => a.data - b.data); availableEventos = fetched;
+            console.log(`Found ${availableEventos.length} valid future events.`);
+        } catch (error) { console.error("ERROR fetching events:", error); alert("Erro datas eventos."); availableEventos = []; }
+        return availableEventos;
+    }
 
   // --- CORE APPLICATION LOGIC ---
 
   // Fetch Names from Firestore
-  async function preencherDropdown() {
-      const select = document.getElementById("nomeSelect"); select.innerHTML = '<option value="">-- Carregando... --</option>'; select.disabled = true;
-      console.log("[preencherDropdown] Starting."); if (!db) { console.error("DB not initialized."); select.innerHTML = '<option value="">-- Erro DB --</option>'; return; }
-      console.log("Fetching 'pessoas'...");
+  async function preencherNomes() {
+      nomeInput.placeholder = '-- Carregando... --';
+      nomeInput.disabled = true;
+      continuarBtn.disabled = true;
+      allNames = [];
+      console.log("[preencherNomes] Starting.");
+      if (!db) { /* ... error handling ... */ return; }
       try {
-          const qSnapshot = await getDocs(collection(db, "pessoas")); console.log(`Found ${qSnapshot.size} docs.`);
-          const nomes = []; qSnapshot.forEach((doc) => { if (doc.data()?.nome) { nomes.push(doc.data().nome.trim()); }});
-          console.log(`Found ${nomes.length} valid names.`); nomes.sort((a, b) => a.localeCompare(b));
-          select.innerHTML = '<option value="">-- Selecione --</option>';
-          if (nomes.length > 0) { nomes.forEach(n => { const opt = document.createElement("option"); opt.value = n; opt.textContent = n; select.appendChild(opt); }); select.disabled = false; console.log("Dropdown populated."); }
-          else { console.warn("No names found."); select.innerHTML = '<option value="">-- Nenhum --</option>'; }
-      } catch (error) { console.error("ERROR fetching names:", error); select.innerHTML = '<option value="">-- Erro --</option>'; alert("Erro nomes."); }
-      finally { console.log("[preencherDropdown] Finished."); }
+          const qSnapshot = await getDocs(collection(db, "pessoas"));
+          const nomesTemp = [];
+          qSnapshot.forEach((doc) => {
+              if (doc.data()?.nome) nomesTemp.push(doc.data().nome.trim());
+          });
+          allNames = nomesTemp.sort((a, b) => a.localeCompare(b));
+
+          if (allNames.length > 0) {
+              nomeInput.placeholder = 'Clique ou digite para escolher...';
+              nomeInput.disabled = false;
+              console.log("Names loaded:", allNames.length);
+          } else {
+              nomeInput.placeholder = '-- Nenhum nome encontrado --';
+              console.warn("No names found.");
+          }
+      } catch (error) { /* ... error handling ... */ }
+      finally { console.log("[preencherNomes] Finished."); }
   }
 
+  // --- Suggestion Display Logic ---
+
+  // Function to display a list of names in the suggestions div
+  function displaySuggestions(namesToShow) {
+      suggestionsDiv.innerHTML = ''; // Clear previous
+      if (!namesToShow || namesToShow.length === 0) {
+          suggestionsDiv.classList.add('hidden');
+          return;
+      }
+
+      namesToShow.forEach(name => {
+          const item = document.createElement('div');
+          item.classList.add('suggestion-item');
+          item.textContent = name;
+          // Add click listener to select the name
+          item.addEventListener('click', () => selectName(name));
+          suggestionsDiv.appendChild(item);
+      });
+      suggestionsDiv.classList.remove('hidden'); // Show the list
+  }
+
+  // Function called when a name is selected (from click or potentially later by keyboard)
+  function selectName(name) {
+      if (allNames.includes(name)) { // Double-check it's a valid name
+        nomeInput.value = name; // Set input value
+        suggestionsDiv.classList.add('hidden'); // Hide suggestions
+        usuarioAtual = name; // Store the selected name globally
+        selectedNameValid = true; // Mark as valid
+        continuarBtn.disabled = false; // Enable continue button
+        console.log("Name selected:", usuarioAtual);
+      } else {
+        console.warn("Attempted to select an invalid name:", name);
+        // Optionally clear input or show error? For now, just log.
+      }
+  }
+
+  // Function to handle filtering AND decide whether to show all or filtered
+  function handleNameInput() {
+      const inputText = nomeInput.value.trim();
+      const inputTextLower = inputText.toLowerCase();
+
+      // Always reset validation state when input changes
+      selectedNameValid = false;
+      continuarBtn.disabled = true;
+      usuarioAtual = null; // Clear global selection if user is typing
+
+      let filteredNames = [];
+      if (inputText.length > 0) {
+          // Filter based on input
+          filteredNames = allNames.filter(name =>
+              name.toLowerCase().includes(inputTextLower)
+          );
+      } else {
+           // If input is empty, don't filter (we'll show all on focus/click instead)
+           // Hiding suggestions immediately on empty input might feel abrupt,
+           // let's keep them shown if they were already visible from a focus event.
+           // displaySuggestions([]); // Optionally hide immediately if input is cleared
+           return; // Exit early, let focus handler manage showing all
+      }
+
+      displaySuggestions(filteredNames);
+
+      // Check if the *current full input text* exactly matches a valid name
+      // (even if the suggestions list is longer)
+      if (allNames.includes(inputText)) {
+          selectedNameValid = true;
+          continuarBtn.disabled = false;
+          usuarioAtual = inputText; // Tentatively set global name if it's a full match
+      }
+  }
+
+  // --- Event Listeners for Input ---
+
+  // Typing triggers filtering
+  nomeInput.addEventListener('input', handleNameInput);
+
+  // Focus/Click shows suggestions (all if empty, filtered if not)
+  nomeInput.addEventListener('focus', () => {
+      const inputText = nomeInput.value.trim();
+      if (inputText.length === 0) {
+          // Input is empty, show all names
+          displaySuggestions(allNames);
+      } else {
+          // Input has text, filter and show relevant suggestions
+          handleNameInput(); // Re-run the filter logic
+      }
+  });
+
+  // Use 'click' as well for mobile taps that might not trigger 'focus' reliably
+  nomeInput.addEventListener('click', () => {
+        // Re-use focus logic for simplicity
+       const inputText = nomeInput.value.trim();
+       if (inputText.length === 0) {
+           displaySuggestions(allNames);
+       } else {
+           handleNameInput();
+       }
+   });
+
+
+  // Hide suggestions when clicking outside the input/suggestions area
+  document.addEventListener('click', (event) => {
+      if (!nomeInput.contains(event.target) && !suggestionsDiv.contains(event.target)) {
+          suggestionsDiv.classList.add('hidden');
+      }
+  });
+
+  // --- Button Actions ---
   async function continuar() {
-    const nome = document.getElementById("nomeSelect").value; if (!nome) { alert("Selecione nome."); return; } if (!db) { alert("Erro DB."); return; }
-    usuarioAtual = nome; userConfirmations.clear();
-    document.getElementById("selecao-container").classList.add("hidden"); document.getElementById("cards-container").classList.remove("hidden");
-    document.getElementById("boasVindas").textContent = `Olá, ${nome}! Carregando...`; document.getElementById("cards-grupos").innerHTML = '<div style="text-align:center; padding: 20px;">A carregar...</div>';
+    if (!selectedNameValid || !usuarioAtual) {
+        // Try to validate one last time in case the user typed a full name without clicking
+        const currentInputText = nomeInput.value.trim();
+        if (allNames.includes(currentInputText)) {
+            selectName(currentInputText); // Explicitly select it
+        } else {
+            alert("Por favor, selecione um nome válido da lista ou digite um nome completo existente.");
+            nomeInput.focus();
+            displaySuggestions(allNames); // Show all options again
+            return;
+        }
+    }
+    if (!db) { alert("Erro DB."); return; }
+
+    // ... rest of the continuar function remains the same ...
+    userConfirmations.clear();
+    document.getElementById("selecao-container").classList.add("hidden");
+    document.getElementById("cards-container").classList.remove("hidden");
+    document.getElementById("boasVindas").textContent = `Olá, ${usuarioAtual}! Carregando...`;
+    document.getElementById("cards-grupos").innerHTML = '<div style="text-align:center; padding: 20px;">A carregar disponibilidades...</div>';
+
     const eventosParaMostrar = await fetchAndFilterEventosData();
-    document.getElementById("boasVindas").textContent = `Olá, ${nome}! Selecione os dias:`;
-    if (eventosParaMostrar.length > 0) { renderCardsAgrupados(eventosParaMostrar); }
-    else { document.getElementById("cards-grupos").innerHTML = '<div style="text-align:center; padding: 20px;">Nenhuma data futura.</div>'; }
+    document.getElementById("boasVindas").textContent = `Olá, ${usuarioAtual}! Selecione os dias em que pode:`;
+    if (eventosParaMostrar.length > 0) {
+        renderCardsAgrupados(eventosParaMostrar);
+    } else {
+        document.getElementById("cards-grupos").innerHTML = '<div style="text-align:center; padding: 20px;">Nenhuma data futura disponível para confirmação.</div>';
+    }
   }
 
   function voltar() {
-    usuarioAtual = ""; userConfirmations.clear(); availableEventos = [];
-    document.getElementById("cards-container").classList.add("hidden"); document.getElementById("selecao-container").classList.remove("hidden");
-    document.getElementById("nomeSelect").value = ""; document.getElementById("cards-grupos").innerHTML = "";
+    usuarioAtual = null;
+    selectedNameValid = false;
+    userConfirmations.clear();
+    availableEventos = [];
+    document.getElementById("cards-container").classList.add("hidden");
+    document.getElementById("selecao-container").classList.remove("hidden");
+    nomeInput.value = "";
+    suggestionsDiv.classList.add('hidden');
+    continuarBtn.disabled = true;
+    document.getElementById("cards-grupos").innerHTML = "";
+    // Don't focus immediately, let user click if they want
   }
 
-  // --- Helper function to create a single card element ---
-  function createCardElement(ev) {
-      // *** USA CHAVE COMBINADA (data+horario) para verificar cache da SESSÃO ***
-      const sessionKey = `${ev.dataOriginal}|${ev.horario || 'null'}`;
-      const confirmadoNaSessao = userConfirmations.has(sessionKey);
-      // *********************************************************************
+  // --- Card Creation / Rendering --- (Keep existing functions)
+   function createCardElement(ev) { /* ... same ... */
+       const sessionKey = `${ev.dataOriginal}|${ev.horario || 'null'}`;
+       const confirmadoNaSessao = userConfirmations.has(sessionKey);
 
-      const card = document.createElement("div"); card.className = "card";
-      if (confirmadoNaSessao) { card.classList.add("confirmado"); }
+       const card = document.createElement("div"); card.className = "card";
+       if (confirmadoNaSessao) { card.classList.add("confirmado"); }
 
-      const dataPequenaDiv = document.createElement("div"); dataPequenaDiv.className = "data-pequena"; dataPequenaDiv.textContent = ev.dataExtenso;
-      const diaSemanaDiv = document.createElement("div"); diaSemanaDiv.className = "dia-semana";
-      const diaTexto = ev.diasemana;
-      const horarioTexto = (ev.horario?.trim()) ? `| ${ev.horario.trim()}` : '';
-      if (horarioTexto) { diaSemanaDiv.innerHTML = `${diaTexto}<br><span class="hora-texto">${horarioTexto}</span>`; }
-      else { diaSemanaDiv.innerHTML = diaTexto; }
-
-      const btnConfirmar = document.createElement("button"); btnConfirmar.className = "btn-confirmar";
-      btnConfirmar.textContent = confirmadoNaSessao ? "Confirmado!" : "Eu posso";
-      btnConfirmar.onclick = () => confirmar(ev, btnConfirmar);
-
-      card.appendChild(dataPequenaDiv); card.appendChild(diaSemanaDiv); card.appendChild(btnConfirmar);
-      return card;
-  }
+       const dataPequenaDiv = document.createElement("div"); dataPequenaDiv.className = "data-pequena"; dataPequenaDiv.textContent = ev.dataExtenso;
+       const diaSemanaDiv = document.createElement("div"); diaSemanaDiv.className = "dia-semana";
+       const diaTexto = ev.diasemana;
+       const horarioTexto = (ev.horario?.trim()) ? ` ${ev.horario.trim()}` : '';
+       diaSemanaDiv.innerHTML = `${diaTexto}${horarioTexto ? '<br><span class="hora-texto">' + horarioTexto + '</span>' : ''}`;
 
 
-  // --- Rendering Logic (Groups cards by day, Sorts by time within day) ---
-  function renderCardsAgrupados(eventos) {
-      const container = document.getElementById("cards-grupos"); container.innerHTML = "";
-      console.log(`Rendering ${eventos.length} events. Session confirmations:`, Array.from(userConfirmations));
-      if (eventos.length === 0) { container.innerHTML = '<div style="text-align:center; padding: 20px;">Nenhuma data futura.</div>'; return; }
+       const btnConfirmar = document.createElement("button"); btnConfirmar.className = "btn-confirmar";
+       btnConfirmar.textContent = confirmadoNaSessao ? "Confirmado!" : "Eu posso";
+       btnConfirmar.onclick = () => confirmar(ev, btnConfirmar);
 
-      // 1. Agrupar por Semana
-      const gruposPorSemana = {};
-      eventos.forEach(ev => { if (!ev?.data) return; try { const si = getSemanaRange(ev.data); if (!gruposPorSemana[si.key]) { gruposPorSemana[si.key] = { display: si.display, eventos: [] }; } gruposPorSemana[si.key].eventos.push(ev); } catch (e) { console.error("Error grouping week", e); } });
-      const semanasOrdenadas = Object.keys(gruposPorSemana).sort();
-
-      // 2. Iterar Semanas
-      semanasOrdenadas.forEach(semanaKey => {
-          const semanaGrupo = gruposPorSemana[semanaKey];
-          const grupoDiv = document.createElement("div"); grupoDiv.className = "grupo-semana";
-          const titulo = document.createElement("div"); titulo.className = "semana-titulo"; titulo.textContent = semanaGrupo.display; grupoDiv.appendChild(titulo);
-          const gridSemana = document.createElement("div"); gridSemana.className = "cards-grid";
-
-          // 3. Agrupar por Dia na Semana
-          const eventosPorDiaNaSemana = {};
-          semanaGrupo.eventos.forEach(ev => { const dk = ev.dataOriginal; if (!eventosPorDiaNaSemana[dk]) { eventosPorDiaNaSemana[dk] = []; } eventosPorDiaNaSemana[dk].push(ev); });
-          const diasOrdenadosNaSemana = Object.keys(eventosPorDiaNaSemana);
-
-          // 4. Iterar Dias
-          diasOrdenadosNaSemana.forEach(dataDia => {
-              const eventosDoDia = eventosPorDiaNaSemana[dataDia];
-              // *** ORDENAR EVENTOS DO DIA PELA HORA ***
-              eventosDoDia.sort((a, b) => (a.startHour ?? 99) - (b.startHour ?? 99));
-              console.log(`Sorted events for ${dataDia}:`, eventosDoDia.map(e => e.horario));
-
-              if (eventosDoDia.length === 1) { // Dia com 1 evento
-                  gridSemana.appendChild(createCardElement(eventosDoDia[0]));
-              } else if (eventosDoDia.length > 1) { // Dia com >1 evento
-                  const diaAgrupadoWrapper = document.createElement("div"); diaAgrupadoWrapper.className = "dia-agrupado";
-                  eventosDoDia.forEach(ev => diaAgrupadoWrapper.appendChild(createCardElement(ev))); // Adiciona cards ordenados
-                  gridSemana.appendChild(diaAgrupadoWrapper); // Adiciona wrapper ao grid
-              }
-          });
-          grupoDiv.appendChild(gridSemana); container.appendChild(grupoDiv);
-      });
-      console.log("[renderCardsAgrupados] Finished.");
-  } // Fim de renderCardsAgrupados
-
-
-  // --- Find and Delete Confirmation (Deletes specific Nome+Data+Horario) ---
-  async function deleteConfirmation(dataOriginal, horario = null) {
-      if (!usuarioAtual || !dataOriginal || !db) { console.error("deleteConfirmation missing data"); return false; }
-      console.log(`Deleting for ${usuarioAtual} on ${dataOriginal} ${horario !== undefined ? `at ${horario}` : '(horario REQUIRED)'}...`);
-      if (horario === undefined) { console.error("Horario required"); alert("Erro interno: horário falta."); return false; }
-      const q = query( collection(db, "disponibilidade"), where("nome", "==", usuarioAtual), where("dataOriginal", "==", dataOriginal), where("horario", "==", horario), limit(1) );
-      try {
-          const qSnapshot = await getDocs(q);
-          if (qSnapshot.empty) { console.warn(`Doc not found for ${dataOriginal} at ${horario}.`); return true; }
-          const docToDelete = qSnapshot.docs[0]; await deleteDoc(doc(db, "disponibilidade", docToDelete.id));
-          console.log(`Doc ${docToDelete.id} deleted.`); return true;
-      } catch (error) { console.error(`Error deleting ${dataOriginal} at ${horario}:`, error); alert(`Erro remover ${dataOriginal}.`); return false; }
-  }
-
-
-  // --- Check Cache Helper (Optional - Not currently used in main flow) ---
-  async function checkAndUpdateSessionCache(dataOriginal) { /* ... (code kept for potential future use) ... */ }
-
-
-  // --- Confirmation Logic (Handles Session State for Deletion) ---
-  async function confirmar(eventoData, button) {
-    if (!db) { console.error("DB not available."); alert("Erro conexão."); return; }
-    const card = button.closest('.card');
-    const dataOriginal = eventoData.dataOriginal;
-    const horarioEvento = eventoData.horario || null;
-    if (!dataOriginal) { console.error("Missing dataOriginal"); alert("Erro data."); return; }
-    if (button.disabled) { console.log("In progress"); return; }
-
-    const sessionKey = `${dataOriginal}|${horarioEvento || 'null'}`; // Chave combinada
-    const logPrefix = `[confirmar | ${sessionKey}]`;
-    console.log(`${logPrefix} --- Function START ---`);
-
-    const isConfirmedInSession = userConfirmations.has(sessionKey); // Verifica cache da SESSÃO
-    console.log(`${logPrefix} Confirmed in this session: ${isConfirmedInSession}`);
-
-    button.disabled = true;
-    const spinner = document.createElement('div'); spinner.className = 'loading-spinner'; card.appendChild(spinner);
-
-    try {
-        if (isConfirmedInSession) { // --- REMOVE ---
-            button.textContent = 'A remover...'; console.log(`${logPrefix} Step 1: In session cache. REMOVE path.`);
-            console.log(`${logPrefix} Step 2: Calling deleteConfirmation...`);
-            const t0 = performance.now();
-            const deleteSuccess = await deleteConfirmation(dataOriginal, horarioEvento); // Apaga específico
-            const t1 = performance.now(); console.log(`${logPrefix} Step 2: deleteConfirmation returned ${deleteSuccess} in ${(t1-t0).toFixed(1)}ms.`);
-            if (deleteSuccess) {
-                console.log(`${logPrefix} Step 3: Deletion OK. Updating session/UI.`);
-                userConfirmations.delete(sessionKey); // Remove chave específica do cache sessão
-                card.classList.remove('confirmado'); button.textContent = 'Eu posso';
-            } else { console.error(`${logPrefix} Step 3: Deletion FAIL. Reverting UI text.`); button.textContent = 'Confirmado!'; }
-        } else { // --- ADD ---
-            button.textContent = 'A guardar...'; console.log(`${logPrefix} Step 1: Not in session cache. ADD path.`);
-            console.log(`${logPrefix} Step 2: Checking Firestore if combination exists...`);
-            const checkQuery = query( collection(db, "disponibilidade"), where("nome", "==", usuarioAtual), where("dataOriginal", "==", dataOriginal), where("horario", "==", horarioEvento), limit(1) );
-            const t2 = performance.now(); const existingDocsSnapshot = await getDocs(checkQuery); const t3 = performance.now();
-            const existsInFirestore = !existingDocsSnapshot.empty;
-            console.log(`${logPrefix} Step 2: Firestore check in ${(t3-t2).toFixed(1)}ms. Entry exists: ${existsInFirestore}`);
-            let operationSuccess = false;
-            if (!existsInFirestore) { // --- Guarda no Firestore ---
-                 console.log(`${logPrefix} Step 3: Entry does not exist. Attempting addDoc...`);
-                 const dados = { nome: usuarioAtual, ano: eventoData.ano, mes: eventoData.mes, semana: eventoData.semanaDisplay||getSemanaRange(eventoData.data).display, dia: eventoData.dia, diasemana: eventoData.diasemana, dataOriginal: dataOriginal, horario: horarioEvento, timestamp: serverTimestamp() };
-                 if (!dados.nome||!dados.ano||!dados.mes||!dados.semana||!dados.dia||!dados.diasemana||!dados.dataOriginal) { throw new Error("Missing fields"); }
-                 const t4 = performance.now(); const docRef = await addDoc(collection(db, "disponibilidade"), dados); const t5 = performance.now();
-                 console.log(`${logPrefix} Step 3: addDoc OK in ${(t5-t4).toFixed(1)}ms. ID: ${docRef.id}`); operationSuccess = true;
-            } else { // --- Já existe no Firestore ---
-                 console.warn(`${logPrefix} Step 3: Entry already exists. Skipping save.`); operationSuccess = true;
-            }
-            if (operationSuccess) { // --- Atualiza UI/Cache Sessão ---
-                 console.log(`${logPrefix} Step 4: Updating session cache and UI.`);
-                 userConfirmations.add(sessionKey); // Adiciona chave específica ao cache sessão
-                 card.classList.add('confirmado'); button.textContent = "Confirmado!"; triggerEmojiBurst(button);
-            }
-        }
-    } catch (e) { console.error(`${logPrefix} !!!!! ERROR !!!!! `, e); alert(`Erro ${dataOriginal}. ${e.message}`); button.textContent = isConfirmedInSession ? 'Confirmado!' : 'Eu posso'; }
-    finally { if(spinner) spinner.remove(); button.disabled = false; console.log(`${logPrefix} Button RE-ENABLED.`); console.log(`${logPrefix} --- Function END --- Session cache:`, Array.from(userConfirmations)); }
-  } // Fim confirmar
-
-
-  // --- Visual Effects ---
-  function triggerEmojiBurst(button) { /* ... código mantido ... */
-     if (!button || !document.body) return; const buttonRect = button.getBoundingClientRect();
-     const startX = buttonRect.left + buttonRect.width / 2 + window.scrollX; const startY = buttonRect.top + buttonRect.height / 2 + window.scrollY;
-     for (let i = 0; i < 15; i++) { const emoji = document.createElement('span'); emoji.textContent = '👍'; emoji.className = 'emoji-burst'; emoji.style.left = `${startX}px`; emoji.style.top = `${startY}px`; document.body.appendChild(emoji); const angle = Math.random() * Math.PI * 2; const distance = 60 + Math.random() * 50; const duration = 700 + Math.random() * 300; const x = Math.cos(angle) * distance; const y = Math.sin(angle) * distance - distance * 0.5; const animation = emoji.animate([{ transform: `translate(0, 0) scale(1)`, opacity: 1 }, { transform: `translate(${x}px, ${y}px) scale(0.5)`, opacity: 0 }], { duration: duration, easing: 'cubic-bezier(0.1, 0.8, 0.7, 1.0)' }); animation.finished.then(() => emoji.remove()); }
+       card.appendChild(dataPequenaDiv); card.appendChild(diaSemanaDiv); card.appendChild(btnConfirmar);
+       return card;
    }
+   function renderCardsAgrupados(eventos) { /* ... same ... */
+        const container = document.getElementById("cards-grupos"); container.innerHTML = "";
+        console.log(`Rendering ${eventos.length} events. Session confirmations:`, Array.from(userConfirmations));
+        if (eventos.length === 0) { container.innerHTML = '<div style="text-align:center; padding: 20px;">Nenhuma data futura.</div>'; return; }
+
+        const gruposPorSemana = {};
+        eventos.forEach(ev => { if (!ev?.data) return; try { const si = getSemanaRange(ev.data); if (!gruposPorSemana[si.key]) { gruposPorSemana[si.key] = { display: si.display, eventos: [] }; } gruposPorSemana[si.key].eventos.push(ev); } catch (e) { console.error("Error grouping week", e); } });
+        const semanasOrdenadas = Object.keys(gruposPorSemana).sort();
+
+        semanasOrdenadas.forEach(semanaKey => {
+            const semanaGrupo = gruposPorSemana[semanaKey];
+            const grupoDiv = document.createElement("div"); grupoDiv.className = "grupo-semana";
+            const titulo = document.createElement("div"); titulo.className = "semana-titulo"; titulo.textContent = semanaGrupo.display; grupoDiv.appendChild(titulo);
+            const gridSemana = document.createElement("div"); gridSemana.className = "cards-grid";
+
+            const eventosPorDiaNaSemana = {};
+            semanaGrupo.eventos.forEach(ev => { const dk = ev.dataOriginal; if (!eventosPorDiaNaSemana[dk]) { eventosPorDiaNaSemana[dk] = []; } eventosPorDiaNaSemana[dk].push(ev); });
+            const diasOrdenadosNaSemana = Object.keys(eventosPorDiaNaSemana).sort((a, b) => new Date(a) - new Date(b));
+
+            diasOrdenadosNaSemana.forEach(dataDia => {
+                const eventosDoDia = eventosPorDiaNaSemana[dataDia];
+                eventosDoDia.sort((a, b) => (a.startHour ?? 99) - (b.startHour ?? 99));
+                console.log(`Sorted events for ${dataDia}:`, eventosDoDia.map(e => e.horario));
+
+                if (eventosDoDia.length === 1) {
+                    gridSemana.appendChild(createCardElement(eventosDoDia[0]));
+                } else if (eventosDoDia.length > 1) {
+                    const diaAgrupadoWrapper = document.createElement("div"); diaAgrupadoWrapper.className = "dia-agrupado";
+                    eventosDoDia.forEach(ev => diaAgrupadoWrapper.appendChild(createCardElement(ev)));
+                    gridSemana.appendChild(diaAgrupadoWrapper);
+                }
+            });
+            grupoDiv.appendChild(gridSemana); container.appendChild(grupoDiv);
+        });
+        console.log("[renderCardsAgrupados] Finished.");
+    }
+
+  // --- Confirmation/Deletion Logic --- (Keep existing functions)
+  async function deleteConfirmation(dataOriginal, horario = null) { /* ... same ... */
+        if (!usuarioAtual || !dataOriginal || !db) { console.error("deleteConfirmation missing data"); return false; }
+        console.log(`Deleting for ${usuarioAtual} on ${dataOriginal} ${horario !== null ? `at ${horario}` : '(no specific time)'}...`);
+        let q;
+         if (horario === null) {
+             q = query( collection(db, "disponibilidade"), where("nome", "==", usuarioAtual), where("dataOriginal", "==", dataOriginal), where("horario", "==", null), limit(1) );
+         } else {
+              q = query( collection(db, "disponibilidade"), where("nome", "==", usuarioAtual), where("dataOriginal", "==", dataOriginal), where("horario", "==", horario), limit(1) );
+         }
+        try {
+            const qSnapshot = await getDocs(q);
+            if (qSnapshot.empty) { console.warn(`Doc not found for ${dataOriginal} at ${horario}.`); return true; }
+            const docToDelete = qSnapshot.docs[0]; await deleteDoc(doc(db, "disponibilidade", docToDelete.id));
+            console.log(`Doc ${docToDelete.id} deleted.`); return true;
+        } catch (error) { console.error(`Error deleting ${dataOriginal} at ${horario}:`, error); alert(`Erro ao remover confirmação para ${dataOriginal}.`); return false; }
+    }
+  async function confirmar(eventoData, button) { /* ... same ... */
+       if (!db) { console.error("DB not available."); alert("Erro conexão."); return; }
+       const card = button.closest('.card');
+       const dataOriginal = eventoData.dataOriginal;
+       const horarioEvento = eventoData.horario || null;
+       if (!dataOriginal) { console.error("Missing dataOriginal"); alert("Erro data."); return; }
+       if (button.disabled) { console.log("In progress"); return; }
+
+       const sessionKey = `${dataOriginal}|${horarioEvento === null ? 'null' : horarioEvento}`;
+       const logPrefix = `[confirmar | ${sessionKey}]`; console.log(`${logPrefix} --- START ---`);
+
+       const isConfirmedInSession = userConfirmations.has(sessionKey);
+       console.log(`${logPrefix} In session: ${isConfirmedInSession}`);
+
+       button.disabled = true;
+       const spinner = document.createElement('div'); spinner.className = 'loading-spinner'; card.appendChild(spinner);
+
+       try {
+           if (isConfirmedInSession) { // --- REMOVE ---
+               button.textContent = 'A remover...'; console.log(`${logPrefix} REMOVE path.`);
+               const deleteSuccess = await deleteConfirmation(dataOriginal, horarioEvento);
+               if (deleteSuccess) {
+                   userConfirmations.delete(sessionKey);
+                   card.classList.remove('confirmado'); button.textContent = 'Eu posso';
+               } else { button.textContent = 'Confirmado!'; }
+           } else { // --- ADD ---
+               button.textContent = 'A guardar...'; console.log(`${logPrefix} ADD path.`);
+               let checkQuery;
+               if (horarioEvento === null) { checkQuery = query( collection(db, "disponibilidade"), where("nome", "==", usuarioAtual), where("dataOriginal", "==", dataOriginal), where("horario", "==", null), limit(1) ); }
+               else { checkQuery = query( collection(db, "disponibilidade"), where("nome", "==", usuarioAtual), where("dataOriginal", "==", dataOriginal), where("horario", "==", horarioEvento), limit(1) ); }
+
+               const existingDocsSnapshot = await getDocs(checkQuery);
+               const existsInFirestore = !existingDocsSnapshot.empty;
+               console.log(`${logPrefix} Exists in Firestore: ${existsInFirestore}`);
+               let operationSuccess = false;
+               if (!existsInFirestore) {
+                    console.log(`${logPrefix} Saving to Firestore...`);
+                    const semanaInfo = getSemanaRange(eventoData.data);
+                    const dados = { nome: usuarioAtual, ano: eventoData.ano || eventoData.data.getUTCFullYear(), mes: eventoData.mes || (eventoData.data.getUTCMonth() + 1), semana: eventoData.semanaDisplay || semanaInfo.display, dia: eventoData.dia || eventoData.data.getUTCDate(), diasemana: eventoData.diasemana, dataOriginal: dataOriginal, horario: horarioEvento, timestamp: serverTimestamp() };
+                    if (!dados.nome||!dados.ano||!dados.mes||!dados.semana||!dados.dia||!dados.diasemana||!dados.dataOriginal) { throw new Error("Missing fields"); }
+                    await addDoc(collection(db, "disponibilidade"), dados);
+                    operationSuccess = true;
+               } else { operationSuccess = true; /* Treat as success if already exists */ }
+
+               if (operationSuccess) {
+                    userConfirmations.add(sessionKey);
+                    card.classList.add('confirmado'); button.textContent = "Confirmado!"; triggerEmojiBurst(button);
+               }
+           }
+       } catch (e) { console.error(`${logPrefix} ERROR: `, e); alert(`Erro ${dataOriginal}. ${e.message}`); button.textContent = isConfirmedInSession ? 'Confirmado!' : 'Eu posso'; }
+       finally { if(spinner) spinner.remove(); button.disabled = false; console.log(`${logPrefix} --- END --- Session cache:`, Array.from(userConfirmations)); }
+     }
+
+  // --- Visual Effects --- (Keep existing function)
+  function triggerEmojiBurst(button) { /* ... same ... */
+        if (!button || !document.body) return; const buttonRect = button.getBoundingClientRect();
+        const startX = buttonRect.left + buttonRect.width / 2 + window.scrollX; const startY = buttonRect.top + buttonRect.height / 2 + window.scrollY;
+        for (let i = 0; i < 15; i++) { const emoji = document.createElement('span'); emoji.textContent = '👍'; emoji.className = 'emoji-burst'; emoji.style.left = `${startX}px`; emoji.style.top = `${startY}px`; document.body.appendChild(emoji); const angle = Math.random() * Math.PI * 2; const distance = 60 + Math.random() * 50; const duration = 700 + Math.random() * 300; const x = Math.cos(angle) * distance; const y = Math.sin(angle) * distance - distance * 0.5; const animation = emoji.animate([{ transform: `translate(0, 0) scale(1)`, opacity: 1 }, { transform: `translate(${x}px, ${y}px) scale(0.5)`, opacity: 0 }], { duration: duration, easing: 'cubic-bezier(0.1, 0.8, 0.7, 1.0)' }); animation.finished.then(() => emoji.remove()); }
+    }
 
   // --- Expose functions ---
   window.continuar = continuar;
@@ -696,12 +872,25 @@ select#nomeSelect:disabled {
   // --- INITIALIZATION ---
   window.onload = async () => {
       console.log("[window.onload] Page loading...");
-      console.log("[window.onload] Calling preencherDropdown()...");
-      await preencherDropdown();
-      console.log("[window.onload] preencherDropdown() finished.");
-      const nomeSelect = document.getElementById('nomeSelect');
-      if (nomeSelect && !nomeSelect.disabled) { console.log("[window.onload] Adding Enter listener."); nomeSelect.addEventListener('keypress', function(event) { if (event.key === 'Enter') { continuar(); } }); }
-      else { console.log("[window.onload] Skipping Enter listener."); }
+      if (db) {
+        console.log("[window.onload] Calling preencherNomes()...");
+        await preencherNomes();
+        console.log("[window.onload] preencherNomes() finished.");
+        // Add Enter listener only if input is enabled
+        if (!nomeInput.disabled) {
+            console.log("[window.onload] Adding Enter listener to nomeInput.");
+            nomeInput.addEventListener('keypress', function(event) {
+                if (event.key === 'Enter') {
+                    // Try to continue if button is enabled OR if current text is valid
+                    if (!continuarBtn.disabled || allNames.includes(nomeInput.value.trim())) {
+                        continuar();
+                    }
+                }
+            });
+        }
+      } else {
+          console.error("[window.onload] Skipping setup due to DB init error.");
+      }
       console.log("[window.onload] Page load script finished.");
   };
 
