@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <title>Confirmação de Disponibilidade</title>
   <style>
-    /* --- CSS Completo (Ajustes Mobile) --- */
-    * { box-sizing: border-box; }
+   /* --- CSS Completo (Ajustes Mobile) --- */
+* { box-sizing: border-box; }
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -111,58 +111,79 @@ select#nomeSelect:disabled { background-color: #e9ecef; cursor: not-allowed; opa
 
 /* --- AJUSTES ESPECÍFICOS PARA MOBILE --- */
 @media (max-width: 700px) {
+  body {
+    font-size: 18px; /* Aumenta a fonte base para mobile */
+  }
+
   /* Layout: Uma coluna */
   .cards-grid { grid-template-columns: 1fr; }
   .dia-agrupado { flex-wrap: wrap; } /* Permite quebrar dentro do dia */
 
   /* Dropdown Maior */
+  #selecao-container h2 {
+    font-size: 1.8em; /* Aumenta título "Escolha seu nome" */
+  }
   select#nomeSelect {
-    padding: 16px 20px; /* Mais padding */
-    font-size: 1.1em;  /* Texto maior */
+    padding: 20px 25px; /* Mais padding */
+    font-size: 1.4em;  /* Texto maior */
     width: 100%; /* Ocupa toda a largura */
-    padding-right: 45px; /* Ajustar espaço da seta */
-    background-position: right 20px center; /* Ajustar posição da seta */
+    margin-bottom: 30px; /* Mais espaço abaixo */
+    padding-right: 45px;
+    background-position: right 20px center;
+  }
+
+  /* Botão "Continuar" */
+  .btn-continuar {
+    width: 100%; /* Ocupa toda a largura do container */
+    padding: 20px 25px; /* Aumenta padding */
+    font-size: 1.3em; /* Aumenta fonte */
   }
 
   /* Cards Maiores (todos) */
   .card {
-    padding: 30px 20px; /* Mais padding vertical */
+    padding: 35px 25px; /* Mais padding vertical e horizontal */
     /* Garante que o card ocupa a largura disponível na coluna única */
     width: 100%;
+    margin-bottom: 25px; /* Espaço entre os cards */
   }
 
   /* Textos Maiores Dentro dos Cards */
   .card .data-pequena {
-    font-size: 1em;
-    margin-bottom: 10px;
+    font-size: 1.2em;
+    margin-bottom: 12px;
   }
   .card .dia-semana {
-    font-size: 1.7em; /* Dia da semana bem legível */
-    line-height: 1.35;
-    margin-bottom: 25px;
+    font-size: 2em; /* Dia da semana bem legível */
+    line-height: 1.4;
+    margin-bottom: 30px;
   }
   .card .dia-semana .hora-texto {
-    font-size: 0.9em; /* Hora proporcionalmente maior */
-    margin-top: 5px;
+    font-size: 1.1em; /* Hora proporcionalmente maior */
+    margin-top: 6px;
   }
 
    /* Botão Maior Dentro dos Cards */
   .card .btn-confirmar {
-    padding: 15px 30px; /* Botão bem maior para toque */
-    font-size: 1.15em;
+    padding: 18px 35px; /* Botão bem maior para toque */
+    font-size: 1.3em;
     width: 80%; /* Ocupa boa parte da largura do card */
-    max-width: 250px; /* Limite máximo */
+    max-width: 300px; /* Limite máximo */
   }
 
   /* Remover/Ajustar estilos específicos de .dia-agrupado > .card se conflitarem */
   /* Estes estilos de card mais gerais devem aplicar-se a todos no mobile */
    .dia-agrupado > .card {
-       padding: 25px 15px; /* Um pouco menos que o individual talvez */
+       padding: 30px 20px; /* Um pouco menos que o individual talvez */
    }
-    .dia-agrupado > .card .dia-semana { font-size: 1.6em;}
-    .dia-agrupado > .card .dia-semana .hora-texto { font-size: 0.85em;}
-    .dia-agrupado > .card .data-pequena { font-size: 0.9em;}
-    .dia-agrupado > .card .btn-confirmar { width: auto; max-width: none; padding: 12px 20px; font-size: 1em; } /* Botão menor nos agrupados */
+    .dia-agrupado > .card .dia-semana { font-size: 1.8em;}
+    .dia-agrupado > .card .dia-semana .hora-texto { font-size: 1em;}
+    .dia-agrupado > .card .data-pequena { font-size: 1.1em;}
+    .dia-agrupado > .card .btn-confirmar { width: auto; max-width: none; padding: 15px 25px; font-size: 1.1em; } /* Botão menor nos agrupados */
+
+    #boasVindas { font-size: 1.8em; margin-bottom: 40px; } /* Aumenta "Olá, [nome]!" */
+    .semana-titulo { font-size: 1.5em; margin-bottom: 25px; padding-bottom: 10px; } /* Títulos de semana maiores */
+    .btn-voltar { padding: 15px 30px; font-size: 1.2em; margin-bottom: 40px; } /* Botão "Voltar" maior */
+
 
 }
 /* --- Fim do CSS --- */
