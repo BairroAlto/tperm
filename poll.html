@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Confirmação de Disponibilidade</title>
   <style>
-   /* --- CSS Completo (Ajustes Mobile) --- */
+  /* --- CSS Completo (Ajustes Mobile - 100% Largura Ecrã) --- */
 * { box-sizing: border-box; }
 
 body {
@@ -118,6 +118,11 @@ select#nomeSelect:disabled { background-color: #e9ecef; cursor: not-allowed; opa
   /* Layout: Uma coluna */
   .cards-grid { grid-template-columns: 1fr; }
   .dia-agrupado { flex-wrap: wrap; } /* Permite quebrar dentro do dia */
+
+  /* Containers 100% largura tela no mobile (removido padding horizontal) */
+  #selecao-container, #cards-container {
+    padding: 0; /* Removido padding horizontal para ocupar 100% da largura */
+  }
 
   /* Dropdown Maior */
   #selecao-container h2 {
