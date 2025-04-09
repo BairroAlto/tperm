@@ -527,13 +527,6 @@
     margin: 0 !important; /* Remover margens que H4 podem ter por padrão */
 }
 
-
-
-
-
-
-
-
     #datasCriadasListContainer > h4.toggle-header:first-of-type { border-top: none; }
     .toggle-list ul { margin-top: 0; }
     /* Default LI styling inside a toggle list (applies to rules list AND names list) */
@@ -1865,7 +1858,7 @@ document.addEventListener('click', function(event) {
     }
 
     // --- Popup & Resumo Functions ---
-    function openPopupResumo() { const select = document.getElementById('mesSelect'); if (!select?.value) { alert("Selecione um mês primeiro."); return; } const key = select.value; const title = document.querySelector('#popupResumoContainer h2'); if (title) title.textContent = `Resumo Disponibilidade (Eventos Ativos) - ${select.options[select.selectedIndex]?.text}`; renderPopupResumo(key); const modal = document.getElementById('popupResumoContainer'); if (!modal) return; modal.style.display = 'flex'; setTimeout(() => modal.classList.add('visible'), 10); }
+    function openPopupResumo() { const select = document.getElementById('mesSelect'); if (!select?.value) { alert("Selecione um mês primeiro."); return; } const key = select.value; const title = document.querySelector('#popupResumoContainer h2'); if (title) title.textContent = `Escala TPERM Bairro Alto - ${select.options[select.selectedIndex]?.text}`; renderPopupResumo(key); const modal = document.getElementById('popupResumoContainer'); if (!modal) return; modal.style.display = 'flex'; setTimeout(() => modal.classList.add('visible'), 10); }
     function closePopupResumo() { const modal = document.getElementById('popupResumoContainer'); if (!modal) return; modal.classList.remove('visible'); modal.addEventListener('transitionend', () => { if (!modal.classList.contains('visible')) { modal.style.display = 'none'; document.getElementById('popupResumoContent').innerHTML = '<p>...</p>'; } }, { once: true }); }
     function renderPopupResumo(mesKey) {
         const content = document.getElementById('popupResumoContent'); if (!content) return;
@@ -2117,7 +2110,7 @@ document.addEventListener('click', function(event) {
         try {
             const pdf = new jsPDFInstance({ orientation: 'p', unit: 'mm', format: 'a4' }); // Use jsPDF constructor
             const pageMargin = 14;
-            pdf.setFontSize(18); pdf.text(`Resumo Disponibilidade (Eventos Ativos) - ${mesTxt}`, pageMargin, 22);
+            pdf.setFontSize(18); pdf.text(`Escala TPERM Bairro Alto - ${mesTxt}`, pageMargin, 22);
 
             const cols = ["Data / Horário", "Nomes Confirmados"]; const rows = [];
             const sortedDates = Array.from(monthAvailFiltered.keys()).sort();
@@ -2143,7 +2136,7 @@ document.addEventListener('click', function(event) {
 
                             // Build names string: Captain first (bold), then others
                             let namesStr = "";
-                            if(capName) namesStr += `**${capName} (C)**`; // Use markdown-like bold
+                            if(capName) namesStr += `${capName} (C)`; // Use markdown-like bold
                             if(others.length>0){
                                 if(capName) namesStr+=", "; // Add separator if captain exists
                                 namesStr+=others.join(", ");
@@ -2159,53 +2152,32 @@ document.addEventListener('click', function(event) {
 
             // --- Use AutoTable ---
             pdf.autoTable({
-                head: [cols],
-                body: rows.map(r=>[r[0],r[1]]), // Only pass data for columns, not the grouping date
-                startY: 30,
-                theme: 'grid', // 'striped', 'grid', 'plain'
-                margin: { top: 30, left: pageMargin, right: pageMargin, bottom: pageMargin },
-                headStyles: { fillColor: [45,137,239], textColor: [255,255,255], fontStyle: 'bold' },
-                styles: { fontSize: 9, cellPadding: 2.5, lineWidth: 0.1, lineColor: [200,200,200], font: 'helvetica' }, // Standard font
-                columnStyles: {
-                    0:{cellWidth:65}, // Width for Date/Time column
-                    1:{cellWidth:'auto'} // Width for Names column
-                },
-                // --- Styling based on Date Group ---
-                didParseCell: (data) => {
-                    if(data.section==='body'){
-                        const rowData=rows[data.row.index]; // Get original row data with grouping date
-                        const rowDateFmt=rowData?.[2]; // The formatted date string used for grouping
-                        if(rowDateFmt && pdfColorMap.has(rowDateFmt)) {
-                            data.cell.styles.fillColor = pdfColorMap.get(rowDateFmt); // Apply background color
-                        } else {
-                            data.cell.styles.fillColor = [255,255,255]; // Default white
-                        }
-                        data.cell.styles.textColor = [0,0,0]; // Ensure text is black
-                    }
-                },
-                 // --- Handling Bold Text (Captain) ---
-                didDrawCell: (data) => {
-                    if (data.section === 'body' && data.column.index === 1) { // Only for the 'Nomes Confirmados' column
-                        const cellText = data.cell.text?.[0]; // Get the text content of the cell
-                        if (typeof cellText === 'string' && cellText.includes('**')) {
-                            const parts = cellText.split('**'); // Split by the bold marker
-                            let currentX = data.cell.x + data.cell.padding('left');
-                            const currentY = data.cell.y + data.cell.textPos.y; // Use calculated text position
-
-                            pdf.setFont(undefined, 'normal'); // Start normal
-
-                            parts.forEach((part, index) => {
-                                const isBold = index % 2 !== 0; // Parts at odd indices were between **
-                                pdf.setFont(undefined, isBold ? 'bold' : 'normal');
-                                pdf.text(part, currentX, currentY);
-                                // Move X position for the next part
-                                currentX += pdf.getStringUnitWidth(part) * pdf.internal.getFontSize() / pdf.internal.scaleFactor;
-                            });
-                            pdf.setFont(undefined, 'normal'); // Reset to normal after the cell
-                        }
-                    }
-                }
-            });
+    head: [cols],
+    body: rows.map(r=>[r[0],r[1]]), // Only pass data for columns, not the grouping date
+    startY: 30,
+    theme: 'grid',
+    margin: { top: 30, left: pageMargin, right: pageMargin, bottom: pageMargin },
+    headStyles: { fillColor: [45,137,239], textColor: [255,255,255], fontStyle: 'bold' },
+    styles: { fontSize: 9, cellPadding: 2.5, lineWidth: 0.1, lineColor: [200,200,200], font: 'helvetica' },
+    columnStyles: {
+        0:{cellWidth:65},
+        1:{cellWidth:'auto'}
+    },
+               // Styling based on Date Group
+    didParseCell: (data) => {
+        if(data.section==='body'){
+            const rowData=rows[data.row.index];
+            const rowDateFmt=rowData?.[2];
+            if(rowDateFmt && pdfColorMap.has(rowDateFmt)) {
+                data.cell.styles.fillColor = pdfColorMap.get(rowDateFmt);
+            } else {
+                data.cell.styles.fillColor = [255,255,255];
+            }
+            data.cell.styles.textColor = [0,0,0];
+        }
+    }
+});        // --- Handling Bold Text (Captain) ---
+               
 
             // --- Save PDF ---
             pdf.save(`Resumo_Disponibilidade_Ativos_${mesKey.replace('-','_')}.pdf`);
