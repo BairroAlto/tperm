@@ -911,6 +911,22 @@
 
     }
 
+
+
+    .section-top-right-icon-stats { /* Use a distinct class if needed */
+        position: absolute;
+        top: 20px;
+        right: 25px;
+        z-index: 5;
+    }
+     @media (max-width: 768px) {
+        .section-top-right-icon-stats { top: 15px; right: 18px; }
+     }
+     @media (max-width: 600px) {
+         .section-top-right-icon-stats { top: 12px; right: 15px; }
+     }
+    /* --- END CSS for stats icon --- */
+
   </style>
 </head>
 <body>
@@ -932,6 +948,7 @@
             💡
         </button>
     </div>
+    
     <!-- Fim do Ícone da Lâmpada -->
 
     <h2>➕ Criar Nova Data de Evento</h2>
@@ -1003,7 +1020,11 @@
   <!-- INÍCIO Seção: Gerenciamento de Pessoas -->
   <section>
     <h2>👤 Gerenciamento de Pessoas</h2>
-
+    <div class="section-top-right-icon-stats">
+        <button id="statsPessoasBtn" class="icon-button" onclick="openStatsPessoasPopup()" title="Ver Estatísticas de Pessoas">
+            📊 <!-- Bar Chart Emoji Icon -->
+        </button>
+    </div>
     <!-- Formulário para adicionar nova pessoa (usando classes inline) -->
     <div class="inline-form-container">
         <label for="novoNomeInput" class="inline-label">Adicionar Pessoa:</label>
@@ -1089,6 +1110,20 @@
         <p style="margin-top: 20px; font-size: 0.9em; color: #666;">Gerar sugestões limpará e recriará todas as sugestões baseadas nas regras ativas acima para os próximos meses.</p>
       </section>
       <!-- FIM DO CONTEÚDO MOVIDO -->
+    </div>
+  </div>
+
+
+
+  <div id="popupStatsPessoasContainer" class="modal-overlay">
+    <div class="modal-content">
+      <button class="modal-close-btn" onclick="closeStatsPessoasPopup()">×</button>
+      <h2>Estatísticas de Pessoas</h2>
+      <div id="statsPessoasContentArea" style="margin-top: 20px;">
+        <p>Carregando estatísticas...</p>
+        <!-- Statistics content will be populated by JS -->
+      </div>
+       <!-- Optional: Add buttons here later if needed, e.g., for different stats views -->
     </div>
   </div>
   <!-- ============================================================== -->
@@ -1794,75 +1829,382 @@
     function closeSugestoesPopup() { const modal = document.getElementById('popupSugestoesContainer'); if (!modal) return; modal.classList.remove('visible'); modal.addEventListener('transitionend', () => { if (!modal.classList.contains('visible')) modal.style.display = 'none'; }, { once: true }); }
 
 
-    // --- Inicialização ---
-    window.onload = async function () {
-      // Assign functions to window scope for HTML onclick handlers
-      window.criarData = criarData;
-      window.removerData = removerData;
-      window.cancelarData = cancelarData;
-      window.reativarData = reativarData;
-      window.adicionarRegrasESalvarSugestoes = adicionarRegrasESalvarSugestoes;
-      window.removerRegraSugestao = removerRegraSugestao;
-      window.adicionarNome = adicionarNome;   // <-- Função de Nome
-      window.removerNome = removerNome;       // <-- Função de Nome
-      window.filterNomes = filterNomes;       // <-- Função de Nome
-      window.renderCalendario = renderCalendario;
-      window.toggleListVisibility = toggleListVisibility;
-      window.openPopupResumo = openPopupResumo;
-      window.closePopupResumo = closePopupResumo;
-      window.removerConfirmacao = removerConfirmacao;
-      window.exportarResumoPdf = exportarResumoPdf;
-      window.toggleCapitaoStatus = toggleCapitaoStatus;
-      window.openSugestoesPopup = openSugestoesPopup;
-      window.closeSugestoesPopup = closeSugestoesPopup;
-      window.filterSugestoes = filterSugestoes;
+    // --- ****** UPDATED Functions for Popup de Estatísticas de Pessoas ****** ---
+    function openStatsPessoasPopup() {
+        const modal = document.getElementById('popupStatsPessoasContainer');
+        if (!modal) return;
+        // Show loading indicator immediately
+        const contentArea = document.getElementById('statsPessoasContentArea');
+        if(contentArea) contentArea.innerHTML = '<p>Carregando e calculando estatísticas...</p>';
 
-      console.log("Initializing Admin Panel...");
-      try {
-        // Initial data loading sequence
-        // Load independent data first
-        await Promise.all([
-           loadSuggestionRulesFromFirestore(),
-           loadNomes(), // <-- Carrega nomes
-           loadDatas()  // <-- Carrega datas/eventos
-        ]);
+        modal.style.display = 'flex';
+        setTimeout(() => modal.classList.add('visible'), 10);
 
+        // Start calculation *after* showing the modal with loading text
+        renderStatsPessoas();
+    }
 
-        // Render components using the loaded/cached data
-        renderActiveRules(); // Render suggestion rules list inside popup
-        renderNomes(); // <-- Renderiza a lista inicial de nomes
+    function closeStatsPessoasPopup() {
+        const modal = document.getElementById('popupStatsPessoasContainer');
+        if (!modal) return;
+        modal.classList.remove('visible');
+        modal.addEventListener('transitionend', () => {
+            if (!modal.classList.contains('visible')) {
+                modal.style.display = 'none';
+                const contentArea = document.getElementById('statsPessoasContentArea');
+                if (contentArea) contentArea.innerHTML = '<p>Carregando estatísticas...</p>'; // Reset
+            }
+        }, { once: true });
+    }
 
-        // Generate suggestions and render them (depends on rules and dates)
-        await gerarEAtualizarSugestoesFirestore();
+    // Helper to parse duration from horario string (e.g., "10h-13h", "14h", "9h30-11h")
+    // Returns duration in hours, or null if parsing fails. Makes assumptions!
+    function parseHorarioDuration(horarioStr) {
+        if (!horarioStr || typeof horarioStr !== 'string') return null;
+        horarioStr = horarioStr.toLowerCase().replace(/\s+/g, ''); // Normalize: "10h-13h" or "9h30-11h"
 
-        // Render the list of created dates
-        await renderDatasCriadas();
+        const timeParts = horarioStr.split('-');
+        let startTime = null, endTime = null;
 
+        const parseTime = (timeStr) => {
+            const match = timeStr.match(/(\d{1,2})(?:h(\d{1,2})?)?/);
+            if (!match) return null;
+            const hour = parseInt(match[1], 10);
+            const minute = match[2] ? parseInt(match[2], 10) : 0;
+            if (isNaN(hour) || isNaN(minute) || hour < 0 || hour > 23 || minute < 0 || minute > 59) return null;
+            return hour + minute / 60.0; // Time in hours (float)
+        };
 
-        // Render calendar last as it depends on events and processes availability
-        await renderCalendario();
-
-        // Activate default suggestion filter button ('Este Mês')
-        const initialButton = document.querySelector('#sugestoesFilterButtons .suggestion-filter-btn[data-offset="0"]');
-        if (initialButton) {
-             document.querySelectorAll('#sugestoesFilterButtons .suggestion-filter-btn.active').forEach(b => b.classList.remove('active'));
-             initialButton.classList.add('active');
+        startTime = parseTime(timeParts[0]);
+        if (timeParts.length > 1) {
+            endTime = parseTime(timeParts[1]);
         } else {
-            console.warn("Initial suggestion filter button not found.");
+             // Assume 1 hour duration if only start time is given (e.g., "14h")
+             if (startTime !== null) endTime = startTime + 1;
         }
 
-        console.log("Admin Panel Initialization complete.");
 
-      } catch (e) { // Catch errors during the initialization sequence
-        console.error("Error during initial data loading/rendering:", e);
-        const errorDiv = document.createElement('div');
-        errorDiv.innerHTML = `<p style="color: red; background: #ffebee; border: 1px solid red; padding: 10px; text-align: center; margin: 15px;">Erro ao carregar dados iniciais: ${e.message}. Verifique console (F12).</p>`;
-        document.body.insertAdjacentElement('afterbegin', errorDiv);
-      } // End of main try...catch for initialization
+        if (startTime !== null && endTime !== null) {
+            if (endTime <= startTime) {
+                 const diff = endTime - startTime;
+                 return diff > 0 ? diff : 1.0; // Default 1h if same time or ends earlier
+            }
+            return endTime - startTime;
+        }
 
-      // Add listeners for closing modals by clicking overlay backdrop AFTER initialization attempt
-      document.getElementById('popupResumoContainer')?.addEventListener('click', (e) => { if(e.target === e.currentTarget) closePopupResumo(); });
-      document.getElementById('popupSugestoesContainer')?.addEventListener('click', (e) => { if(e.target === e.currentTarget) closeSugestoesPopup(); });
+        return null; // Parsing failed
+    }
+
+
+    async function renderStatsPessoas() {
+        const contentArea = document.getElementById('statsPessoasContentArea');
+        if (!contentArea) return;
+
+        try {
+            // Ensure necessary base data is loaded (should be from window.onload)
+            if (allPessoas.length === 0) await loadNomes();
+            if (allEventosData.length === 0) await loadDatas();
+
+            // 1. Fetch ALL relevant availability data
+            console.log("Fetching availability data for stats...");
+            const disponibilidadeSnapshot = await getDocs(query(disponibilidadeCollectionRef));
+            const allDisponibilidade = disponibilidadeSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            console.log(`Fetched ${allDisponibilidade.length} availability records.`);
+
+            // 2. Process and Aggregate Data
+            const stats = {
+                totalEscalas: 0,
+                totalEscalasCanceladas: 0,
+                totalHoras: 0,
+                countByMonth: {}, // { "YYYY-MM": { count: N, uniquePeople: Set(), canceled: N } }
+                countByWeek: {},  // { "Week String": { count: N, uniquePeople: Set(), canceled: N } }
+                countByWeekday: {}, // { "Weekday": { count: N, uniquePeople: Set() } }
+                countByHorario: {}, // { "Horario": { count: N, uniquePeople: Set() } }
+                countByPerson: {},  // { "Name": { count: N, hours: N } }
+                countByDate: {},    // { "YYYY-MM-DD": { count: N, uniquePeople: Set() } }
+                countByHorarioFull: {} // { "Horario": { count: N, uniquePeople: Set() } } // Needed for separate stat
+            };
+
+            const uniquePeopleAvailableOverall = new Set();
+            const peopleWithAnyEscala = new Set();
+
+            allDisponibilidade.forEach(disp => {
+                if (!disp.dataOriginal || !disp.nome || !disp.horario) {
+                    console.warn("Skipping availability record with missing data:", disp);
+                    return;
+                }
+
+                const evento = eventosDataMap.get(disp.dataOriginal);
+                const isEventoAtivo = evento && evento.estado !== 'cancelado';
+
+                 uniquePeopleAvailableOverall.add(disp.nome);
+
+                if (isEventoAtivo) {
+                    stats.totalEscalas++;
+                    peopleWithAnyEscala.add(disp.nome);
+
+                    const monthKey = disp.dataOriginal.substring(0, 7);
+                    const weekKey = disp.semana || `Semana de ${disp.dataOriginal}`;
+                    const weekdayKey = disp.diasemana || 'Dia Desconhecido';
+                    const horarioKey = disp.horario;
+                    const dateKey = disp.dataOriginal;
+                    const personKey = disp.nome;
+
+                    // Init counters
+                    if (!stats.countByMonth[monthKey]) stats.countByMonth[monthKey] = { count: 0, uniquePeople: new Set(), canceled: 0 };
+                    if (!stats.countByWeek[weekKey]) stats.countByWeek[weekKey] = { count: 0, uniquePeople: new Set(), canceled: 0 };
+                    if (!stats.countByWeekday[weekdayKey]) stats.countByWeekday[weekdayKey] = { count: 0, uniquePeople: new Set() };
+                    if (!stats.countByHorario[horarioKey]) stats.countByHorario[horarioKey] = { count: 0, uniquePeople: new Set() };
+                    if (!stats.countByPerson[personKey]) stats.countByPerson[personKey] = { count: 0, hours: 0 };
+                    if (!stats.countByDate[dateKey]) stats.countByDate[dateKey] = { count: 0, uniquePeople: new Set() };
+                    if (!stats.countByHorarioFull[horarioKey]) stats.countByHorarioFull[horarioKey] = { count: 0, uniquePeople: new Set() };
+
+                    // Increment counts
+                    stats.countByMonth[monthKey].count++;
+                    stats.countByMonth[monthKey].uniquePeople.add(personKey);
+                    stats.countByWeek[weekKey].count++;
+                    stats.countByWeek[weekKey].uniquePeople.add(personKey);
+                    stats.countByWeekday[weekdayKey].count++;
+                    stats.countByWeekday[weekdayKey].uniquePeople.add(personKey);
+                    stats.countByHorario[horarioKey].count++;
+                    stats.countByHorario[horarioKey].uniquePeople.add(personKey);
+                    stats.countByPerson[personKey].count++;
+                    stats.countByDate[dateKey].count++;
+                    stats.countByDate[dateKey].uniquePeople.add(personKey);
+                    stats.countByHorarioFull[horarioKey].count++;
+                    stats.countByHorarioFull[horarioKey].uniquePeople.add(personKey);
+
+                    // Calculate and add hours
+                    const duration = parseHorarioDuration(disp.horario);
+                    if (duration !== null) {
+                        stats.countByPerson[personKey].hours += duration;
+                        stats.totalHoras += duration;
+                    } else {
+                        console.warn(`Could not parse duration for horario: ${disp.horario} on ${disp.dataOriginal}`);
+                    }
+
+                } else {
+                    stats.totalEscalasCanceladas++;
+
+                     const monthKey = disp.dataOriginal.substring(0, 7);
+                     const weekKey = disp.semana || `Semana de ${disp.dataOriginal}`;
+
+                     if (stats.countByMonth[monthKey]) {
+                         stats.countByMonth[monthKey].canceled = (stats.countByMonth[monthKey].canceled || 0) + 1;
+                     }
+                      if (stats.countByWeek[weekKey]) {
+                         stats.countByWeek[weekKey].canceled = (stats.countByWeek[weekKey].canceled || 0) + 1;
+                     }
+                }
+            }); // End forEach disp
+
+            // 3. Calculate Derived Statistics & Prepare Output
+            let statsHTML = `<h4>Resumo Geral (Eventos Ativos)</h4>`;
+            statsHTML += `<ul style="list-style: disc; padding-left: 20px;">`;
+            statsHTML += `<li>Total de Pessoas Registradas: <strong>${allPessoas.length}</strong></li>`;
+            statsHTML += `<li>Total de Escalas Ativas Registradas: <strong>${stats.totalEscalas}</strong></li>`;
+            statsHTML += `<li>Total Estimado de Horas Escalonadas (Eventos Ativos): <strong>${stats.totalHoras.toFixed(1)}h</strong> (Baseado na duração do horário)</li>`;
+            statsHTML += `<li>Média de Escalas Ativas por Pessoa (que teve alguma escala): <strong>${(peopleWithAnyEscala.size > 0 ? (stats.totalEscalas / peopleWithAnyEscala.size) : 0).toFixed(1)}</strong></li>`;
+            const peopleNotScheduled = allPessoas.filter(p => !peopleWithAnyEscala.has(p.nome)).length;
+            statsHTML += `<li>Pessoas Registradas SEM Escalas Ativas: <strong>${peopleNotScheduled}</strong></li>`;
+             statsHTML += `<li>Total de Registros de Disponibilidade para Eventos Cancelados/Inexistentes: <strong>${stats.totalEscalasCanceladas}</strong></li>`;
+            statsHTML += `</ul>`;
+
+            // -- Per Month Stats --
+            statsHTML += `<h4 style="margin-top: 1.5em;">Estatísticas Mensais (Eventos Ativos)</h4>`;
+            const sortedMonths = Object.keys(stats.countByMonth).sort();
+            if (sortedMonths.length > 0) {
+                statsHTML += `<ul style="list-style: none; padding-left: 0;">`;
+                sortedMonths.forEach(month => {
+                    const data = stats.countByMonth[month];
+                    const [y, m] = month.split('-');
+                    const monthName = capitalize(new Date(Date.UTC(y, m - 1, 1)).toLocaleDateString('pt-PT', { timeZone: 'UTC', month: 'long', year: 'numeric' }));
+                    statsHTML += `<li style="margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px dotted #ccc;"><strong>${monthName}:</strong> `;
+                    statsHTML += ` ${data.count} escalas, ${data.uniquePeople.size} pessoas distintas.`;
+                    if (data.canceled > 0) {
+                         statsHTML += ` <span style="color: #e74c3c;">(${data.canceled} registros para eventos cancelados neste mês)</span>`;
+                    }
+                    statsHTML += `</li>`;
+                });
+                statsHTML += `</ul>`;
+            } else {
+                statsHTML += `<p>Nenhuma escala ativa encontrada para análise mensal.</p>`;
+            }
+
+            // -- Per Week Stats --
+            statsHTML += `<h4 style="margin-top: 1.5em;">Estatísticas Semanais (Eventos Ativos)</h4>`;
+            const sortedWeeks = Object.keys(stats.countByWeek).sort((a, b) => {
+                const dateA = a.match(/\d{4}-\d{2}-\d{2}/)?.[0] || a;
+                const dateB = b.match(/\d{4}-\d{2}-\d{2}/)?.[0] || b;
+                return dateA.localeCompare(dateB);
+            });
+            if (sortedWeeks.length > 0) {
+                 statsHTML += `<ul style="list-style: none; padding-left: 0;">`;
+                sortedWeeks.forEach(week => {
+                    const data = stats.countByWeek[week];
+                    statsHTML += `<li style="margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px dotted #ccc;"><strong>${week}:</strong> `;
+                    statsHTML += `${data.count} escalas, ${data.uniquePeople.size} pessoas distintas.`;
+                     if (data.canceled > 0) {
+                         statsHTML += ` <span style="color: #e74c3c;">(${data.canceled} registros para eventos cancelados nesta semana)</span>`;
+                    }
+                    statsHTML += `</li>`;
+                });
+                statsHTML += `</ul>`;
+            } else {
+                statsHTML += `<p>Nenhuma escala ativa encontrada para análise semanal.</p>`;
+            }
+
+             // -- Per Weekday Stats --
+            statsHTML += `<h4 style="margin-top: 1.5em;">Escalas Ativas por Dia da Semana</h4>`;
+            const sortedWeekdays = Object.keys(stats.countByWeekday).sort((a, b) => DIAS_SEMANA_NOMES_COMPLETOS.indexOf(a) - DIAS_SEMANA_NOMES_COMPLETOS.indexOf(b));
+            if (sortedWeekdays.length > 0) {
+                statsHTML += `<ul style="list-style: disc; padding-left: 20px;">`;
+                sortedWeekdays.forEach(day => {
+                    const data = stats.countByWeekday[day];
+                    statsHTML += `<li><strong>${day}:</strong> ${data.count} escalas, ${data.uniquePeople.size} pessoas distintas</li>`;
+                });
+                statsHTML += `</ul>`;
+            } else {
+                statsHTML += `<p>Nenhuma escala ativa encontrada.</p>`;
+            }
+
+             // -- Per Horario Stats --
+            statsHTML += `<h4 style="margin-top: 1.5em;">Escalas Ativas por Horário</h4>`;
+            const sortedHorarios = Object.entries(stats.countByHorario).sort(([,a], [,b]) => b.count - a.count);
+             if (sortedHorarios.length > 0) {
+                statsHTML += `<ul style="list-style: disc; padding-left: 20px;">`;
+                sortedHorarios.forEach(([horario, data]) => {
+                    statsHTML += `<li><strong>${horario}:</strong> ${data.count} escalas, ${data.uniquePeople.size} pessoas distintas</li>`;
+                });
+                statsHTML += `</ul>`;
+            } else {
+                statsHTML += `<p>Nenhuma escala ativa encontrada.</p>`;
+            }
+
+            // -- Per Person Stats --
+            statsHTML += `<h4 style="margin-top: 1.5em;">Escalas Ativas por Pessoa</h4>`;
+            const sortedPeople = Object.entries(stats.countByPerson).sort(([,a], [,b]) => b.count - a.count || a.hours - b.hours);
+             if (sortedPeople.length > 0) {
+                statsHTML += `<ul style="list-style: none; padding-left: 0;">`;
+                sortedPeople.forEach(([name, data]) => {
+                    statsHTML += `<li style="margin-bottom: 5px;"><strong>${name}:</strong> ${data.count} escalas, ~${data.hours.toFixed(1)}h estimadas</li>`;
+                });
+                statsHTML += `</ul>`;
+            } else {
+                statsHTML += `<p>Nenhuma escala ativa encontrada para análise por pessoa.</p>`;
+            }
+
+            // -- Per Date Specific --
+             statsHTML += `<h4 style="margin-top: 1.5em;">Escalas Ativas por Dia Específico (Top 10)</h4>`;
+             const sortedDates = Object.entries(stats.countByDate).sort(([,a], [,b]) => b.count - a.count);
+             if (sortedDates.length > 0) {
+                 statsHTML += `<ul style="list-style: disc; padding-left: 20px;">`;
+                 sortedDates.slice(0, 10).forEach(([date, data]) => {
+                     statsHTML += `<li><strong>${formatarDataParaExibicao(date)}:</strong> ${data.count} escalas, ${data.uniquePeople.size} pessoas distintas</li>`;
+                 });
+                 if (sortedDates.length > 10) statsHTML += `<li>... (e mais ${sortedDates.length - 10} datas)</li>`;
+                 statsHTML += `</ul>`;
+             } else {
+                 statsHTML += `<p>Nenhuma escala ativa encontrada.</p>`;
+             }
+
+
+            // --- LIMITATIONS / IMPOSSIBLE STATS ---
+            statsHTML += `<hr style="margin: 2em 0 1em 0;">`;
+            statsHTML += `<h4 style="color: #777;">Estatísticas Não Calculadas</h4>`;
+            statsHTML += `<p style="font-size: 0.9em; color: #777;">As seguintes estatísticas solicitadas não puderam ser calculadas devido a dados ausentes no schema atual do Firebase ('disponibilidade', 'eventosData', 'pessoas'):</p>`;
+            statsHTML += `<ul style="font-size: 0.85em; color: #777; list-style: circle; padding-left: 20px;">`;
+            statsHTML += `<li>Percentual de disponibilidade (requer definição clara e possivelmente dados sobre *todos* os eventos oferecidos vs. marcados)</li>`;
+            statsHTML += `<li>Horas não cobertas (requer dados sobre a *necessidade* de escala vs. quem foi escalado)</li>`;
+            statsHTML += `<li>Escalas alteradas (requer histórico de alterações)</li>`;
+            statsHTML += `<li>Comparecimento / Atraso / Escalas cumpridas (requer dados de check-in/check-out)</li>`;
+            statsHTML += `<li>Confirmação de escala (requer status de confirmação)</li>`;
+            statsHTML += `<li>Escalas de última hora (requer timestamp de adição da escala)</li>`;
+            statsHTML += `<li>Escalas por tipo de atividade/cargo/função/localização (requer esses campos)</li>`;
+            statsHTML += `<li>Escalas por faixa etária (requer idade das pessoas)</li>`;
+            statsHTML += `<li>Sobrecarga de escalas (requer número ideal de pessoas por slot)</li>`;
+            statsHTML += `<li>Ajustes solicitados (requer log de solicitações)</li>`;
+            statsHTML += `<li>Escalas em feriados (requer lista de feriados para comparar)</li>`;
+            statsHTML += `<li>Dados sobre cancelamento por pessoa (requer mais detalhes ou ligação pessoa->evento cancelado)</li>`;
+            statsHTML += `<li>Muitas outras estatísticas baseadas em percentuais complexos, histórico, ou dados não presentes...</li>`;
+            statsHTML += `</ul>`;
+
+            // 4. Display the HTML
+            contentArea.innerHTML = statsHTML;
+
+        } catch (error) {
+            console.error("Erro ao gerar estatísticas de pessoas:", error);
+            contentArea.innerHTML = `<p style="color: red;">Erro ao carregar e calcular estatísticas: ${error.message}</p>`;
+        }
+    }
+    // --- ****** FIM Funções Popup Estatísticas ****** ---
+
+
+    // --- Inicialização ---
+    window.onload = async function () {
+        // Assign functions to window scope
+        window.criarData = criarData;
+        window.removerData = removerData;
+        window.cancelarData = cancelarData;
+        window.reativarData = reativarData;
+        window.adicionarRegrasESalvarSugestoes = adicionarRegrasESalvarSugestoes;
+        window.removerRegraSugestao = removerRegraSugestao;
+        window.adicionarNome = adicionarNome;
+        window.removerNome = removerNome;
+        window.filterNomes = filterNomes;
+        window.renderCalendario = renderCalendario;
+        window.toggleListVisibility = toggleListVisibility;
+        window.openPopupResumo = openPopupResumo;
+        window.closePopupResumo = closePopupResumo;
+        window.removerConfirmacao = removerConfirmacao;
+        window.exportarResumoPdf = exportarResumoPdf;
+        window.toggleCapitaoStatus = toggleCapitaoStatus;
+        window.openSugestoesPopup = openSugestoesPopup;
+        window.closeSugestoesPopup = closeSugestoesPopup;
+        window.filterSugestoes = filterSugestoes;
+        window.openStatsPessoasPopup = openStatsPessoasPopup;   // <-- Stats Popup Func
+        window.closeStatsPessoasPopup = closeStatsPessoasPopup; // <-- Stats Popup Func
+
+        console.log("Initializing Admin Panel...");
+        try {
+            // Load base data
+            await Promise.all([
+               loadSuggestionRulesFromFirestore(),
+               loadNomes(),
+               loadDatas()
+            ]);
+
+            // Render initial UI elements that depend on base data
+            renderActiveRules();
+            renderNomes();
+
+            // Generate suggestions (depends on rules/dates) and render related UI
+            await gerarEAtualizarSugestoesFirestore(); // Also calls renderSugestoesVisiveis inside
+
+            // Render other UI elements
+            await renderDatasCriadas();
+            await renderCalendario(); // Renders calendar, depends on dates and processes initial availability
+
+            // Activate default suggestion filter button ('Este Mês')
+            const initialButton = document.querySelector('#sugestoesFilterButtons .suggestion-filter-btn[data-offset="0"]');
+            if (initialButton) {
+                 document.querySelectorAll('#sugestoesFilterButtons .suggestion-filter-btn.active').forEach(b => b.classList.remove('active'));
+                 initialButton.classList.add('active');
+            } else { console.warn("Initial suggestion filter button not found."); }
+
+            console.log("Admin Panel Initialization complete.");
+
+        } catch (e) { // Catch errors during the initialization sequence
+            console.error("Error during initial data loading/rendering:", e);
+            const errorDiv = document.createElement('div');
+            errorDiv.innerHTML = `<p style="color: red; background: #ffebee; border: 1px solid red; padding: 10px; text-align: center; margin: 15px;">Erro ao carregar dados iniciais: ${e.message}. Verifique console (F12).</p>`;
+            document.body.insertAdjacentElement('afterbegin', errorDiv);
+        } // End of main try...catch for initialization
+
+        // Add listeners for closing modals by clicking overlay backdrop AFTER initialization attempt
+        document.getElementById('popupResumoContainer')?.addEventListener('click', (e) => { if(e.target === e.currentTarget) closePopupResumo(); });
+        document.getElementById('popupSugestoesContainer')?.addEventListener('click', (e) => { if(e.target === e.currentTarget) closeSugestoesPopup(); });
+        document.getElementById('popupStatsPessoasContainer')?.addEventListener('click', (e) => { if(e.target === e.currentTarget) closeStatsPessoasPopup(); });
 
     }; // End window.onload function assignment
 
