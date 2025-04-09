@@ -493,14 +493,15 @@
   // Firebase Imports...
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
   import { getFirestore, collection, addDoc, serverTimestamp, query, where, getDocs, limit, deleteDoc, doc, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-  // ** REPLACE WITH YOUR ACTUAL FIREBASE CONFIG **
+
+  // ** REPLACE WITH YOUR ACTUAL FIREBASE CONFIG (ou use métodos mais seguros em produção) **
   const firebaseConfig = {
     apiKey: "AIzaSyCxUQTIg1cebw6FSzIH2w05ETgi9sj6dcU",
-  authDomain: "daytime-a0fa5.firebaseapp.com",
-  projectId: "daytime-a0fa5",
-  storageBucket: "daytime-a0fa5.firebasestorage.app",
-  messagingSenderId: "217848316066",
-  appId: "1:217848316066:web:fad68b3fd59ece761997fb"
+    authDomain: "daytime-a0fa5.firebaseapp.com",
+    projectId: "daytime-a0fa5",
+    storageBucket: "daytime-a0fa5.firebasestorage.app",
+    messagingSenderId: "217848316066",
+    appId: "1:217848316066:web:fad68b3fd59ece761997fb"
   };
 
   // Initialize Firebase
@@ -518,10 +519,10 @@
       }
       app = initializeApp(firebaseConfig);
       db = getFirestore(app);
-      console.log("Firebase initialized successfully.");
+      console.log(">>> Firebase initialized successfully.");
       nomeInput.placeholder = "Carregando nomes...";
   } catch (error) {
-      console.error("Firebase initialization failed:", error);
+      console.error(">>> Firebase initialization failed:", error);
       alert(`Erro ao conectar com a base de dados: ${error.message}`);
       if(nomeInput) { nomeInput.placeholder = '-- Erro de Conexão --'; nomeInput.disabled = true; }
       if(continuarBtn) continuarBtn.disabled = true;
@@ -529,66 +530,55 @@
 
   // --- Global Variables ---
   let usuarioAtual = null;
-  let userConfirmations = new Set(); // Stores session confirmations as "YYYY-MM-DD|HH:MM" or "YYYY-MM-DD|null"
+  // REMOVED: let userConfirmations = new Set(); // No longer needed
   let availableEventos = []; // Stores fetched & processed future events {..., data: Date, estado: string}
   let allNames = []; // Array to store all fetched names
   let selectedNameValid = false; // Track if input holds a valid selected name
 
   // --- Date Formatting/Grouping Helpers ---
   function parseStartHour(horarioString) {
-        if (!horarioString || typeof horarioString !== 'string') { return 99; } // Default high number for sorting
-        const match = horarioString.match(/^(\d+)/); // Match digits at the beginning
+        if (!horarioString || typeof horarioString !== 'string') { return 99; }
+        const match = horarioString.match(/^(\d+)/);
         if (match && match[1]) {
             const hour = parseInt(match[1], 10);
             return isNaN(hour) ? 99 : hour;
         }
-        return 99; // Return high number if no digits found
+        return 99;
     }
     function processEventDateData(eventoDataFromFirestore) {
-         // Expects an object like { dataOriginal: 'YYYY-MM-DD', horario: 'HH:MM', diasemana: '...', estado: 'ativo/cancelado', ... }
          if (!eventoDataFromFirestore?.dataOriginal) return null;
          const dataStr = eventoDataFromFirestore.dataOriginal;
          const parts = dataStr.split('-');
-         if (parts.length !== 3) return null; // Invalid format
+         if (parts.length !== 3) return null;
 
           try {
-             // Use UTC to avoid timezone issues when comparing dates
-             const dateObjectUTC = new Date(Date.UTC(parts[0], parts[1] - 1, parts[2])); // Month is 0-indexed
-
-             // Format for display (adjust locale as needed)
+             const dateObjectUTC = new Date(Date.UTC(parts[0], parts[1] - 1, parts[2]));
              const optionsDataExtenso = { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' };
              const dataExtenso = dateObjectUTC.toLocaleDateString('pt-PT', optionsDataExtenso);
-
-             // Extract start hour for potential sorting within a day
              const startHour = parseStartHour(eventoDataFromFirestore.horario);
 
-             // Return enriched object including the Date object and state
              return {
-                ...eventoDataFromFirestore, // Keep all original fields (like id, estado, etc.)
-                data: dateObjectUTC,        // Add the actual Date object (UTC)
-                dataExtenso: dataExtenso,   // Add formatted date string
-                startHour: startHour        // Add parsed start hour
+                ...eventoDataFromFirestore,
+                data: dateObjectUTC,
+                dataExtenso: dataExtenso,
+                startHour: startHour
              };
           } catch (e) {
-             console.error(`Error processing date ${dataStr}:`, e);
+             console.error(`>>> Error processing date ${dataStr}:`, e);
              return null;
           }
       }
      function getSemanaRange(data) {
-       // Expects a Date object
        if (!(data instanceof Date) || isNaN(data)) return { display: "Semana inválida", key: "invalid-" + Date.now() };
 
-       // Calculate start of the week (Monday) based on UTC day
-       const diaDaSemana = data.getUTCDay(); // 0 (Sun) to 6 (Sat)
-       const diff = diaDaSemana === 0 ? -6 : 1 - diaDaSemana; // Calculate difference to Monday
+       const diaDaSemana = data.getUTCDay();
+       const diff = diaDaSemana === 0 ? -6 : 1 - diaDaSemana;
        const inicioSemana = new Date(data);
        inicioSemana.setUTCDate(data.getUTCDate() + diff);
 
-       // Calculate end of the week (Sunday)
        const fimSemana = new Date(inicioSemana);
        fimSemana.setUTCDate(inicioSemana.getUTCDate() + 6);
 
-       // Format the display string
        const iDia = inicioSemana.getUTCDate();
        const fDia = fimSemana.getUTCDate();
        const opts = { month: 'long', timeZone: 'UTC' };
@@ -598,13 +588,11 @@
        const aFim = fimSemana.getUTCFullYear();
 
        let range = `Semana de ${iDia}`;
-       if (mInicio !== mFim || aInicio !== aFim) range += ` de ${mInicio}`; // Add month if different or year is different
-       if (aInicio !== aFim) range += ` de ${aInicio}`; // Add year if different
-       range += ` a ${fDia} de ${mFim}`; // Always add end day and month
-       // Add end year only if different from start year OR if months were different (to avoid ambiguity)
+       if (mInicio !== mFim || aInicio !== aFim) range += ` de ${mInicio}`;
+       if (aInicio !== aFim) range += ` de ${aInicio}`;
+       range += ` a ${fDia} de ${mFim}`;
        if (aInicio !== aFim || mInicio !== mFim) range += ` de ${aFim}`;
 
-       // Create a sortable key (YYYY-MM-DD of the start date)
        const sortK = `${aInicio}-${String(inicioSemana.getUTCMonth() + 1).padStart(2, '0')}-${String(iDia).padStart(2, '0')}`;
 
        return { display: range, key: sortK };
@@ -612,44 +600,39 @@
 
   // --- Fetch Event Dates ---
   async function fetchAndFilterEventosData() {
-        if (!db) { console.error("DB not initialized."); return []; }
-        console.log("Fetching 'eventosData'...");
-        availableEventos = []; // Reset global list
+        if (!db) { console.error(">>> DB not initialized for fetchAndFilterEventosData."); return []; }
+        console.log(">>> [fetchAndFilterEventosData] Starting fetch...");
+        availableEventos = [];
 
-        // Get today's date at the beginning (00:00:00) in UTC
         const today = new Date();
         const todayUTC = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate()));
-        console.log(`Comparing against future/today date: ${todayUTC.toISOString().split('T')[0]}`);
+        console.log(`>>> [fetchAndFilterEventosData] Comparing against future/today date: ${todayUTC.toISOString().split('T')[0]}`);
 
         try {
             const qSnapshot = await getDocs(collection(db, "eventosData"));
-            console.log(`Fetched ${qSnapshot.size} total events from Firestore.`);
+            console.log(`>>> [fetchAndFilterEventosData] Fetched ${qSnapshot.size} total events from Firestore.`);
 
             const fetchedAndProcessed = [];
             qSnapshot.forEach((doc) => {
-                // Process each event (parse date, add helpers)
                 const pData = processEventDateData(doc.data());
-                // Filter: Check if processed data is valid AND date is today or in the future
                 if (pData && pData.data >= todayUTC) {
-                     // Keep all fields including the 'estado'
                     fetchedAndProcessed.push(pData);
                 }
             });
 
-            // Sort the valid future events by date, then by start hour
             fetchedAndProcessed.sort((a, b) => {
                 const dateDiff = a.data - b.data;
                 if (dateDiff !== 0) return dateDiff;
-                return (a.startHour ?? 99) - (b.startHour ?? 99); // Sort by parsed hour
+                return (a.startHour ?? 99) - (b.startHour ?? 99);
             });
 
-            availableEventos = fetchedAndProcessed; // Update global list
-            console.log(`Found ${availableEventos.length} valid future/today events after processing and filtering.`);
+            availableEventos = fetchedAndProcessed;
+            console.log(`>>> [fetchAndFilterEventosData] Found ${availableEventos.length} valid future/today events.`);
 
         } catch (error) {
-            console.error("ERROR fetching or processing events:", error);
+            console.error(">>> ERROR fetching or processing events:", error);
             alert("Erro ao carregar as datas dos eventos.");
-            availableEventos = []; // Ensure list is empty on error
+            availableEventos = [];
         }
         return availableEventos;
     }
@@ -662,33 +645,31 @@
       nomeInput.disabled = true;
       continuarBtn.disabled = true;
       allNames = [];
-      console.log("[preencherNomes] Starting.");
-      if (!db) { console.error("DB not initialized."); return; }
+      console.log(">>> [preencherNomes] Starting.");
+      if (!db) { console.error(">>> DB not initialized for preencherNomes."); return; }
       try {
-          const qSnapshot = await getDocs(query(collection(db, "pessoas"), orderBy("nome"))); // Order by name in Firestore
+          const qSnapshot = await getDocs(query(collection(db, "pessoas"), orderBy("nome")));
           const nomesTemp = [];
           qSnapshot.forEach((doc) => {
-              // Trim whitespace just in case
               if (doc.data()?.nome) nomesTemp.push(doc.data().nome.trim());
           });
-          allNames = nomesTemp; // Already sorted by Firestore
+          allNames = nomesTemp;
 
           if (allNames.length > 0) {
               nomeInput.placeholder = 'Clique ou digite para escolher...';
               nomeInput.disabled = false;
-              console.log("Names loaded:", allNames.length);
+              console.log(">>> [preencherNomes] Names loaded:", allNames.length);
           } else {
               nomeInput.placeholder = '-- Nenhum nome encontrado --';
-              console.warn("No names found in 'pessoas' collection.");
+              console.warn(">>> [preencherNomes] No names found in 'pessoas' collection.");
           }
       } catch (error) {
-          console.error("Error fetching names:", error);
+          console.error(">>> Error fetching names:", error);
           nomeInput.placeholder = '-- Erro ao carregar nomes --';
           alert("Não foi possível carregar a lista de nomes.");
       }
       finally {
-          console.log("[preencherNomes] Finished.");
-          // Ensure button state is correct after loading finishes or fails
+          console.log(">>> [preencherNomes] Finished.");
           continuarBtn.disabled = !selectedNameValid;
       }
   }
@@ -696,7 +677,7 @@
   // --- Suggestion Display Logic ---
 
   function displaySuggestions(namesToShow) {
-      suggestionsDiv.innerHTML = ''; // Clear previous
+      suggestionsDiv.innerHTML = '';
       if (!namesToShow || namesToShow.length === 0) {
           suggestionsDiv.classList.add('hidden');
           return;
@@ -708,22 +689,19 @@
           item.addEventListener('click', () => selectName(name));
           suggestionsDiv.appendChild(item);
       });
-      suggestionsDiv.classList.remove('hidden'); // Show the list
+      suggestionsDiv.classList.remove('hidden');
   }
 
   function selectName(name) {
-      // Check against the fetched list `allNames`
       if (allNames.includes(name)) {
         nomeInput.value = name;
         suggestionsDiv.classList.add('hidden');
         usuarioAtual = name;
         selectedNameValid = true;
         continuarBtn.disabled = false;
-        console.log("Name selected:", usuarioAtual);
+        console.log(">>> [selectName] Name selected and valid:", usuarioAtual);
       } else {
-        console.warn("Attempted to select an invalid name:", name);
-        // Keep button disabled, maybe clear input?
-        // nomeInput.value = ""; // Optional: Clear if invalid selection somehow occurs
+        console.warn(">>> [selectName] Attempted to select an invalid name:", name);
         usuarioAtual = null;
         selectedNameValid = false;
         continuarBtn.disabled = true;
@@ -743,51 +721,41 @@
           filteredNames = allNames.filter(name =>
               name.toLowerCase().includes(inputTextLower)
           );
-           displaySuggestions(filteredNames); // Show filtered list
+           displaySuggestions(filteredNames);
       } else {
-          // If input is empty, show all names (triggered by focus/click)
           displaySuggestions(allNames);
-          // Don't automatically enable continue button if input is empty
           return;
       }
 
-      // Check if the current typed text is an exact match to a valid name
       if (allNames.includes(inputText)) {
           selectedNameValid = true;
           continuarBtn.disabled = false;
-          usuarioAtual = inputText; // Set global name if it's a perfect match
-          console.log("Input matches valid name:", usuarioAtual);
+          usuarioAtual = inputText;
+          console.log(">>> [handleNameInput] Input matches valid name:", usuarioAtual);
       }
   }
 
   // --- Event Listeners for Input ---
   nomeInput.addEventListener('input', handleNameInput);
-  nomeInput.addEventListener('focus', () => {
-      // Show suggestions on focus: all if empty, filtered otherwise
-      handleNameInput(); // Re-run logic which handles empty/non-empty cases
-  });
-  nomeInput.addEventListener('click', () => {
-      // Re-run logic on click as well for mobile/etc.
-      handleNameInput();
-  });
+  nomeInput.addEventListener('focus', handleNameInput);
+  nomeInput.addEventListener('click', handleNameInput);
   document.addEventListener('click', (event) => {
-      // Hide suggestions if click is outside the input AND outside the suggestions list
       if (!nomeInput.contains(event.target) && !suggestionsDiv.contains(event.target)) {
           suggestionsDiv.classList.add('hidden');
       }
   });
-   // Add Enter key listener in window.onload after names are loaded
-
+   // Add Enter key listener in window.onload
 
   // --- Button Actions ---
   async function continuar() {
+    console.log(">>> [continuar] Button clicked. Valid name?", selectedNameValid, "User:", usuarioAtual);
     if (!selectedNameValid || !usuarioAtual) {
-        // Final validation check
         const currentInputText = nomeInput.value.trim();
         if (allNames.includes(currentInputText)) {
-            selectName(currentInputText); // Explicitly select if valid
+            selectName(currentInputText);
         } else {
             alert("Por favor, selecione um nome válido da lista ou digite um nome completo existente.");
+            console.warn(">>> [continuar] Validation failed.");
             nomeInput.focus();
             displaySuggestions(allNames);
             return;
@@ -795,30 +763,37 @@
     }
     if (!db) { alert("Erro DB."); return; }
 
-    userConfirmations.clear(); // Clear previous session confirmations
+    // REMOVED: userConfirmations.clear();
+    console.log(">>> [continuar] Proceeding to show cards.");
     document.getElementById("selecao-container").classList.add("hidden");
     document.getElementById("cards-container").classList.remove("hidden");
     document.getElementById("boasVindas").textContent = `Olá, ${usuarioAtual}! Carregando datas...`;
     document.getElementById("cards-grupos").innerHTML = '<div style="text-align:center; padding: 20px;">A carregar disponibilidades...</div>';
 
-    // Fetch the events again (or use cached if implementing caching)
+    console.log(">>> [continuar] Calling fetchAndFilterEventosData...");
     const eventosParaMostrar = await fetchAndFilterEventosData();
+    console.log(`>>> [continuar] fetchAndFilterEventosData returned ${eventosParaMostrar.length} events.`);
 
     document.getElementById("boasVindas").textContent = `Olá, ${usuarioAtual}! Selecione os dias em que pode:`;
     if (eventosParaMostrar.length > 0) {
-        // Render cards based on the fetched events
-        renderCardsAgrupados(eventosParaMostrar);
-        // Pre-load user's existing confirmations for these events in the background
-        preloadUserConfirmations(eventosParaMostrar);
+        console.log(">>> [continuar] Calling renderCardsAgrupados...");
+        renderCardsAgrupados(eventosParaMostrar); // Renders cards always as "Eu posso"
+        console.log(">>> [continuar] renderCardsAgrupados finished.");
+
+        // REMOVED CALL: await preloadUserConfirmations(eventosParaMostrar);
+        // console.log(">>> [continuar] preloadUserConfirmations would have run here.");
+
     } else {
+        console.log(">>> [continuar] No future events found.");
         document.getElementById("cards-grupos").innerHTML = '<div style="text-align:center; padding: 20px;">Nenhuma data futura disponível para confirmação.</div>';
     }
   }
 
   function voltar() {
+    console.log(">>> [voltar] Back button clicked.");
     usuarioAtual = null;
     selectedNameValid = false;
-    userConfirmations.clear();
+    // REMOVED: userConfirmations.clear();
     availableEventos = [];
     document.getElementById("cards-container").classList.add("hidden");
     document.getElementById("selecao-container").classList.remove("hidden");
@@ -826,97 +801,42 @@
     suggestionsDiv.classList.add('hidden');
     continuarBtn.disabled = true;
     document.getElementById("cards-grupos").innerHTML = "";
-    // Optionally call preencherNomes again if list might have changed?
-    // For now, assume the initial list is static for the session.
   }
 
-  // --- Preload User Confirmations ---
-   async function preloadUserConfirmations(eventos) {
-        if (!usuarioAtual || !db || eventos.length === 0) return;
-        console.log(`Preloading confirmations for ${usuarioAtual}...`);
-        userConfirmations.clear(); // Start fresh for this view
+  // REMOVED FUNCTION: preloadUserConfirmations()
 
-        // Create a list of unique date strings from the displayed events
-        const dateStrings = [...new Set(eventos.map(ev => ev.dataOriginal))];
-        if (dateStrings.length === 0) return;
-
-        // Query Firestore for confirmations matching the user and the relevant dates
-        // Note: Firestore 'in' query limit is 30 items as of now. If more dates, split into multiple queries.
-        const MAX_IN_QUERY = 30;
-        const dateChunks = [];
-        for (let i = 0; i < dateStrings.length; i += MAX_IN_QUERY) {
-            dateChunks.push(dateStrings.slice(i, i + MAX_IN_QUERY));
-        }
-
-        let foundConfirmations = 0;
-        try {
-            for (const chunk of dateChunks) {
-                 const q = query(
-                     collection(db, "disponibilidade"),
-                     where("nome", "==", usuarioAtual),
-                     where("dataOriginal", "in", chunk)
-                 );
-                 const querySnapshot = await getDocs(q);
-                 querySnapshot.forEach((doc) => {
-                    const data = doc.data();
-                    const sessionKey = `${data.dataOriginal}|${data.horario === null ? 'null' : data.horario}`;
-                    userConfirmations.add(sessionKey);
-                    foundConfirmations++;
-                    // Update the specific card visually *now* that we know it's confirmed
-                    const cardElement = findCardElement(data.dataOriginal, data.horario);
-                    if (cardElement && !cardElement.classList.contains('canceled')) { // Only update if not canceled
-                       cardElement.classList.add('confirmado');
-                       const button = cardElement.querySelector('.btn-confirmar');
-                       if (button) button.textContent = 'Confirmado!';
-                    }
-                 });
-            }
-            console.log(`Preloaded ${foundConfirmations} existing confirmations. Session cache:`, Array.from(userConfirmations));
-        } catch (error) {
-            console.error("Error preloading user confirmations:", error);
-            // Don't alert the user, but log the error
-        }
-    }
-
-     // Helper to find a card based on data and horario
+     // Helper to find a card based on data and horario (still useful for UI updates)
      function findCardElement(dataOriginal, horario) {
         const cards = document.querySelectorAll('#cards-grupos .card');
         for (const card of cards) {
-            // Find the hidden data needed for matching (could store as data attributes)
-            // For now, let's try matching based on displayed text (less robust)
-            const dataPequena = card.querySelector('.data-pequena');
-            const horaTextoSpan = card.querySelector('.dia-semana .hora-texto');
-            const displayedHorario = horaTextoSpan ? horaTextoSpan.textContent.trim() : null;
-
-            // Need a way to reliably get the 'dataOriginal' back from the element.
-            // Let's add it as a data attribute in createCardElement.
             if (card.dataset.originalDate === dataOriginal && card.dataset.horario === (horario === null ? 'null' : horario)) {
                 return card;
             }
         }
-        return null; // Not found
+        return null;
      }
 
 
   // --- Card Creation / Rendering ---
    function createCardElement(ev) {
-       const isCanceled = ev.estado === 'cancelado'; // Check the canceled status
-       const sessionKey = `${ev.dataOriginal}|${ev.horario || 'null'}`;
-       // Confirmation status is irrelevant if event is canceled
-       const confirmadoNaSessao = !isCanceled && userConfirmations.has(sessionKey);
+       const isCanceled = ev.estado === 'cancelado';
+       const dataOriginal = ev.dataOriginal;
+       // Ensure horario is consistently 'null' string or the time string
+       const horario = ev.horario === null ? 'null' : (ev.horario || 'null');
+       const logPrefix = `>>> [createCardElement | ${dataOriginal}|${horario}]`;
+
+       // console.log(`${logPrefix} Creating card element for event:`, ev); // Keep this if needed
 
        const card = document.createElement("div");
        card.className = "card";
-       // Add data attributes for easier lookup later
-       card.dataset.originalDate = ev.dataOriginal;
-       card.dataset.horario = ev.horario === null ? 'null' : ev.horario;
+       card.dataset.originalDate = dataOriginal;
+       card.dataset.horario = horario; // Store 'null' or time string
 
        if (isCanceled) {
-           card.classList.add('canceled'); // Add canceled class
-       } else if (confirmadoNaSessao) {
-           // Note: Preload confirms might add this class later too
-           card.classList.add('confirmado');
+           // console.log(`${logPrefix} Applying 'canceled' class.`);
+           card.classList.add('canceled');
        }
+       // Intentionally NO 'confirmado' class added here
 
        const dataPequenaDiv = document.createElement("div");
        dataPequenaDiv.className = "data-pequena";
@@ -925,272 +845,286 @@
        const diaSemanaDiv = document.createElement("div");
        diaSemanaDiv.className = "dia-semana";
        const diaTexto = ev.diasemana;
-       const horarioTexto = (ev.horario?.trim()) ? ` ${ev.horario.trim()}` : '';
+       const horarioTexto = (ev.horario?.trim() && horario !== 'null') ? ` ${ev.horario.trim()}` : ''; // Display only if not null/empty
        diaSemanaDiv.innerHTML = `${diaTexto}${horarioTexto ? '<br><span class="hora-texto">' + horarioTexto + '</span>' : ''}`;
 
        const btnConfirmar = document.createElement("button");
        btnConfirmar.className = "btn-confirmar";
 
        if (isCanceled) {
+           // console.log(`${logPrefix} Setting button text to 'Cancelado' and disabling.`);
            btnConfirmar.textContent = "Cancelado";
-           btnConfirmar.disabled = true; // Disable button
+           btnConfirmar.disabled = true;
        } else {
-           // Initial state based on session cache, preload might update later
-           btnConfirmar.textContent = confirmadoNaSessao ? "Confirmado!" : "Eu posso";
-           btnConfirmar.onclick = () => confirmar(ev, btnConfirmar); // Add handler only if not canceled
+           // ALWAYS initialize as "Eu posso"
+           // console.log(`${logPrefix} Setting button text to 'Eu posso'.`);
+           btnConfirmar.textContent = "Eu posso";
+           btnConfirmar.onclick = () => confirmar(ev, btnConfirmar);
        }
 
        card.appendChild(dataPequenaDiv);
        card.appendChild(diaSemanaDiv);
        card.appendChild(btnConfirmar);
 
+       // console.log(`${logPrefix} Final card classes: '${card.className}'. Final button text: '${btnConfirmar.textContent}'. Returning card element.`);
        return card;
    }
+
    function renderCardsAgrupados(eventos) {
         const container = document.getElementById("cards-grupos");
-        container.innerHTML = ""; // Clear previous cards
-        console.log(`Rendering ${eventos.length} events. Initial session confirmations:`, Array.from(userConfirmations));
+        container.innerHTML = "";
+        console.log(`>>> [renderCardsAgrupados] Rendering ${eventos.length} events.`);
 
         if (eventos.length === 0) {
             container.innerHTML = '<div style="text-align:center; padding: 20px;">Nenhuma data futura disponível para confirmação.</div>';
             return;
         }
 
-        // Group events by week
         const gruposPorSemana = {};
         eventos.forEach(ev => {
-            if (!ev?.data) return; // Skip if date object is missing
+            if (!ev?.data) return;
             try {
-                const si = getSemanaRange(ev.data); // Get week info { display: "...", key: "YYYY-MM-DD" }
+                const si = getSemanaRange(ev.data);
                 if (!gruposPorSemana[si.key]) {
                     gruposPorSemana[si.key] = { display: si.display, eventos: [] };
                 }
                 gruposPorSemana[si.key].eventos.push(ev);
             } catch (e) {
-                console.error("Error grouping event by week", ev, e);
+                console.error(">>> Error grouping event by week", ev, e);
             }
         });
 
-        // Sort weeks by their key (YYYY-MM-DD)
         const semanasOrdenadas = Object.keys(gruposPorSemana).sort();
 
-        // Render each week
         semanasOrdenadas.forEach(semanaKey => {
             const semanaGrupo = gruposPorSemana[semanaKey];
             const grupoDiv = document.createElement("div");
             grupoDiv.className = "grupo-semana";
 
-            // Add week title
             const titulo = document.createElement("div");
             titulo.className = "semana-titulo";
             titulo.textContent = semanaGrupo.display;
             grupoDiv.appendChild(titulo);
 
-            // Create grid for the week's cards
             const gridSemana = document.createElement("div");
             gridSemana.className = "cards-grid";
 
-            // Group events within the week by day
             const eventosPorDiaNaSemana = {};
             semanaGrupo.eventos.forEach(ev => {
-                const dk = ev.dataOriginal; // Group by YYYY-MM-DD string
+                const dk = ev.dataOriginal;
                 if (!eventosPorDiaNaSemana[dk]) {
                     eventosPorDiaNaSemana[dk] = [];
                 }
                 eventosPorDiaNaSemana[dk].push(ev);
             });
 
-            // Sort days within the week
             const diasOrdenadosNaSemana = Object.keys(eventosPorDiaNaSemana).sort();
 
-            // Render cards for each day
             diasOrdenadosNaSemana.forEach(dataDia => {
                 const eventosDoDia = eventosPorDiaNaSemana[dataDia];
-                // Sort events within the same day by start hour
                 eventosDoDia.sort((a, b) => (a.startHour ?? 99) - (b.startHour ?? 99));
 
+                // console.log(`>>> [renderCardsAgrupados] Processing day ${dataDia}, ${eventosDoDia.length} event(s).`);
+
                 if (eventosDoDia.length === 1) {
-                    // If only one event for the day, add card directly to grid
+                    // console.log(`>>> [renderCardsAgrupados] Calling createCardElement for single event on ${dataDia}`);
                     gridSemana.appendChild(createCardElement(eventosDoDia[0]));
                 } else if (eventosDoDia.length > 1) {
-                    // If multiple events, group them horizontally
+                    // console.log(`>>> [renderCardsAgrupados] Creating dia-agrupado for ${eventosDoDia.length} events on ${dataDia}`);
                     const diaAgrupadoWrapper = document.createElement("div");
                     diaAgrupadoWrapper.className = "dia-agrupado";
-                    eventosDoDia.forEach(ev => diaAgrupadoWrapper.appendChild(createCardElement(ev)));
-                    gridSemana.appendChild(diaAgrupadoWrapper); // Add the group to the grid
+                    eventosDoDia.forEach((ev, index) => {
+                        // console.log(`>>> [renderCardsAgrupados] Calling createCardElement for event ${index+1} in group on ${dataDia}`);
+                        diaAgrupadoWrapper.appendChild(createCardElement(ev));
+                    });
+                    gridSemana.appendChild(diaAgrupadoWrapper);
                 }
             });
 
-            grupoDiv.appendChild(gridSemana); // Add the grid to the week group
-            container.appendChild(grupoDiv); // Add the week group to the main container
+            grupoDiv.appendChild(gridSemana);
+            container.appendChild(grupoDiv);
         });
-        console.log("[renderCardsAgrupados] Finished rendering.");
+        console.log(">>> [renderCardsAgrupados] Finished rendering all weeks.");
     }
 
-  // --- Confirmation/Deletion Logic ---
-  async function deleteConfirmation(dataOriginal, horario = null) {
-        if (!usuarioAtual || !dataOriginal || !db) { console.error("deleteConfirmation missing data"); return false; }
-        const horarioValue = horario === null ? null : horario; // Use actual null for query if needed
-        console.log(`Deleting for ${usuarioAtual} on ${dataOriginal} ${horarioValue !== null ? `at ${horarioValue}` : '(no specific time)'}...`);
+  // --- Confirmation/Deletion Logic (NEW VERSION) ---
+  
+  
+  
+  
+  async function confirmar(eventoData, button) {
+     // Prevent action on canceled event
+     if (eventoData.estado === 'cancelado') {
+         console.warn(">>> [confirmar] Action on canceled event blocked:", eventoData.dataOriginal, eventoData.horario);
+         return;
+     }
 
-        // Construct the query based on whether horario is null or a string
-        const q = query(
+     if (!db) { console.error(">>> DB not available for confirmar."); alert("Erro conexão."); return; }
+     if (!usuarioAtual) { console.error(">>> No user selected for confirmar."); alert("Erro: Utilizador não definido."); return; }
+
+     const card = button.closest('.card');
+     const dataOriginal = eventoData.dataOriginal;
+     const horarioEvento = eventoData.horario || null;
+     if (!dataOriginal) { console.error(">>> Missing dataOriginal in confirmar"); alert("Erro interno."); return; }
+
+     // Capture the button text BEFORE disabling it, as this indicates user intent
+     const currentButtonText = button.textContent;
+     console.log(`>>> [confirmar] Clicked button with text: "${currentButtonText}"`);
+
+     if (button.disabled) { console.log(">>> [confirmar] Action already in progress."); return; }
+
+     const horarioLog = horarioEvento === null ? 'null' : horarioEvento;
+     const logPrefix = `>>> [confirmar | User: ${usuarioAtual} | ${dataOriginal}|${horarioLog}]`;
+     console.log(`${logPrefix} --- Button Click START (UI Intent Logic) ---`);
+
+     button.disabled = true; // Disable button early
+     button.textContent = 'Aguarde...'; // Generic processing text
+     const spinner = document.createElement('div'); spinner.className = 'loading-spinner'; card.appendChild(spinner);
+
+     let confirmationExists = false; // Track the state found in Firestore
+
+     try {
+         // --- STEP 1: Always check current state in Firestore ---
+         console.log(`${logPrefix} Checking Firestore for existing confirmation...`);
+         const qCheck = query(
              collection(db, "disponibilidade"),
              where("nome", "==", usuarioAtual),
              where("dataOriginal", "==", dataOriginal),
-             where("horario", "==", horarioValue), // Query for null or specific time string
+             where("horario", "==", horarioEvento),
              limit(1)
          );
+         const checkSnapshot = await getDocs(qCheck);
+         confirmationExists = !checkSnapshot.empty;
+         const existingDocId = confirmationExists ? checkSnapshot.docs[0].id : null; // Get ID if exists
+         console.log(`${logPrefix} Firestore check complete. Exists? ${confirmationExists}${existingDocId ? ` (ID: ${existingDocId})` : ''}`);
 
-        try {
-            const qSnapshot = await getDocs(q);
-            if (qSnapshot.empty) {
-                 console.warn(`Confirmation doc not found in Firestore for ${usuarioAtual} on ${dataOriginal} at ${horarioValue}. Assuming deleted.`);
-                 return true; // Treat as success if already gone
-            }
-            const docToDelete = qSnapshot.docs[0];
-            await deleteDoc(doc(db, "disponibilidade", docToDelete.id));
-            console.log(`Doc ${docToDelete.id} deleted from Firestore.`);
-            return true;
-        } catch (error) {
-            console.error(`Error deleting confirmation for ${usuarioAtual} on ${dataOriginal} at ${horarioValue}:`, error);
-            alert(`Erro ao remover confirmação para ${dataOriginal}. Tente novamente.`);
-            return false;
-        }
-    }
-  async function confirmar(eventoData, button) {
-       // --- Prevent action on canceled event ---
-       if (eventoData.estado === 'cancelado') {
-           console.warn("Attempted action on a canceled event:", eventoData.dataOriginal, eventoData.horario);
-           return; // Stop execution
-       }
-       // --- End Canceled Check ---
+         // --- STEP 2: Act based on USER INTENT (button text) and Firestore state ---
 
-       if (!db) { console.error("DB not available."); alert("Erro conexão."); return; }
-       const card = button.closest('.card');
-       const dataOriginal = eventoData.dataOriginal;
-       const horarioEvento = eventoData.horario || null; // Use null if horario is empty/null/undefined
-       if (!dataOriginal) { console.error("Missing dataOriginal in eventoData"); alert("Erro interno: dados do evento inválidos."); return; }
-       if (button.disabled) { console.log("Action already in progress for this card."); return; }
+         if (currentButtonText === "Eu posso") {
+             // --- USER INTENDS TO CONFIRM ---
+             console.log(`${logPrefix} User intent: CONFIRM.`);
+             if (!confirmationExists) {
+                 // --- Needs to be added ---
+                 console.log(`${logPrefix} Firestore state: DOES NOT EXIST. Adding...`);
+                 // Prepare data
+                 const semanaInfo = getSemanaRange(eventoData.data);
+                 const dados = { /* ... dados ... */
+                     nome: usuarioAtual, ano: String(eventoData.data.getUTCFullYear()), mes: String(eventoData.data.getUTCMonth() + 1).padStart(2,'0'), semana: semanaInfo.display, dia: String(eventoData.data.getUTCDate()).padStart(2,'0'), diasemana: eventoData.diasemana, dataOriginal: dataOriginal, horario: horarioEvento, timestamp: serverTimestamp()
+                 };
+                 if (!dados.nome || !dados.dataOriginal) throw new Error("Dados essenciais em falta.");
 
-       const sessionKey = `${dataOriginal}|${horarioEvento === null ? 'null' : horarioEvento}`;
-       const logPrefix = `[confirmar | User: ${usuarioAtual} | ${sessionKey}]`;
-       console.log(`${logPrefix} --- START ---`);
+                 const docRef = await addDoc(collection(db, "disponibilidade"), dados);
+                 console.log(`${logPrefix} ADD successful. Doc ID: ${docRef.id}.`);
 
-       const isConfirmedInSession = userConfirmations.has(sessionKey);
-       console.log(`${logPrefix} Status in session cache: ${isConfirmedInSession}`);
+                 // Update UI to CONFIRMED state
+                 card.classList.add('confirmado');
+                 button.textContent = "Confirmado!";
+                 triggerEmojiBurst(button);
 
-       button.disabled = true;
-       const spinner = document.createElement('div'); spinner.className = 'loading-spinner'; card.appendChild(spinner); // Add spinner
+             } else {
+                 // --- Already exists, user clicked "Eu posso" ---
+                 console.log(`${logPrefix} Firestore state: ALREADY EXISTS. Updating UI only.`);
+                 // DO NOTHING in Firebase
+                 // Update UI to CONFIRMED state (syncing UI with actual state)
+                 card.classList.add('confirmado');
+                 button.textContent = "Confirmado!";
+                 triggerEmojiBurst(button); // Still show success effect
+             }
 
-       try {
-           if (isConfirmedInSession) { // --- REMOVE CONFIRMATION ---
-               button.textContent = 'A remover...';
-               console.log(`${logPrefix} Attempting to REMOVE confirmation.`);
-               const deleteSuccess = await deleteConfirmation(dataOriginal, horarioEvento);
+         } else if (currentButtonText === "Confirmado!") {
+             // --- USER INTENDS TO REMOVE ---
+             console.log(`${logPrefix} User intent: REMOVE.`);
+             if (confirmationExists && existingDocId) {
+                 // --- Exists and we have ID: Remove it ---
+                  console.log(`${logPrefix} Firestore state: EXISTS. Removing doc ID: ${existingDocId}...`);
+                 await deleteDoc(doc(db, "disponibilidade", existingDocId));
+                 console.log(`${logPrefix} REMOVE successful.`);
 
-               if (deleteSuccess) {
-                   userConfirmations.delete(sessionKey); // Remove from session cache
-                   card.classList.remove('confirmado');
-                   button.textContent = 'Eu posso'; // Update button text
-                   console.log(`${logPrefix} REMOVE successful.`);
-               } else {
-                   // Deletion failed, revert button text (card state remains 'confirmado' visually for now)
-                   button.textContent = 'Confirmado!';
-                   console.error(`${logPrefix} REMOVE failed.`);
-               }
+                 // Update UI to NON-confirmed state
+                 card.classList.remove('confirmado');
+                 button.textContent = "Eu posso";
 
-           } else { // --- ADD CONFIRMATION ---
-               button.textContent = 'A guardar...';
-               console.log(`${logPrefix} Attempting to ADD confirmation.`);
+             } else {
+                 // --- Does not exist OR failed to get ID, but user clicked "Confirmado!" ---
+                 console.warn(`${logPrefix} Firestore state: DOES NOT EXIST (or no ID found), but UI said 'Confirmado!'. Correcting UI only.`);
+                 // DO NOTHING in Firebase
+                 // Correct UI to NON-confirmed state
+                 card.classList.remove('confirmado');
+                 button.textContent = "Eu posso";
+             }
+         } else {
+             // Should not happen if button text is managed correctly
+             console.warn(`${logPrefix} Unexpected button text found: "${currentButtonText}"`);
+             // Revert button text conservatively
+             button.textContent = confirmationExists ? 'Confirmado!' : 'Eu posso';
+         }
 
-               // Optional: Check Firestore again just before adding, though preload helps avoid this.
-               // const checkQuery = query( ... );
-               // const existingDocsSnapshot = await getDocs(checkQuery);
-               // if (!existingDocsSnapshot.empty) { ... handle already exists ... }
+     } catch (e) {
+         console.error(`${logPrefix} ERROR during Firestore check or update: `, e);
+         alert(`Ocorreu um erro ao atualizar a disponibilidade para ${dataOriginal}. Tente novamente. (${e.message})`);
+         // Revert button text based on the state BEFORE the action was attempted
+         button.textContent = confirmationExists ? 'Confirmado!' : 'Eu posso';
+         // Avoid changing card class here to prevent potential visual inconsistencies after error
 
-               console.log(`${logPrefix} Saving to Firestore...`);
-               // Prepare data, ensuring all necessary fields are present
-               const semanaInfo = getSemanaRange(eventoData.data); // Recalculate just in case
-               const dados = {
-                  nome: usuarioAtual,
-                  ano: String(eventoData.data.getUTCFullYear()), // Ensure string if needed by DB/rules
-                  mes: String(eventoData.data.getUTCMonth() + 1).padStart(2,'0'), // Ensure string/padding
-                  semana: semanaInfo.display, // Use calculated week display string
-                  dia: String(eventoData.data.getUTCDate()).padStart(2,'0'), // Ensure string/padding
-                  diasemana: eventoData.diasemana,
-                  dataOriginal: dataOriginal, // YYYY-MM-DD
-                  horario: horarioEvento, // Specific time string or null
-                  timestamp: serverTimestamp() // Use Firestore server timestamp
-               };
-
-                // Basic validation before sending
-               if (!dados.nome || !dados.dataOriginal) {
-                   throw new Error("Dados essenciais (nome, dataOriginal) em falta para guardar.");
-               }
-
-               await addDoc(collection(db, "disponibilidade"), dados);
-               console.log(`${logPrefix} ADD successful in Firestore.`);
-
-               userConfirmations.add(sessionKey); // Add to session cache
-               card.classList.add('confirmado');
-               button.textContent = "Confirmado!";
-               triggerEmojiBurst(button); // Visual feedback
-
-           }
-       } catch (e) {
-           console.error(`${logPrefix} ERROR during confirm/remove: `, e);
-           alert(`Ocorreu um erro ao ${isConfirmedInSession ? 'remover' : 'adicionar'} a confirmação para ${dataOriginal}. Tente novamente. (${e.message})`);
-           // Revert button text based on the intended action before the error
-           button.textContent = isConfirmedInSession ? 'Confirmado!' : 'Eu posso';
-           // Optional: Revert visual card state if error occurred during ADD?
-           // if (!isConfirmedInSession) card.classList.remove('confirmado');
-       } finally {
-           if(spinner) spinner.remove(); // Remove spinner regardless of outcome
-           // Re-enable button only if it wasn't for a canceled event initially
-           if (eventoData.estado !== 'cancelado') {
-               button.disabled = false;
-           }
-           console.log(`${logPrefix} --- END --- Session cache:`, Array.from(userConfirmations));
-       }
+     } finally {
+         if(spinner) spinner.remove();
+         // Re-enable button ONLY if it wasn't for a canceled event
+         if (eventoData.estado !== 'cancelado') {
+             button.disabled = false;
+             // Ensure the final button text reflects the logical state after operation/error
+             // Read the classList AGAIN as the primary source of truth for UI state after try/catch
+             if (card.classList.contains('confirmado')) {
+                 button.textContent = 'Confirmado!';
+             } else {
+                 button.textContent = 'Eu posso';
+             }
+         } else {
+             button.textContent = 'Cancelado'; // Ensure canceled stays canceled
+         }
+         console.log(`${logPrefix} --- Button Click END (UI Intent Logic) --- Final Button Text: "${button.textContent}"`);
      }
+ }
+
+
+
+
+
+
+
+
+
 
   // --- Visual Effects ---
   function triggerEmojiBurst(button) {
         if (!button || !document.body) return;
         const buttonRect = button.getBoundingClientRect();
-        // Calculate center relative to viewport, then add scroll offsets for absolute positioning
         const startX = buttonRect.left + buttonRect.width / 2 + window.scrollX;
         const startY = buttonRect.top + buttonRect.height / 2 + window.scrollY;
-        const emojiChar = '👍'; // Choose your emoji
+        const emojiChar = '👍';
 
-        for (let i = 0; i < 15; i++) { // Number of emojis
+        for (let i = 0; i < 15; i++) {
             const emoji = document.createElement('span');
             emoji.textContent = emojiChar;
-            emoji.className = 'emoji-burst'; // Use class for styling if needed
-            emoji.style.position = 'absolute'; // Ensure absolute positioning
+            emoji.className = 'emoji-burst';
+            emoji.style.position = 'absolute';
             emoji.style.left = `${startX}px`;
             emoji.style.top = `${startY}px`;
-            emoji.style.fontSize = `${18 + Math.random() * 12}px`; // Random size
+            emoji.style.fontSize = `${18 + Math.random() * 12}px`;
             document.body.appendChild(emoji);
 
-            const angle = Math.random() * Math.PI * 2; // Random direction
-            const distance = 60 + Math.random() * 50; // Random distance
-            const duration = 700 + Math.random() * 300; // Random duration
-
-            // Animate position and fade out
+            const angle = Math.random() * Math.PI * 2;
+            const distance = 60 + Math.random() * 50;
+            const duration = 700 + Math.random() * 300;
             const x = Math.cos(angle) * distance;
-            const y = Math.sin(angle) * distance - distance * 0.5; // Slight upward bias
+            const y = Math.sin(angle) * distance - distance * 0.5;
 
             const animation = emoji.animate([
                 { transform: `translate(0, 0) scale(1)`, opacity: 1 },
                 { transform: `translate(${x}px, ${y}px) scale(0.5)`, opacity: 0 }
             ], {
                 duration: duration,
-                easing: 'cubic-bezier(0.1, 0.8, 0.7, 1.0)' // Ease out effect
+                easing: 'cubic-bezier(0.1, 0.8, 0.7, 1.0)'
             });
-
-            // Remove emoji from DOM after animation finishes
             animation.finished.then(() => emoji.remove());
         }
     }
@@ -1198,40 +1132,39 @@
   // --- Expose functions needed by HTML ---
   window.continuar = continuar;
   window.voltar = voltar;
-  // Note: confirmar is called internally by createCardElement, no need to expose unless called elsewhere
+  // confirmar is called internally
 
   // --- INITIALIZATION ---
   window.onload = async () => {
-      console.log("[window.onload] Page loading...");
-      if (db) { // Proceed only if Firebase initialized
-        console.log("[window.onload] Calling preencherNomes()...");
-        await preencherNomes(); // Fetch names and populate input logic
-        console.log("[window.onload] preencherNomes() finished.");
+      console.log(">>> [window.onload] Page loading...");
+      if (db) {
+        console.log(">>> [window.onload] Calling preencherNomes()...");
+        await preencherNomes();
+        console.log(">>> [window.onload] preencherNomes() finished.");
 
-        // Add Enter key listener only if input is enabled (names loaded successfully)
         if (!nomeInput.disabled) {
-            console.log("[window.onload] Adding Enter listener to nomeInput.");
+            console.log(">>> [window.onload] Adding Enter listener to nomeInput.");
             nomeInput.addEventListener('keypress', function(event) {
                 if (event.key === 'Enter') {
-                    event.preventDefault(); // Prevent default form submission if applicable
-                    // Try to continue if button is enabled OR if current text is valid
+                    event.preventDefault();
+                    // console.log(">>> [Event Listener] Enter key pressed.");
                     if (!continuarBtn.disabled || allNames.includes(nomeInput.value.trim())) {
+                        // console.log(">>> [Event Listener] Enter key: Calling continuar()");
                         continuar();
                     } else {
-                         // Maybe shake the input or provide visual feedback?
-                         console.log("Enter pressed but name invalid or button disabled.");
-                         nomeInput.focus(); // Keep focus on input
+                         // console.log(">>> [Event Listener] Enter key: Name invalid or button disabled.");
+                         nomeInput.focus();
                     }
                 }
             });
-             console.log("[window.onload] Enter listener added.");
+             console.log(">>> [window.onload] Enter listener added.");
         } else {
-             console.log("[window.onload] Skipping Enter listener because name input is disabled.");
+             console.log(">>> [window.onload] Skipping Enter listener (input disabled).");
         }
       } else {
-          console.error("[window.onload] Skipping setup because DB is not initialized.");
+          console.error(">>> [window.onload] Skipping setup (DB not initialized).");
       }
-      console.log("[window.onload] Page load script finished.");
+      console.log(">>> [window.onload] Page load script finished.");
   };
 
 </script>
