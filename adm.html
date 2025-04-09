@@ -62,6 +62,21 @@
      }
     /* --- Fim dos Estilos Adicionais --- */
 
+    /* --- CSS for the general stats icon --- */
+    .section-top-right-icon-stats {
+        position: absolute;
+        top: 20px;
+        right: 25px;
+        z-index: 5;
+    }
+     @media (max-width: 768px) {
+        .section-top-right-icon-stats { top: 15px; right: 18px; }
+     }
+     @media (max-width: 600px) {
+         .section-top-right-icon-stats { top: 12px; right: 15px; }
+     }
+    /* --- END CSS for stats icon --- */
+
 
     label {
         display: block;
@@ -201,14 +216,14 @@
       color: white;
       font-size: 0.8em;
       padding: 5px 10px;
-      margin-left: 5px; /* Keep some left margin or set to 0 if gap handles it */
+      margin-left: 5px;
       border-radius: 4px;
       cursor: pointer;
       border: none;
       vertical-align: middle;
       transition: background-color 0.2s, opacity 0.2s, transform 0.1s;
-      flex-shrink: 0; /* Prevent shrinking */
-      min-width: 70px; /* Ensure some width */
+      flex-shrink: 0;
+      min-width: 70px;
       text-align: center;
     }
     .reactivate-btn {
@@ -221,23 +236,49 @@
     .cancel-btn:active:not(:disabled), .reactivate-btn:active:not(:disabled) { transform: translateY(0px); }
 
     .cancel-btn:disabled, .reactivate-btn:disabled {
-        background: #ffcc80; /* Lighter orange */
-        opacity: 0.7;
-        cursor: not-allowed;
-        transform: none !important;
+        background: #ffcc80; opacity: 0.7; cursor: not-allowed; transform: none !important;
     }
      .reactivate-btn:disabled {
-        background: #a5d6a7; /* Lighter green */
+        background: #a5d6a7;
      }
 
     /* Style for canceled list items */
-    .canceled-event span:first-of-type { /* Target the text span */
+    .canceled-event span:first-of-type {
         text-decoration: line-through;
         opacity: 0.7;
         color: #777;
     }
     /* --- END: Added styles for Cancel/Reactivate --- */
 
+    /* Style for individual stats button in the list */
+    .stats-btn-pessoa {
+      background: #5bc0de; /* Info blue */
+      color: white;
+      font-size: 0.8em;
+      padding: 5px 10px;
+      margin-left: 5px;
+      border-radius: 4px;
+      cursor: pointer;
+      border: none;
+      vertical-align: middle;
+      transition: background-color 0.2s, opacity 0.2s, transform 0.1s;
+      flex-shrink: 0;
+      min-width: 80px; /* Give it some width */
+      text-align: center;
+    }
+    .stats-btn-pessoa:hover:not(:disabled) {
+      background: #31b0d5;
+      transform: translateY(-1px);
+    }
+     .stats-btn-pessoa:active:not(:disabled) {
+         transform: translateY(0px);
+     }
+     .stats-btn-pessoa:disabled {
+         background: #b0e0e6; /* Lighter blue */
+         opacity: 0.7;
+         cursor: not-allowed;
+         transform: none !important;
+     }
 
      /* Style for captain toggle button */
      .toggle-capitao-btn {
@@ -255,7 +296,6 @@
      .toggle-capitao-btn:hover:not(:disabled) { transform: translateY(-1px); }
      .toggle-capitao-btn:active:not(:disabled) { transform: translateY(0px); }
      .toggle-capitao-btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none !important; }
-     /* Specific colors are set inline via JS */
 
 
     /* Estilos do Calendário */
@@ -290,14 +330,14 @@
       display: flex;
       flex-direction: column;
       position: relative;
-      transition: box-shadow 0.2s, border-color 0.2s, background-color 0.3s; /* Added background-color transition */
-      min-height: 100px; /* Optional: Base minimum height for empty days */
+      transition: box-shadow 0.2s, border-color 0.2s, background-color 0.3s;
+      min-height: 100px;
     }
      .day:hover {
          box-shadow: 0 5px 10px rgba(0,0,0,0.08);
      }
 
-    .day-number-header { /* Estilo para o número do dia centralizado */
+    .day-number-header {
         font-weight: bold;
         font-size: 1.3em;
         text-align: center;
@@ -313,7 +353,7 @@
         box-shadow: none;
     }
     .day-empty {
-        background-color: #ffffff; /* Ensure empty days are white */
+        background-color: #ffffff;
         border-color: #e0e0e0;
     }
     .day.has-event {
@@ -324,30 +364,28 @@
         color: #2d89ef;
     }
 
-    /* NEW: Style for horario group header within calendar day */
     .horario-group-header {
         font-size: 0.8em;
         font-weight: bold;
         color: #555;
-        margin-top: 8px; /* Space above the time */
-        margin-bottom: 2px; /* Space below the time */
+        margin-top: 8px;
+        margin-bottom: 2px;
         padding-left: 2px;
-        border-bottom: 1px dotted #ccc; /* Separator */
+        border-bottom: 1px dotted #ccc;
         transition: opacity 0.3s, color 0.3s;
     }
 
 
     .nomes { /* Class used in calendar days */
-      margin-top: 4px; /* Reduced top margin as horario header adds space */
+      margin-top: 4px;
       padding-left: 0;
-      flex-grow: 1; /* Takes remaining vertical space */
+      flex-grow: 1;
       font-size: 0.9em;
     }
-     /* Specific list style for names under a horario */
      .horario-nomes-list {
-        margin-top: 2px !important; /* Remove extra space above this list */
-        padding-left: 5px !important; /* Indent names under horario */
-        margin-bottom: 8px; /* Space after a horario group */
+        margin-top: 2px !important;
+        padding-left: 5px !important;
+        margin-bottom: 8px;
      }
 
     .nomes li { /* Style for names within calendar day */
@@ -359,7 +397,6 @@
       line-height: 1.3;
       display: block; /* Ensure names stack vertically */
     }
-     /* Styling for captain name within calendar day list */
      .nomes li span {
          transition: opacity 0.3s, color 0.3s;
      }
@@ -367,440 +404,186 @@
          /* font-weight: bold; applied inline */
      }
 
-    /* --- START: Style for canceled calendar days --- */
+    /* --- Style for canceled calendar days --- */
     .day.is-canceled {
-        background-color: #ffebee !important; /* Light red background */
-        border-color: #e57373 !important; /* Darker red border */
-        box-shadow: inset 0 0 8px rgba(200, 0, 0, 0.1);
+        background-color: #ffebee !important; border-color: #e57373 !important; box-shadow: inset 0 0 8px rgba(200, 0, 0, 0.1);
     }
-    .day.is-canceled .day-number-header {
-        color: #c62828 !important; /* Dark red number */
-        text-decoration: line-through;
-        opacity: 0.8;
-    }
+    .day.is-canceled .day-number-header { color: #c62828 !important; text-decoration: line-through; opacity: 0.8; }
     .day.is-canceled .horario-group-header,
-    .day.is-canceled .nomes li span {
-       opacity: 0.6; /* Dim availability text */
-       color: #d32f2f;
-    }
-    /* --- END: Style for canceled calendar days --- */
+    .day.is-canceled .nomes li span { opacity: 0.6; color: #d32f2f; }
 
 
     /* --- Styles for Suggestion Filter Buttons --- */
-    #sugestoesHeaderContainer {
-        margin-bottom: 10px; /* Add space below the header/buttons row */
-    }
-
-    .suggestion-filter-btn {
-        padding: 6px 12px;
-        font-size: 0.85em;
-        background-color: #f0f0f0;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
-        font-weight: 500;
-        color: #555;
-    }
-
-    .suggestion-filter-btn:hover:not(.active) {
-        background-color: #e9e9e9;
-        border-color: #bbb;
-    }
-
-    .suggestion-filter-btn.active {
-        background-color: #2d89ef;
-        border-color: #1b5dbf;
-        color: white;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        cursor: default;
-    }
-    /* --- End Suggestion Filter Button Styles --- */
+    #sugestoesHeaderContainer { margin-bottom: 10px; }
+    .suggestion-filter-btn { padding: 6px 12px; font-size: 0.85em; background-color: #f0f0f0; border: 1px solid #ccc; border-radius: 5px; cursor: pointer; transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s; font-weight: 500; color: #555; }
+    .suggestion-filter-btn:hover:not(.active) { background-color: #e9e9e9; border-color: #bbb; }
+    .suggestion-filter-btn.active { background-color: #2d89ef; border-color: #1b5dbf; color: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1); cursor: default; }
 
     /* Estilos das Sugestões (Flexbox) */
-    #sugestoesContainer {
-        display: flex; /* Usa flexbox */
-        flex-wrap: wrap; /* Permite quebra de linha */
-        gap: 10px; /* Espaçamento entre cards */
-        min-height: 40px; /* Ensure it has some height for the loading/empty message */
-    }
-     #sugestoesContainer p { /* For loading/empty messages */
-         width: 100%; /* Ocupa largura total */
-         text-align: center;
-         color: #777;
-         margin: 10px 0; /* Adiciona margem */
-         font-style: italic;
-     }
-     #sugestoesContainer p[style*="color: red"] {
-         font-weight: bold;
-         font-style: normal;
-     }
-
-    .sugestao-card {
-       display: inline-block; /* Keep suggestions as inline blocks */
-    }
-    .sugestao-card button {
-      padding: 8px 14px;
-      margin: 0; /* Remove margin from button itself */
-      background: #eaf4ff;
-      border: 1px solid #a0c7e8;
-      border-radius: 6px;
-      width: auto;
-      display: inline-block;
-      text-align: left;
-      cursor: pointer;
-      font-size: 0.95em;
-      font-weight: 500;
-      color: #1c5a9b;
-      transition: background 0.2s, border-color 0.2s, opacity 0.3s, transform 0.1s ease-out;
-      white-space: nowrap;
-      vertical-align: middle;
-    }
-    .sugestao-card button:hover:not(:disabled) {
-      background: #d8e9fd;
-      border-color: #7ab1e8;
-      transform: translateY(-1px);
-    }
-    .sugestao-card button:active:not(:disabled) {
-        transform: scale(0.98);
-    }
-    .sugestao-card button:disabled { /* Estilo para botão desabilitado (sugestão adicionada) */
-        background-color: #f0f0f0; border-color: #dcdcdc; color: #a0a0a0;
-        cursor: not-allowed; opacity: 0.7; transform: none;
-    }
+    #sugestoesContainer { display: flex; flex-wrap: wrap; gap: 10px; min-height: 40px; }
+     #sugestoesContainer p { width: 100%; text-align: center; color: #777; margin: 10px 0; font-style: italic; }
+     #sugestoesContainer p[style*="color: red"] { font-weight: bold; font-style: normal; }
+    .sugestao-card { display: inline-block; }
+    .sugestao-card button { padding: 8px 14px; margin: 0; background: #eaf4ff; border: 1px solid #a0c7e8; border-radius: 6px; width: auto; display: inline-block; text-align: left; cursor: pointer; font-size: 0.95em; font-weight: 500; color: #1c5a9b; transition: background 0.2s, border-color 0.2s, opacity 0.3s, transform 0.1s ease-out; white-space: nowrap; vertical-align: middle; }
+    .sugestao-card button:hover:not(:disabled) { background: #d8e9fd; border-color: #7ab1e8; transform: translateY(-1px); }
+    .sugestao-card button:active:not(:disabled) { transform: scale(0.98); }
+    .sugestao-card button:disabled { background-color: #f0f0f0; border-color: #dcdcdc; color: #a0a0a0; cursor: not-allowed; opacity: 0.7; transform: none; }
 
      /* Estilos das Regras Ativas List (Popup) */
-     #activeRulesList li {
-        background-color: #f9f9f9;
-        padding: 10px 15px;
-        border-radius: 5px;
-        border-bottom: none;
-        margin-bottom: 8px;
-     }
-     .toggle-list #activeRulesList li { /* Specificity for background inside toggle */
-         background-color: #f9f9f9;
-     }
-     #activeRulesList li .remove-btn {
-         margin-left: 15px;
-         flex-shrink: 0;
-     }
-     #activeRulesList li span { /* Ensure text takes available space */
-         flex-grow: 1;
-         margin-right: 10px; /* Space between text and button */
-     }
+     #activeRulesList li { background-color: #f9f9f9; padding: 10px 15px; border-radius: 5px; border-bottom: none; margin-bottom: 8px; }
+     .toggle-list #activeRulesList li { background-color: #f9f9f9; }
+     #activeRulesList li .remove-btn { margin-left: 15px; flex-shrink: 0; }
+     #activeRulesList li span { flex-grow: 1; margin-right: 10px; }
 
-
-    #calendarioContainer {
-      width: 100%;
-      min-height: 200px; /* Ensure container has some height while loading */
-    }
+    #calendarioContainer { width: 100%; min-height: 200px; }
 
     /* --- Toggle Styles --- */
-    .toggle-container {
-        margin-top: 25px;
-        border: 1px solid #e0e0e0;
-        border-radius: 8px;
-        overflow: hidden;
-        background-color: #fff;
-    }
-    .toggle-header { /* Applies to H3 and H4 used as headers */
-        cursor: pointer; padding: 12px 15px; margin: 0;
-        background-color: #f8f9fa; border-bottom: 1px solid #e0e0e0;
-        transition: background-color 0.2s; display: flex;
-        justify-content: space-between; align-items: center; color: #495057;
-        font-weight: 600; /* Consistent weight */
-    }
-    /* Remove bottom border from header if its list is visible (looks smoother) */
-    .toggle-header.open {
-        border-bottom-color: transparent;
-    }
-    .toggle-header h3, h3.toggle-header, .toggle-header h4, h4.toggle-header { /* Target elements used as headers */
-         color: inherit; margin: 0; font-size: 1.2em; font-weight: inherit;
-     }
-     h4.toggle-header { /* Specific style for month sub-toggles */
-        font-size: 1.1em;
-        background-color: #f0f5fa; /* Slightly different background */
-        border-top: 1px solid #e9ecef; /* Separator line above */
-        border-bottom: 1px solid #e9ecef; /* Also add bottom border */
-        margin-top: 0 !important; /* Remove top margin, control via list container padding */
-        margin-bottom: 0 !important;
-     }
-     /* Remove top border for the very first H4 in the list */
-     #datasCriadasListContainer > h4.toggle-header:first-of-type {
-         border-top: none;
-     }
-     /* Remove bottom border if the next element (list) is visible */
-      h4.toggle-header.open {
-          border-bottom-color: transparent;
-      }
-
-
+    .toggle-container { margin-top: 25px; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; background-color: #fff; }
+    .toggle-header { cursor: pointer; padding: 12px 15px; margin: 0; background-color: #f8f9fa; border-bottom: 1px solid #e0e0e0; transition: background-color 0.2s; display: flex; justify-content: space-between; align-items: center; color: #495057; font-weight: 600; }
+    .toggle-header.open { border-bottom-color: transparent; }
+    .toggle-header h3, h3.toggle-header, .toggle-header h4, h4.toggle-header { color: inherit; margin: 0; font-size: 1.2em; font-weight: inherit; }
+    h4.toggle-header { font-size: 1.1em; background-color: #f0f5fa; border-top: 1px solid #e9ecef; border-bottom: 1px solid #e9ecef; margin-top: 0 !important; margin-bottom: 0 !important; }
+    #datasCriadasListContainer > h4.toggle-header:first-of-type { border-top: none; }
+    h4.toggle-header.open { border-bottom-color: transparent; }
     .toggle-header:hover { background-color: #f1f3f5; }
-    .toggle-icon {
-        font-size: 1.2em; font-weight: bold; transition: transform 0.3s ease; color: #6c757d;
-    }
+    .toggle-icon { font-size: 1.2em; font-weight: bold; transition: transform 0.3s ease; color: #6c757d; }
     .toggle-header.open .toggle-icon { transform: rotate(135deg); } /* Changed to 'x' (minus) */
+
     .toggle-list {
         padding: 0 15px; margin: 0;
-        transition: max-height 0.4s ease-out, opacity 0.3s ease-in, padding 0.4s ease-out, border-top-width 0.1s linear 0.3s; /* Added border transition */
+        transition: max-height 0.4s ease-out, opacity 0.3s ease-in, padding 0.4s ease-out, border-top-width 0.1s linear 0.3s;
         max-height: 0; overflow: hidden; opacity: 0;
-        border-top: 0px solid #e0e0e0; /* Start with 0 border */
-        background-color: #fff; /* Default background */
+        border-top: 0px solid #e0e0e0;
+        background-color: #fff;
     }
-
     .toggle-list.visible {
-        max-height: 1500px; /* Increased max-height */
+        /* max-height: 1500px; REMOVED - Let JS handle transition */
         opacity: 1;
-        /* overflow: hidden; Keep hidden to enforce max-height */
-        border-top-width: 1px; /* Animate border in */
-        transition: max-height 0.4s ease-out, opacity 0.3s ease-in 0.1s, padding 0.4s ease-out, border-top-width 0.1s linear; /* Delay opacity */
+        overflow: hidden; /* Keep hidden during transition */
+        border-top-width: 1px;
+        transition: max-height 0.4s ease-out, opacity 0.3s ease-in 0.1s, padding 0.4s ease-out, border-top-width 0.1s linear;
     }
-     /* Specific padding for names list container when visible */
-     #listaNomesContainer.toggle-list.visible { padding: 15px; } /* ADDED PADDING FOR NAMES LIST */
-     /* Specific padding for dates list container when visible */
-     #datasCriadasListContainer.toggle-list.visible { padding: 0; } /* No padding on main container */
 
-     /* Style for sub-lists within the 'Datas Criadas' main list */
+    /* Specific padding for names list container when visible */
+    #listaNomesContainer.toggle-list.visible { padding: 15px; }
+    /* Specific padding for main dates list container when visible */
+    #datasCriadasListContainer.toggle-list.visible { padding: 0; }
+
+    /* Style for SUB-lists (monthly events) within 'Datas Criadas' */
     #datasCriadasListContainer > ul.toggle-list {
         padding: 0 15px 0 35px; /* Top/Bottom 0, Left Indented */
         margin: 0;
-        background-color: #fdfdff; /* Slightly different background for event list */
-        border-top: 1px solid #e9ecef; /* Separator from H4 header */
+        background-color: #fdfdff;
+        border-top: 1px solid #e9ecef;
+        /* REMOVED max-height and overflow-y */
     }
+     /* Apply specific padding when the monthly list becomes visible */
      #datasCriadasListContainer > ul.toggle-list.visible {
           padding-top: 10px;
           padding-bottom: 10px;
-          border-top-width: 1px;
+          border-top-width: 1px; /* Ensure border shows */
      }
+     /* Style list items within the monthly list */
      #datasCriadasListContainer > ul.toggle-list > li {
          border-bottom: 1px dashed #eee !important;
          padding: 6px 0 !important;
-         margin-bottom: 0 !important; /* Override default li margin */
+         margin-bottom: 0 !important;
      }
      #datasCriadasListContainer > ul.toggle-list > li:last-child {
          border-bottom: none !important;
      }
 
-
-    /* Remove top border when list directly follows header (generally) */
-     .toggle-header + .toggle-list.visible { border-top: none; }
-     /* Ensure H4 header has top border */
-     #datasCriadasListContainer > h4.toggle-header { border-top: 1px solid #e9ecef; }
-     #datasCriadasListContainer > h4.toggle-header:first-of-type { border-top: none; }
-
-
+    /* General rules for lists within toggles */
+    .toggle-header + .toggle-list.visible { border-top: none; }
+    #datasCriadasListContainer > h4.toggle-header { border-top: 1px solid #e9ecef; }
+    #datasCriadasListContainer > h4.toggle-header:first-of-type { border-top: none; }
     .toggle-list ul { margin-top: 0; }
     /* Default LI styling inside a toggle list (applies to rules list AND names list) */
     .toggle-list > ul > li {
         border-bottom: 1px solid #f0f0f0;
-        padding: 8px 5px; /* Adjust as needed */
-        display: flex; /* Ensure flex for alignment */
-        justify-content: space-between; /* Space between content and buttons */
+        padding: 8px 5px;
+        display: flex;
+        justify-content: space-between;
         align-items: center;
-        gap: 10px; /* Add gap */
+        gap: 10px;
     }
     .toggle-list > ul > li:last-child { border-bottom: none; }
 
     /* Style for the name span within the names list */
-    #listaNomes li span {
-       flex-grow: 1; /* Allow name to take available space */
-       word-break: break-word;
-       margin-right: 5px; /* Ensure space before button if gap isn't enough */
-    }
-    /* Ensure remove button in names list doesn't shrink */
-    #listaNomes .remove-btn {
-       flex-shrink: 0;
-    }
-
+    #listaNomes li span { flex-grow: 1; word-break: break-word; margin-right: 5px; }
+    #listaNomes .remove-btn, #listaNomes .stats-btn-pessoa { flex-shrink: 0; }
 
      /* --- Inline Form Styles --- */
-    /* Container specifically for the add person form */
-    .inline-form-container {
-        display: flex;
-        align-items: center; /* Vertically align label, input, button */
-        gap: 10px; /* Space between items */
-        flex-wrap: wrap; /* Allow wrapping on smaller screens */
-        margin-bottom: 25px; /* Space below the form */
-    }
+    .inline-form-container { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 25px; }
     .inline-form-container label.inline-label { display: inline-block; margin: 0; flex-shrink: 0; }
     .inline-form-container input.inline-input { flex-grow: 1; min-width: 150px; margin: 0; width: auto; }
     .inline-form-container button.inline-button { margin: 0; flex-shrink: 0; }
-    /* Ensure specific add person form items use these styles */
-    #novoNomeInput.inline-input, #addNomeBtn.inline-button {
-        margin-bottom: 0 !important; /* Override general bottom margin for inputs/buttons */
-    }
-    /* Optional: Specific override if needed */
+    #novoNomeInput.inline-input, #addNomeBtn.inline-button { margin-bottom: 0 !important; }
     input[type="text"].inline-input, button.inline-button { width: auto; max-width: none; }
 
-
     /* --- Styles for Inline Event Creation Form --- */
-    .event-creation-form {
-        display: flex;       /* Enable flexbox layout */
-        align-items: flex-end; /* Align items to their bottom edge (looks good with labels above) */
-        flex-wrap: wrap;     /* Allow items to wrap onto the next line on smaller screens */
-        gap: 15px;           /* Add space between the items (adjust as needed) */
-        margin-bottom: 25px; /* Optional: Add space below the form row */
-    }
-    /* Remove default bottom margin from divs inside the flex container */
+    .event-creation-form { display: flex; align-items: flex-end; flex-wrap: wrap; gap: 15px; margin-bottom: 25px; }
     .event-creation-form > div { margin-bottom: 0; }
-    /* Ensure inputs and button don't have extra top/bottom margins interfering with alignment */
     .event-creation-form input[type="date"],
     .event-creation-form input[type="text"],
     .event-creation-form button { margin-top: 0; margin-bottom: 0; }
-    /* Optional: Adjust label margin if needed */
     .event-creation-form label { margin-bottom: 4px; }
 
-
     /* --- Top Right Link Styles --- */
-    .top-right-link {
-        position: absolute; top: 20px; right: 30px; z-index: 10;
-    }
-    .top-right-link a {
-        display: inline-flex; justify-content: center; align-items: center;
-        width: 44px; height: 44px; padding: 0;
-        background-color: rgba(45, 137, 239, 0.85);
-        border-radius: 50%; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
-        text-decoration: none; font-size: 1.8em; color: #ffffff;
-        transition: background-color 0.2s, transform 0.2s; line-height: 1;
-    }
+    .top-right-link { position: absolute; top: 20px; right: 30px; z-index: 10; }
+    .top-right-link a { display: inline-flex; justify-content: center; align-items: center; width: 44px; height: 44px; padding: 0; background-color: rgba(45, 137, 239, 0.85); border-radius: 50%; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); text-decoration: none; font-size: 1.8em; color: #ffffff; transition: background-color 0.2s, transform 0.2s; line-height: 1; }
     .top-right-link a:hover { background-color: #1b5dbf; transform: scale(1.1); color: #ffffff; }
 
-    /* --- Icon Button Style (for Lab icon AND Lamp icon) --- */
-    .icon-button {
-        background: none; border: none; padding: 5px 8px; font-size: 1.6em;
-        color: #6c757d; cursor: pointer; transition: color 0.2s, transform 0.2s;
-        line-height: 1; margin-left: 15px;
-    }
+    /* --- Icon Button Style --- */
+    .icon-button { background: none; border: none; padding: 5px 8px; font-size: 1.6em; color: #6c757d; cursor: pointer; transition: color 0.2s, transform 0.2s; line-height: 1; margin-left: 15px; }
     .icon-button:hover { color: #2d89ef; transform: scale(1.1); }
 
-    /* --- Modal Styles (Reused for both popups) --- */
-    .modal-overlay {
-        position: fixed; left: 0; top: 0; width: 100%; height: 100%;
-        background-color: rgba(0, 0, 0, 0.6); display: flex; justify-content: center;
-        align-items: center; z-index: 1000; opacity: 0; visibility: hidden;
-        transition: opacity 0.3s ease, visibility 0s linear 0.3s;
-    }
+    /* --- Modal Styles --- */
+    .modal-overlay { position: fixed; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0s linear 0.3s; }
     .modal-overlay.visible { opacity: 1; visibility: visible; transition: opacity 0.3s ease, visibility 0s linear 0s; }
-    .modal-content {
-        background-color: #fff; padding: 30px; border-radius: 10px;
-        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2); width: 90%; max-width: 650px;
-        max-height: 85vh; overflow-y: auto; position: relative;
-        transform: scale(0.9); transition: transform 0.3s ease;
-    }
+    .modal-content { background-color: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2); width: 90%; max-width: 650px; max-height: 85vh; overflow-y: auto; position: relative; transform: scale(0.9); transition: transform 0.3s ease; }
     .modal-overlay.visible .modal-content { transform: scale(1); }
-    .modal-close-btn {
-        position: absolute; top: 10px; right: 15px; background: none; border: none;
-        font-size: 2.2em; color: #aaa; cursor: pointer; line-height: 1;
-        padding: 0 5px; transition: color 0.2s;
-    }
+    .modal-close-btn { position: absolute; top: 10px; right: 15px; background: none; border: none; font-size: 2.2em; color: #aaa; cursor: pointer; line-height: 1; padding: 0 5px; transition: color 0.2s; }
     .modal-close-btn:hover { color: #666; }
 
     /* Content inside Resumo popup */
     #popupResumoContent h2 { margin-top: 0; }
-    /* Style for the date block wrapper in the popup */
-    #popupResumoContent > div { /* Target direct div children - the date blocks */
-        /* Background set by JS */
-        padding: 10px 15px;
-        margin-bottom: 10px;
-        border-radius: 5px;
-    }
-     #popupResumoContent > div > h4 { /* Header inside the date block */
-        margin-top: 0 !important; /* Override default h4 margin */
-        margin-bottom: 8px !important;
-        border-bottom: 1px solid #ddd !important; /* Use a less intrusive border */
-        padding-bottom: 5px !important;
-        color: #555 !important; /* Override default H4 color inside popup */
-        font-size: 1.1em !important;
-    }
-    /* Style for horario sub-header in popup (now inside date block) */
-    #popupResumoContent > div > div[style*="bold"] {
-        font-weight: bold; margin-top: 8px; margin-left: 0px; /* Removed left margin */
-        font-size: 0.95em; color:#333; margin-bottom: 5px;
-    }
-
-    #popupResumoContent ul { list-style: none; padding-left: 10px; /* Indent list slightly */ margin-bottom: 0; margin-top: 5px; }
-    #popupResumoContent li {
-        display: flex; justify-content: space-between; align-items: center;
-        padding: 6px 0; border-bottom: 1px dashed #ddd; /* Use darker dash */ margin-bottom: 0;
-        gap: 10px; flex-wrap: wrap;
-    }
+    #popupResumoContent > div { padding: 10px 15px; margin-bottom: 10px; border-radius: 5px; }
+     #popupResumoContent > div > h4 { margin-top: 0 !important; margin-bottom: 8px !important; border-bottom: 1px solid #ddd !important; padding-bottom: 5px !important; color: #555 !important; font-size: 1.1em !important; }
+    #popupResumoContent > div > div[style*="bold"] { font-weight: bold; margin-top: 8px; margin-left: 0px; font-size: 0.95em; color:#333; margin-bottom: 5px; }
+    #popupResumoContent ul { list-style: none; padding-left: 10px; margin-bottom: 0; margin-top: 5px; }
+    #popupResumoContent li { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px dashed #ddd; margin-bottom: 0; gap: 10px; flex-wrap: wrap; }
     #popupResumoContent li:last-child { border-bottom: none; }
     #popupResumoContent li span { flex-grow: 1; min-width: 100px; word-break: break-word;}
     #popupResumoContent .remove-btn { margin-left: 5px; padding: 4px 8px; font-size: 0.75em; }
     #popupResumoContent .toggle-capitao-btn { margin-left: 10px; }
-    #popupResumoContent li > div:last-child { flex-shrink: 0; display: flex; align-items: center; } /* Button container */
-
-    /* Bold captain name style */
+    #popupResumoContent li > div:last-child { flex-shrink: 0; display: flex; align-items: center; }
      #popupResumoContent li span[style*="bold"] { /* font-weight: bold; applied inline */ }
-     /* Paragraphs inside popup (e.g., "No confirmations") */
      #popupResumoContent p { margin-left: 10px; font-size: 0.9em; color: #777; margin-bottom: 5px; }
 
-
      /* Export Button Container */
-    #popupResumoContainer .modal-content > div:last-of-type { /* Target the last div in modal-content for export */
-       text-align: right; margin-top: 25px; padding-top: 15px; border-top: 1px solid #eee;
-    }
-    /* Export Button */
+    #popupResumoContainer .modal-content > div:last-of-type { text-align: right; margin-top: 25px; padding-top: 15px; border-top: 1px solid #eee; }
     #exportPdfBtn { background-color: #28a745; }
     #exportPdfBtn:hover:not(:disabled) { background-color: #218838; transform: translateY(-1px);}
     #exportPdfBtn:active:not(:disabled) { transform: translateY(0px); }
     #exportPdfBtn:disabled { background: #a3d9a5; cursor: not-allowed; opacity: 0.7; transform: none; }
 
-
      /* --- ESTILOS PARA CONTEÚDO DENTRO DO POPUP DE SUGESTÕES --- */
-     #popupSugestoesContent h2 {
-         margin-top: 0; /* Remove margem superior do H2 dentro do popup */
-         margin-bottom: 1em;
-     }
-     #popupSugestoesContent > section {
-         /* Remove estilos de secção externa quando dentro do popup */
-         box-shadow: none;
-         padding: 0;
-         margin-bottom: 0;
-         border-radius: 0;
-         background: transparent;
-     }
-     #popupSugestoesContent label {
-         margin-top: 15px; /* Adiciona algum espaço acima das labels */
-     }
-     #popupSugestoesContent .toggle-container {
-         margin-top: 20px; /* Espaço antes da lista de regras */
-     }
-     #popupSugestoesContent p:last-of-type { /* Note at the end */
-         margin-top: 20px; /* Espaço antes da nota final */
-         font-size: 0.9em; color: #666;
-     }
+     #popupSugestoesContent h2 { margin-top: 0; margin-bottom: 1em; }
+     #popupSugestoesContent > section { box-shadow: none; padding: 0; margin-bottom: 0; border-radius: 0; background: transparent; }
+     #popupSugestoesContent label { margin-top: 15px; }
+     #popupSugestoesContent .toggle-container { margin-top: 20px; }
+     #popupSugestoesContent p:last-of-type { margin-top: 20px; font-size: 0.9em; color: #666; }
 
+     /* --- Search and Scrollable List Styles --- */
+     #listaNomesContainer #searchNomeInput { padding: 8px 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 0.95em; margin-bottom: 15px; width: auto; min-width: 200px; max-width: 300px; display: inline-block; vertical-align: middle; }
+      #listaNomesContainer label[for="searchNomeInput"] { display: inline-block; margin-right: 5px; vertical-align: middle; font-weight: normal; color: #555; }
+     #listaNomes { max-height: 300px; overflow-y: auto; margin-top: 0; border: 1px solid #eee; border-radius: 4px; padding: 5px 0; }
 
-     /* --- Search and Scrollable List Styles - ADDED BACK --- */
-     #listaNomesContainer #searchNomeInput { /* Styling for the search input */
-        padding: 8px 10px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        font-size: 0.95em;
-        margin-bottom: 15px; /* Space below search bar */
-        width: auto; /* Don't force full width by default */
-        min-width: 200px;
-        max-width: 300px; /* Limit max width */
-        display: inline-block; /* Make it inline */
-        vertical-align: middle;
-     }
-      #listaNomesContainer label[for="searchNomeInput"] { /* Style the label */
-          display: inline-block;
-          margin-right: 5px;
-          vertical-align: middle;
-          font-weight: normal;
-          color: #555;
-     }
-     #listaNomes { /* The list itself */
-        max-height: 300px; /* Limit height and make scrollable */
-        overflow-y: auto;
-        margin-top: 0; /* Remove potential top margin */
-        border: 1px solid #eee; /* Optional border around list */
-        border-radius: 4px; /* Optional rounded corners */
-        padding: 5px 0; /* Add some internal padding top/bottom */
-     }
-     /* List items already styled by .toggle-list > ul > li */
+    /* Optional: Style for the individual person stats popup content */
+    #personStatsContentArea ul { list-style: disc; padding-left: 25px; margin-bottom: 1em; }
+     #personStatsContentArea h4 { margin-top: 1.5em; margin-bottom: 0.5em; border-bottom: 1px solid #eee; padding-bottom: 4px; }
+     #personStatsContentArea li { margin-bottom: 5px; padding: 2px 0; border: none; display: list-item; justify-content: flex-start; }
 
 
     /* --- Estilos Responsivos --- */
@@ -811,34 +594,29 @@
     @media (max-width: 768px) {
         body { padding: 20px; padding-top: 70px; font-size: 15px;}
         h1 { font-size: 1.9em;} h2 { font-size: 1.5em;} h3 { font-size: 1.25em;} h4 { font-size: 1.1em; }
-        /* General rule for form elements */
         input[type="text"], input[type="date"], select,
-        button:not(.inline-button):not(.remove-btn):not(.icon-button):not(.modal-close-btn):not(.toggle-capitao-btn):not(.sugestao-card button):not(.suggestion-filter-btn):not(.cancel-btn):not(.reactivate-btn) { /* Exclude filter/small buttons */
+        button:not(.inline-button):not(.remove-btn):not(.icon-button):not(.modal-close-btn):not(.toggle-capitao-btn):not(.sugestao-card button):not(.suggestion-filter-btn):not(.cancel-btn):not(.reactivate-btn):not(.stats-btn-pessoa) { /* Exclude small/specific buttons */
              width: 100%; max-width: none; margin-right: 0; margin-bottom: 15px; box-sizing: border-box;
         }
-        /* Override for specific inline/small buttons/inputs */
         input.inline-input, button.inline-button, button.remove-btn, button.icon-button,
         button.modal-close-btn, button.toggle-capitao-btn, .sugestao-card button,
         .event-creation-form input[type="date"], .event-creation-form input[type="text"], .event-creation-form button,
-        .suggestion-filter-btn, button.cancel-btn, button.reactivate-btn,
-        #listaNomesContainer #searchNomeInput /* Include search input */ {
-            width: auto; max-width: none; margin-bottom: 0; margin-right: 8px; /* Add some right margin back for inline flow */
+        .suggestion-filter-btn, button.cancel-btn, button.reactivate-btn, button.stats-btn-pessoa, /* Include stats button */
+        #listaNomesContainer #searchNomeInput { /* Keep search input inline initially */
+            width: auto; max-width: none; margin-bottom: 0; margin-right: 8px;
         }
-         /* Make search input full width below its label */
          #listaNomesContainer label[for="searchNomeInput"] { display: block; margin-bottom: 5px; }
          #listaNomesContainer #searchNomeInput { width: 100%; max-width: none; margin-right: 0; margin-bottom: 15px; box-sizing: border-box; }
 
-         .suggestion-filter-btn { margin-bottom: 8px; } /* Allow filter buttons to wrap */
-         button.cancel-btn, button.reactivate-btn { margin-left: 0; } /* Reset left margin, rely on gap */
+         .suggestion-filter-btn { margin-bottom: 8px; }
+         button.cancel-btn, button.reactivate-btn, button.stats-btn-pessoa { margin-left: 0; }
 
-        /* Reset margin for the specific inline person add form */
         .inline-form-container { margin-bottom: 20px; }
-        .inline-form-container > * { margin-bottom: 10px; margin-right: 0; } /* Stack items */
+        .inline-form-container > * { margin-bottom: 10px; margin-right: 0; }
         .inline-form-container > label.inline-label { width: 100%; margin-bottom: 5px; }
         .inline-form-container > input.inline-input { width: 100%; margin-right: 0; }
         .inline-form-container > button.inline-button { width: 100%; }
 
-        /* Specific margin for event creation form items when wrapped */
         .event-creation-form > div, .event-creation-form > button { margin-bottom: 15px; margin-right: 0; }
         .event-creation-form > button { margin-top: 0; }
 
@@ -847,20 +625,17 @@
         .day-number-header { font-size: 1.2em; }
         .nomes li { font-size: 0.85em; }
         .sugestao-card button { width: auto; margin-right: 8px; margin-bottom: 8px; white-space: nowrap; padding: 8px 12px; }
-        /* Rules list in popup */
         #activeRulesList li { flex-direction: column; align-items: flex-start; gap: 8px; }
         #activeRulesList li .remove-btn { margin-left: 0; margin-top: 5px; }
-        /* Names list responsive styles */
-         #listaNomes li {
-            /* Adjust padding or alignment if needed */
-         }
+        #listaNomes li > div:last-child { gap: 8px; } /* Adjust gap for name list buttons */
+        #listaNomes { max-height: 250px; }
 
         .top-right-link { top: 15px; right: 20px; }
         .top-right-link a { width: 40px; height: 40px; font-size: 1.6em; }
         .icon-button { font-size: 1.5em; margin-left: 10px; padding: 3px 5px; }
         .modal-content { width: 95%; padding: 20px; }
         .modal-close-btn { font-size: 2em; top: 8px; right: 10px; }
-         #popupResumoContent li { flex-wrap: nowrap; } /* Prevent wrap on medium screens */
+         #popupResumoContent li { flex-wrap: nowrap; }
          #popupResumoContent li span { min-width: 50px; }
     }
     @media (max-width: 600px) {
@@ -870,62 +645,39 @@
       .day { min-width: auto; padding: 8px 10px; min-height: 70px; }
       .calendar, .calendar-header { gap: 4px; }
       .day-number-header { font-size: 1.1em; margin-bottom: 6px; }
-       .horario-group-header { font-size: 0.75em; margin-top: 5px;} /* Adjust horario header */
-       .horario-nomes-list { padding-left: 2px !important; } /* Adjust name indent */
+       .horario-group-header { font-size: 0.75em; margin-top: 5px;}
+       .horario-nomes-list { padding-left: 2px !important; }
       .top-right-link { top: 12px; right: 15px; }
       .top-right-link a { width: 38px; height: 38px; font-size: 1.5em; }
       .icon-button { font-size: 1.4em; }
-       /* Stack name/buttons in popup resumo on small screens */
        #popupResumoContent li { flex-direction: column; align-items: flex-start; gap: 5px;}
-       #popupResumoContent li > div:last-child { margin-top: 5px; margin-left: 0; } /* Space before buttons, reset margin */
-       #popupResumoContent .toggle-capitao-btn { margin-left: 0; } /* Align buttons */
+       #popupResumoContent li > div:last-child { margin-top: 5px; margin-left: 0; }
+       #popupResumoContent .toggle-capitao-btn { margin-left: 0; }
        #popupResumoContent .remove-btn { margin-left: 5px; }
-       /* Ensure inline event form wraps better */
        .event-creation-form { gap: 10px; }
        .event-creation-form input[type="date"],
-       .event-creation-form input[type="text"] { min-width: 120px; flex-grow: 1; margin-right: 0; } /* Allow inputs to grow */
-       /* Search input already handled by 768px */
-       /* Adjust filter button spacing */
+       .event-creation-form input[type="text"] { min-width: 120px; flex-grow: 1; margin-right: 0; }
        .suggestion-filter-btn { margin-right: 5px; margin-bottom: 5px; padding: 5px 10px;}
-       /* Adjust names list padding */
        #listaNomesContainer.toggle-list.visible { padding: 10px; }
-       #listaNomes { max-height: 250px; } /* Reduce max height slightly */
+       #listaNomes { max-height: 200px; } /* Further reduce height */
+        /* Ensure buttons in name list wrap if needed */
+        #listaNomes li { flex-wrap: wrap; }
+        #listaNomes li span { width: 100%; margin-bottom: 5px; } /* Name takes full width */
+        #listaNomes li > div:last-child { /* Button container */
+            width: 100%; justify-content: flex-start;
+        }
+         #listaNomes li > div:last-child button { margin-left: 0; margin-right: 8px; } /* Adjust button spacing */
 
-         /* Ensure buttons in dates list wrap nicely */
-        #datasCriadasListContainer > ul.toggle-list > li {
-           flex-wrap: wrap; /* Allow buttons to wrap below text */
+
+        #datasCriadasListContainer > ul.toggle-list { /* Monthly event list */
+            padding-left: 25px; padding-right: 10px; /* Adjust padding */
         }
-        #datasCriadasListContainer > ul.toggle-list > li > span {
-            width: 100%; /* Text takes full width first */
-            margin-bottom: 5px; /* Space before buttons */
-        }
-        #datasCriadasListContainer > ul.toggle-list > li > div:last-child { /* Button container */
-             margin-left: 0; /* Reset margin */
-             width: 100%; /* Allow button container to take full width if needed */
-             justify-content: flex-start; /* Align buttons to the start */
-        }
-         #datasCriadasListContainer > ul.toggle-list > li > div:last-child > button {
-             margin-left: 0;
-             margin-right: 5px;
-         }
+        #datasCriadasListContainer > ul.toggle-list > li { flex-wrap: wrap; }
+        #datasCriadasListContainer > ul.toggle-list > li > span { width: 100%; margin-bottom: 5px; }
+        #datasCriadasListContainer > ul.toggle-list > li > div:last-child { margin-left: 0; width: 100%; justify-content: flex-start; }
+         #datasCriadasListContainer > ul.toggle-list > li > div:last-child > button { margin-left: 0; margin-right: 5px; }
 
     }
-
-
-
-    .section-top-right-icon-stats { /* Use a distinct class if needed */
-        position: absolute;
-        top: 20px;
-        right: 25px;
-        z-index: 5;
-    }
-     @media (max-width: 768px) {
-        .section-top-right-icon-stats { top: 15px; right: 18px; }
-     }
-     @media (max-width: 600px) {
-         .section-top-right-icon-stats { top: 12px; right: 15px; }
-     }
-    /* --- END CSS for stats icon --- */
 
   </style>
 </head>
@@ -1126,6 +878,22 @@
        <!-- Optional: Add buttons here later if needed, e.g., for different stats views -->
     </div>
   </div>
+
+
+  <div id="popupPersonStatsContainer" class="modal-overlay">
+    <div class="modal-content">
+      <button class="modal-close-btn" onclick="closePersonStatsPopup()">×</button>
+      <h2 id="personStatsPopupTitle">Estatísticas Individuais</h2>
+      <div id="personStatsContentArea" style="margin-top: 20px;">
+        <p>Carregando estatísticas da pessoa...</p>
+        <!-- Individual statistics content will be populated by JS -->
+      </div>
+    </div>
+  </div>
+
+
+
+
   <!-- ============================================================== -->
   <!-- ==================== FIM DO NOVO POPUP ======================= -->
   <!-- ============================================================== -->
@@ -1203,7 +971,7 @@
 
 
     // --- Firestore Collection References ---
-    const pessoasCollectionRef = collection(db, "pessoas"); // <-- Referência para Pessoas
+    const pessoasCollectionRef = collection(db, "pessoas");
     const eventosDataCollectionRef = collection(db, "eventosData");
     const sugestoesCollectionRef = collection(db, "sugestoes");
     const disponibilidadeCollectionRef = collection(db, "disponibilidade");
@@ -1215,7 +983,7 @@
     let currentSuggestionFilterOffset = 0;
     let allEventosData = [];
     let eventosDataMap = new Map();
-    let allPessoas = []; // <-- Para guardar a lista de pessoas carregada
+    let allPessoas = [];
 
     // --- CONSTANTS ---
     const DIAS_SEMANA_NOMES_COMPLETOS = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
@@ -1228,19 +996,142 @@
     function hslToRgb(h, s, l){ let r, g, b; if(s == 0){ r = g = b = l; }else{ const hue2rgb = (p, q, t) => { if(t < 0) t += 1; if(t > 1) t -= 1; if(t < 1/6) return p + (q - p) * 6 * t; if(t < 1/2) return q; if(t < 2/3) return p + (q - p) * (2/3 - t) * 6; return p; }; const q = l < 0.5 ? l * (1 + s) : l + s - l * s; const p = 2 * l - q; r = hue2rgb(p, q, h + 1/3); g = hue2rgb(p, q, h); b = hue2rgb(p, q, h - 1/3); } return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)]; }
     function rgbToHex(r, g, b) { const componentToHex = (c) => { const hex = c.toString(16); return hex.length == 1 ? "0" + hex : hex; }; return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b); }
     function generateSoftColors(count, saturation = 0.65, lightness = 0.92, startHue = 0.55, hueStep = 0.15) { const colors = []; let currentHue = startHue; for (let i = 0; i < count; i++) { colors.push([currentHue, saturation, lightness]); currentHue = (currentHue + hueStep) % 1.0; } return colors; }
+    function parseHorarioDuration(horarioStr) {
+        if (!horarioStr || typeof horarioStr !== 'string') return null;
+        horarioStr = horarioStr.toLowerCase().replace(/\s+/g, ''); // Normalize
 
-    // --- Toggle Function ---
-    function toggleListVisibility(headerElement) { if (!headerElement) { return; } const listElement = headerElement.nextElementSibling; if (!listElement || !listElement.classList.contains('toggle-list')) { return; } const iconElement = headerElement.querySelector('.toggle-icon'); const isVisible = listElement.classList.contains('visible'); listElement.style.overflow = 'hidden'; if (isVisible) { listElement.classList.remove('visible'); headerElement.classList.remove('open'); if (iconElement) iconElement.textContent = '+'; listElement.style.maxHeight = '0'; listElement.style.paddingTop = '0'; listElement.style.paddingBottom = '0'; listElement.style.borderTopWidth = '0px'; } else { headerElement.classList.add('open'); if (iconElement) iconElement.textContent = '−'; // Use minus/dash for open state
-         const targetPadding = listElement.id === 'listaNomesContainer' ? '15px' : '0'; // Check ID for specific padding
-         // Apply padding *before* calculating scrollHeight for accuracy
-         listElement.style.padding = targetPadding;
-         const targetHeight = listElement.scrollHeight; listElement.classList.add('visible'); listElement.style.maxHeight = targetHeight + 'px'; listElement.style.borderTopWidth = '1px'; // Animate border in
-         // Set overflow back to visible after transition for content visibility (e.g., dropdowns inside)
-         listElement.addEventListener('transitionend', (e) => { if (e.propertyName === 'max-height' && listElement.classList.contains('visible')) { listElement.style.overflow = 'visible'; listElement.style.maxHeight = null; // Allow natural height
-             } }, { once: true }); } }
+        const timeParts = horarioStr.split('-');
+        let startTime = null, endTime = null;
+
+        const parseTime = (timeStr) => {
+            const match = timeStr.match(/(\d{1,2})(?:h(\d{1,2})?)?/);
+            if (!match) return null;
+            const hour = parseInt(match[1], 10);
+            const minute = match[2] ? parseInt(match[2], 10) : 0;
+            if (isNaN(hour) || isNaN(minute) || hour < 0 || hour > 23 || minute < 0 || minute > 59) return null;
+            return hour + minute / 60.0; // Time in hours (float)
+        };
+
+        startTime = parseTime(timeParts[0]);
+        if (timeParts.length > 1) {
+            endTime = parseTime(timeParts[1]);
+        } else {
+             if (startTime !== null) endTime = startTime + 1; // Assume 1 hour duration if only start time
+        }
+
+        if (startTime !== null && endTime !== null) {
+            if (endTime <= startTime) {
+                 const diff = endTime - startTime;
+                 return diff > 0 ? diff : 1.0; // Default 1h if same time or ends earlier
+            }
+            return endTime - startTime;
+        }
+        return null; // Parsing failed
+    }
+
+    // --- Toggle Function (Corrected for Full Expansion) ---
+    function toggleListVisibility(headerElement) {
+        if (!headerElement) return;
+        const listElement = headerElement.nextElementSibling; // The UL/DIV to toggle
+        if (!listElement || !listElement.classList.contains('toggle-list')) return;
+        const iconElement = headerElement.querySelector('.toggle-icon');
+        const isVisible = listElement.classList.contains('visible');
+        const isSubDateList = headerElement.tagName === 'H4' && listElement.closest('#datasCriadasListContainer'); // More specific check for month lists
+
+        listElement.style.overflow = 'hidden'; // Keep overflow hidden during animation
+
+        if (isVisible) {
+            // --- Start Closing ---
+            const currentHeight = listElement.scrollHeight + 'px';
+            listElement.style.maxHeight = currentHeight;
+
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    listElement.classList.remove('visible');
+                    headerElement.classList.remove('open');
+                    if (iconElement) iconElement.textContent = '+';
+                    listElement.style.maxHeight = '0';
+                    listElement.style.paddingTop = '0';
+                    listElement.style.paddingBottom = '0';
+                    listElement.style.borderTopWidth = '0px';
+                });
+            });
+
+            // Adjust parent height when child closes
+            const mainDatesContainer = isSubDateList ? headerElement.closest('#datasCriadasListContainer') : null;
+             if (mainDatesContainer && mainDatesContainer.classList.contains('visible')) {
+                 // Set max-height before starting child collapse to avoid jumpiness
+                  const currentParentHeight = mainDatesContainer.scrollHeight;
+                  const childHeight = parseFloat(currentHeight) || 0; // Use stored height
+                  const newParentHeight = Math.max(0, currentParentHeight - childHeight); // Prevent negative height
+                  mainDatesContainer.style.maxHeight = currentParentHeight + 'px'; // Start from current height
+                  requestAnimationFrame(() => {
+                       mainDatesContainer.style.maxHeight = newParentHeight + 'px'; // Animate parent collapse
+                        // Remove parent max-height after its transition
+                        mainDatesContainer.addEventListener('transitionend', (ev) => {
+                             if (ev.propertyName === 'max-height' && mainDatesContainer.classList.contains('visible')) {
+                                  mainDatesContainer.style.maxHeight = null;
+                                  mainDatesContainer.style.overflow = 'visible';
+                              }
+                          }, { once: true });
+                  });
+             }
+
+        } else {
+            // --- Start Opening ---
+            headerElement.classList.add('open');
+            if (iconElement) iconElement.textContent = '−';
+
+            // Apply target styles BEFORE measuring height
+            listElement.style.borderTopWidth = '1px';
+            if (isSubDateList) {
+                listElement.style.padding = '10px 15px 10px 35px';
+            } else if (listElement.id === 'listaNomesContainer') {
+                listElement.style.padding = '15px';
+            } else if (listElement.id === 'activeRulesList') {
+                 listElement.style.padding = '15px'; // Assuming rules list needs padding too
+            }
+             else { // Default padding (e.g. for #datasCriadasListContainer itself if it was toggled)
+                 listElement.style.padding = '0';
+            }
+
+            const targetHeight = listElement.scrollHeight;
+            //console.log(`Opening: Target height for ${headerElement.textContent.trim()} is ${targetHeight}px`); // Debug log
+
+            // Apply 'visible' class and animate max-height
+            listElement.classList.add('visible');
+            listElement.style.maxHeight = targetHeight + 'px';
+
+            // Remove max-height AFTER transition finishes
+            listElement.addEventListener('transitionend', (e) => {
+                if (e.propertyName === 'max-height' && listElement.classList.contains('visible')) {
+                    listElement.style.maxHeight = null;
+                    listElement.style.overflow = 'visible';
+                    //console.log(`Opening Finished: Removed max-height for ${headerElement.textContent.trim()}`); // Debug log
+                }
+            }, { once: true });
+
+             // Adjust parent height WHEN child starts opening
+             const mainDatesContainer = isSubDateList ? headerElement.closest('#datasCriadasListContainer') : null;
+              if (mainDatesContainer && mainDatesContainer.classList.contains('visible')) {
+                  const currentParentHeight = mainDatesContainer.scrollHeight;
+                  const newParentHeight = currentParentHeight + targetHeight;
+                  mainDatesContainer.style.maxHeight = newParentHeight + 'px';
+                  //console.log(`Adjusting parent height to approx ${newParentHeight}px`); // DEBUG
+
+                   // Remove parent's max-height constraint after its transition
+                   mainDatesContainer.addEventListener('transitionend', (ev) => {
+                      if (ev.propertyName === 'max-height' && mainDatesContainer.classList.contains('visible')) {
+                           mainDatesContainer.style.maxHeight = null;
+                           mainDatesContainer.style.overflow = 'visible';
+                       }
+                   }, { once: true });
+              }
+        }
+    }
 
 
-    // --- Gestão de Nomes --- (DEFINITIONS ADDED HERE)
+    // --- Gestão de Nomes ---
     async function loadNomes() {
         const loadingMsgLi = document.querySelector('#listaNomes #nomesLoadingMsg');
         try {
@@ -1260,12 +1151,11 @@
         const listElement = document.getElementById('listaNomes');
         if (!listElement) { console.error("Elemento #listaNomes não encontrado."); return; }
         const loadingMsg = document.getElementById('nomesLoadingMsg');
-        if (loadingMsg) loadingMsg.remove(); // Remove loading message if it exists
+        if (loadingMsg) loadingMsg.remove();
 
         const searchTermLower = searchTerm.toLowerCase().trim();
-
         const filteredPessoas = searchTermLower === ''
-            ? [...allPessoas] // Use a copy if no filter
+            ? [...allPessoas]
             : allPessoas.filter(p => p.nome && p.nome.toLowerCase().includes(searchTermLower));
 
         listElement.innerHTML = ''; // Clear current list
@@ -1283,20 +1173,35 @@
                 nomeSpan.textContent = pessoa.nome;
                 li.appendChild(nomeSpan);
 
+                // Create a container for buttons
+                const btnContainer = document.createElement('div');
+
+                // Stats Button
+                const statsBtn = document.createElement('button');
+                statsBtn.className = 'stats-btn-pessoa';
+                statsBtn.textContent = 'Estatísticas';
+                statsBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    openPersonStatsPopup(pessoa.id, pessoa.nome);
+                };
+                btnContainer.appendChild(statsBtn);
+
+                // Remove Button
                 const removeBtn = document.createElement('button');
                 removeBtn.className = 'remove-btn';
                 removeBtn.textContent = 'Remover';
-                removeBtn.onclick = (e) => { // Prevent list toggle when clicking button
-                  e.stopPropagation();
-                  removerNome(pessoa.id, pessoa.nome);
+                removeBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    removerNome(pessoa.id, pessoa.nome);
                 };
-                li.appendChild(removeBtn);
+                btnContainer.appendChild(removeBtn);
 
+                li.appendChild(btnContainer);
                 listElement.appendChild(li);
             });
         }
 
-        // Adjust toggle container height if it's visible
+        // Adjust toggle container height if visible
         const parentContainer = listElement.closest('.toggle-list');
         if (parentContainer && parentContainer.classList.contains('visible')) {
             requestAnimationFrame(() => {
@@ -1332,11 +1237,10 @@
 
         try {
             const docRef = await addDoc(pessoasCollectionRef, { nome: nome });
-            // Add to local list immediately for faster UI update
             allPessoas.push({ id: docRef.id, nome: nome });
-            allPessoas.sort((a, b) => a.nome.localeCompare(b.nome)); // Keep sorted
-            input.value = ''; // Clear field
-            filterNomes(); // Re-render list with current filter
+            allPessoas.sort((a, b) => a.nome.localeCompare(b.nome));
+            input.value = '';
+            filterNomes();
         } catch (e) {
             console.error("Erro ao adicionar nome:", e);
             alert("Erro ao adicionar pessoa.");
@@ -1354,31 +1258,27 @@
 
         const liElement = document.querySelector(`#listaNomes li[data-id="${id}"]`);
         const removeBtn = liElement?.querySelector('.remove-btn');
-        if(removeBtn) {
-           removeBtn.disabled = true;
-           removeBtn.textContent = 'Removendo...';
-           liElement.style.opacity = '0.5'; // Visual feedback
-        }
+        const statsBtn = liElement?.querySelector('.stats-btn-pessoa');
+        if(liElement) liElement.style.opacity = '0.5';
+        if(removeBtn) { removeBtn.disabled = true; removeBtn.textContent = '...';}
+        if(statsBtn) { statsBtn.disabled = true; }
 
         try {
             await deleteDoc(doc(db, "pessoas", id));
-            // Remove from local list
             allPessoas = allPessoas.filter(p => p.id !== id);
-            filterNomes(); // Re-render list
+            filterNomes();
         } catch (e) {
             console.error("Erro ao remover nome:", e);
             alert("Erro ao remover pessoa.");
-            if(liElement) liElement.style.opacity = '1'; // Restore on error
-            if(removeBtn) {
-                removeBtn.disabled = false;
-                removeBtn.textContent = 'Remover';
-            }
+            if(liElement) liElement.style.opacity = '1';
+            if(removeBtn) { removeBtn.disabled = false; removeBtn.textContent = 'Remover'; }
+            if(statsBtn) { statsBtn.disabled = false; }
         }
     }
 
     function filterNomes() {
         const searchInput = document.getElementById('searchNomeInput');
-        renderNomes(searchInput?.value || ''); // Render with search term
+        renderNomes(searchInput?.value || '');
     }
     // --- FIM Gestão de Nomes ---
 
@@ -1390,7 +1290,7 @@
             const snapshot = await getDocs(q);
             allEventosData = snapshot.docs.map(d => ({ id: d.id, ...d.data() })).filter(item => {
                 const isValid = item.dataOriginal && item.horario;
-                if (isValid && typeof item.estado === 'undefined') { item.estado = 'ativo'; } // Default to active if missing
+                if (isValid && typeof item.estado === 'undefined') { item.estado = 'ativo'; }
                 return isValid;
             });
             eventosDataMap.clear();
@@ -1409,36 +1309,31 @@
     }
     async function renderDatasCriadas() {
         const listContainer = document.getElementById('datasCriadasListContainer');
-        if (!listContainer) { console.error("renderDatasCriadas: Container element #datasCriadasListContainer not found."); return; }
+        if (!listContainer) { console.error("renderDatasCriadas: Container #datasCriadasListContainer not found."); return; }
         listContainer.innerHTML = '<p style="padding:15px; text-align:center; color:#777;">Carregando datas...</p>';
         try {
-            const datasEventos = allEventosData.length > 0 ? allEventosData : await loadDatas();
+            const datasEventos = allEventosData; // Use cached data
 
-            if (datasEventos.length === 0) { listContainer.innerHTML = '<p style="padding:15px; text-align:center; color:#777;">Nenhuma data e horário adicionados ainda.</p>'; if (listContainer.classList.contains('visible')) { requestAnimationFrame(() => { if(listContainer.classList.contains('visible')) listContainer.style.maxHeight = listContainer.scrollHeight + 'px'; }); } return; }
+            if (datasEventos.length === 0) { listContainer.innerHTML = '<p style="padding:15px; text-align:center; color:#777;">Nenhuma data e horário adicionados ainda.</p>'; return; }
 
             const eventosPorMes = {};
             datasEventos.forEach(evento => { if (evento?.dataOriginal?.length >= 7) { try { const mesKey = evento.dataOriginal.substring(0, 7); if (!eventosPorMes[mesKey]) eventosPorMes[mesKey] = []; eventosPorMes[mesKey].push(evento); } catch (e) { console.warn("Could not parse date for grouping:", evento.dataOriginal, e); } } });
             const sortedMonthKeys = Object.keys(eventosPorMes).sort();
-            listContainer.innerHTML = ''; // Clear loading message
+            listContainer.innerHTML = '';
 
             sortedMonthKeys.forEach(mesKey => {
                 const eventosDoMes = eventosPorMes[mesKey]; if (!eventosDoMes || eventosDoMes.length === 0) return;
-
                 const [year, monthNum] = mesKey.split('-').map(Number);
                 const monthDisplayName = capitalize(new Date(Date.UTC(year, monthNum - 1, 1)).toLocaleDateString('pt-PT', { timeZone: 'UTC', month: 'long', year: 'numeric' }));
                 const monthHeader = document.createElement('h4'); monthHeader.className = 'toggle-header'; monthHeader.onclick = () => toggleListVisibility(monthHeader); monthHeader.innerHTML = `${monthDisplayName} <span class="toggle-icon">+</span>`;
-
-                const monthUl = document.createElement('ul'); monthUl.className = 'toggle-list';
+                const monthUl = document.createElement('ul'); monthUl.className = 'toggle-list'; // This list will now expand fully
                 eventosDoMes.sort((a, b) => a.dataOriginal.localeCompare(b.dataOriginal) || a.horario.localeCompare(b.horario));
 
                 eventosDoMes.forEach(evento => {
                     const dataFormatada = formatarDataParaExibicao(evento.dataOriginal); const horario = evento.horario; const texto = `${dataFormatada} | ${horario}`; const isCanceled = evento.estado === 'cancelado';
-
                     const li = document.createElement('li'); li.setAttribute('data-eventid', evento.id); if (isCanceled) { li.classList.add('canceled-event'); }
-
                     const textoSpan = document.createElement('span'); textoSpan.textContent = texto; li.appendChild(textoSpan);
-
-                    const btnDiv = document.createElement('div'); // Button container
+                    const btnDiv = document.createElement('div');
                     if (isCanceled) {
                         const reactivateBtn = document.createElement('button'); reactivateBtn.className = 'reactivate-btn'; reactivateBtn.textContent = 'Reativar'; reactivateBtn.onclick = (e) => {e.stopPropagation(); reativarData(evento.id, evento.dataOriginal, evento.horario);}; btnDiv.appendChild(reactivateBtn);
                     } else {
@@ -1450,11 +1345,12 @@
                 listContainer.appendChild(monthHeader); listContainer.appendChild(monthUl);
             });
 
+            // Adjust parent container height if it's already visible initially
             if (listContainer.classList.contains('visible')) { requestAnimationFrame(() => { if(listContainer.classList.contains('visible')) listContainer.style.maxHeight = listContainer.scrollHeight + 'px'; }); }
 
         } catch (e) { console.error("Error rendering created dates list:", e); listContainer.innerHTML = '<p style="color:red; padding:15px; text-align:center;">Erro ao carregar datas.</p>'; }
     }
-    async function criarData(dataManual = null, horarioManual = null, clickedButton = null) {
+     async function criarData(dataManual = null, horarioManual = null, clickedButton = null) {
         const inputData = document.getElementById('novaData'); const inputHorario = document.getElementById('novoHorario');
         if (!dataManual && (!inputData || !inputHorario)) { alert("Erro interno: Campos de data/horário não encontrados."); return; }
         let dataString, horarioString, buttonToDisable = null, isManualAdd = false, mainAddButton = null;
@@ -1472,24 +1368,22 @@
                 alert(`O evento para ${formatarDataParaExibicao(dataString)} às ${horarioString} já existe.`);
                 if (!isManualAdd && buttonToDisable) {
                      buttonToDisable.textContent = "Já Adicionado";
-                     // Button remains disabled
                 }
             }
             else {
                 const [yearNum, monthNum, dayNum] = dataString.split('-').map(Number); const dateObject = new Date(Date.UTC(yearNum, monthNum - 1, dayNum)); const mesNome = capitalize(dateObject.toLocaleDateString('pt-PT', { timeZone: 'UTC', month: 'long' })); const diaSemanaNome = capitalize(dateObject.toLocaleDateString('pt-PT', { timeZone: 'UTC', weekday: 'long' }));
-                const eventoDataDoc = { ano: String(yearNum), dataOriginal: dataString, dia: dayNum, diasemana: diaSemanaNome, mes: mesNome, horario: horarioString, estado: "ativo" }; // Default to 'ativo'
+                const eventoDataDoc = { ano: String(yearNum), dataOriginal: dataString, dia: dayNum, diasemana: diaSemanaNome, mes: mesNome, horario: horarioString, estado: "ativo" };
                 const newDocRef = await addDoc(eventosDataCollectionRef, eventoDataDoc);
-                // Add to local cache immediately
+
                 const newEvent = {id: newDocRef.id, ...eventoDataDoc };
                 allEventosData.push(newEvent);
-                allEventosData.sort((a, b) => a.dataOriginal.localeCompare(b.dataOriginal) || a.horario.localeCompare(b.horario)); // Keep sorted
-                if (!eventosDataMap.has(newEvent.dataOriginal)) { // Update map too
+                allEventosData.sort((a, b) => a.dataOriginal.localeCompare(b.dataOriginal) || a.horario.localeCompare(b.horario));
+                if (!eventosDataMap.has(newEvent.dataOriginal)) {
                     eventosDataMap.set(newEvent.dataOriginal, newEvent);
-                } // Handle potential same-day events if needed later
+                }
 
-                if (isManualAdd) { if(inputData) inputData.value = ''; if(inputHorario) inputHorario.value = ''; } // Clear main form only
+                if (isManualAdd) { if(inputData) inputData.value = ''; if(inputHorario) inputHorario.value = ''; }
 
-                // Refresh UI (render functions will use the updated local cache)
                 await renderDatasCriadas();
                 await renderCalendario();
                 await renderSugestoesVisiveis();
@@ -1497,7 +1391,7 @@
         } catch (e) { console.error("Error adding date:", e); alert("Erro ao adicionar a data."); if (!isManualAdd && buttonToDisable) { buttonToDisable.disabled = false; buttonToDisable.textContent = originalButtonText; }
         } finally {
              if (buttonToDisable) {
-                if (isManualAdd || (!isManualAdd && !eventAlreadyExisted)) { // Re-enable main button OR suggestion button if it wasn't a duplicate
+                if (isManualAdd || (!isManualAdd && !eventAlreadyExisted)) {
                      buttonToDisable.disabled = false; buttonToDisable.textContent = originalButtonText;
                 }
              }
@@ -1513,37 +1407,33 @@
 
         try {
             await deleteDoc(doc(db, "eventosData", id));
-            // Remove from local cache
             allEventosData = allEventosData.filter(ev => ev.id !== id);
             if(eventosDataMap.has(dataOriginal) && eventosDataMap.get(dataOriginal).id === id) {
                 eventosDataMap.delete(dataOriginal);
             }
-            // Refresh UI from cache
             await renderDatasCriadas();
             await renderCalendario();
             await renderSugestoesVisiveis();
-        } catch (e) { console.error("Error removing date:", e); alert("Erro ao remover a data."); if (liElement) { await renderDatasCriadas(); } } // Re-render list on error to fix buttons/opacity
+        } catch (e) { console.error("Error removing date:", e); alert("Erro ao remover a data."); await renderDatasCriadas(); }
     }
     async function cancelarData(id, dataOriginal, horario) {
         const dataFormatada = formatarDataParaExibicao(dataOriginal);
-        if (!confirm(`Tem certeza que deseja CANCELAR o evento:\n${dataFormatada} | ${horario}?\nIsso marcará o evento como cancelado, mas não o removerá.`)) return;
+        if (!confirm(`Tem certeza que deseja CANCELAR o evento:\n${dataFormatada} | ${horario}?`)) return;
 
         const liElement = document.querySelector(`#datasCriadasListContainer li[data-eventid="${id}"]`);
         if (liElement) { liElement.querySelectorAll('button').forEach(btn => { btn.disabled = true; btn.textContent='...'}); }
 
         try {
             await updateDoc(doc(db, "eventosData", id), { estado: "cancelado" });
-            // Update local state immediately
             const index = allEventosData.findIndex(ev => ev.id === id);
             if (index > -1) { allEventosData[index].estado = "cancelado"; }
             if (eventosDataMap.has(dataOriginal) && eventosDataMap.get(dataOriginal).id === id) {
                  const eventInMap = eventosDataMap.get(dataOriginal);
                  if (eventInMap) eventInMap.estado = "cancelado";
              }
-            // Refresh UI
             await renderDatasCriadas();
             await renderCalendario();
-        } catch (e) { console.error("Error canceling date:", e); alert("Erro ao cancelar a data."); if (liElement) { await renderDatasCriadas(); } }
+        } catch (e) { console.error("Error canceling date:", e); alert("Erro ao cancelar a data."); await renderDatasCriadas(); }
     }
     async function reativarData(id, dataOriginal, horario) {
         const dataFormatada = formatarDataParaExibicao(dataOriginal);
@@ -1554,17 +1444,15 @@
 
         try {
             await updateDoc(doc(db, "eventosData", id), { estado: "ativo" });
-            // Update local state immediately
             const index = allEventosData.findIndex(ev => ev.id === id);
             if (index > -1) { allEventosData[index].estado = "ativo"; }
              if (eventosDataMap.has(dataOriginal) && eventosDataMap.get(dataOriginal).id === id) {
                  const eventInMap = eventosDataMap.get(dataOriginal);
                  if (eventInMap) eventInMap.estado = "ativo";
              }
-            // Refresh UI
             await renderDatasCriadas();
             await renderCalendario();
-        } catch (e) { console.error("Error reactivating date:", e); alert("Erro ao reativar a data."); if (liElement) { await renderDatasCriadas(); } }
+        } catch (e) { console.error("Error reactivating date:", e); alert("Erro ao reativar a data."); await renderDatasCriadas(); }
     }
 
 
@@ -1578,21 +1466,21 @@
         addButton.disabled = true; addButton.textContent = 'Adicionando...'; let rulesAdded = false; const promises = []; const addedIds = new Set(); const newRules = [];
         checkboxes.forEach(cb => { const dia = parseInt(cb.value, 10); const exists = activeSuggestionRules.some(r => r.diaSemana === dia && r.horario === horario); const identifier = `${dia}-${horario}`; if (!exists && !addedIds.has(identifier)) { const ruleData = { diaSemana: dia, horario: horario }; promises.push(addDoc(regrasSugestaoCollectionRef, ruleData).then(docRef => { newRules.push({ id: docRef.id, ...ruleData }); })); addedIds.add(identifier); rulesAdded = true; } });
         if (!rulesAdded && addedIds.size === 0) { alert("Nenhuma regra nova para adicionar (já existem ou nenhuma selecionada)."); addButton.disabled = false; addButton.textContent = 'Adicionar Regra(s)...'; return; }
-        try { await Promise.all(promises); // Wait for adds to complete
-             activeSuggestionRules.push(...newRules); // Update local cache
-             activeSuggestionRules.sort((a, b) => a.diaSemana - b.diaSemana || a.horario.localeCompare(b.horario)); // Keep sorted
-             renderActiveRules(); // Update list of rules
-             await gerarEAtualizarSugestoesFirestore(); // Regenerate suggestions
-             horarioInput.value = ''; checkboxes.forEach(cb => cb.checked = false); // Clear form
-        } catch (e) { console.error("Error adding rules:", e); alert("Erro ao salvar regras."); await loadSuggestionRulesFromFirestore(); renderActiveRules(); // Refresh rules list on error
+        try { await Promise.all(promises);
+             activeSuggestionRules.push(...newRules);
+             activeSuggestionRules.sort((a, b) => a.diaSemana - b.diaSemana || a.horario.localeCompare(b.horario));
+             renderActiveRules();
+             await gerarEAtualizarSugestoesFirestore();
+             horarioInput.value = ''; checkboxes.forEach(cb => cb.checked = false);
+        } catch (e) { console.error("Error adding rules:", e); alert("Erro ao salvar regras."); await loadSuggestionRulesFromFirestore(); renderActiveRules();
         } finally { addButton.disabled = false; addButton.textContent = 'Adicionar Regra(s)...'; }
     }
     async function removerRegraSugestao(ruleId, diaSemana, horario) {
         const diaNome = DIAS_SEMANA_NOMES_COMPLETOS[diaSemana] || 'Inválido'; if (!confirm(`Remover regra "${capitalize(diaNome)} | ${horario}"?`)) return;
         const button = document.querySelector(`#activeRulesList button[onclick*="${ruleId}"]`); if(button){button.disabled=true; button.textContent="..."; button.closest('li').style.opacity='0.5';}
-        try { await deleteDoc(doc(db, "regrasSugestao", ruleId)); activeSuggestionRules = activeSuggestionRules.filter(r => r.id !== ruleId); // Update local cache
-             renderActiveRules(); // Update rules list UI
-             await gerarEAtualizarSugestoesFirestore(); // Regenerate suggestions
+        try { await deleteDoc(doc(db, "regrasSugestao", ruleId)); activeSuggestionRules = activeSuggestionRules.filter(r => r.id !== ruleId);
+             renderActiveRules();
+             await gerarEAtualizarSugestoesFirestore();
         } catch (e) { console.error("Error removing rule:", e); alert("Erro ao remover regra."); if(button){button.disabled=false; button.textContent="Remover Regra"; button.closest('li').style.opacity='1';} }
     }
     async function gerarEAtualizarSugestoesFirestore() {
@@ -1602,7 +1490,7 @@
         novasSugestoes.sort((a, b) => a.date.localeCompare(b.date) || a.horario.localeCompare(b.horario));
 
         try { const existing = await getDocs(sugestoesCollectionRef); const batch = writeBatch(db); existing.forEach(d => batch.delete(d.ref)); novasSugestoes.forEach(s => batch.set(doc(collection(db, "sugestoes")), s)); await batch.commit();
-             await renderSugestoesVisiveis(); // Update the visible suggestions UI
+             await renderSugestoesVisiveis();
         } catch (e) { console.error("Error updating Firestore suggestions:", e); alert("Erro ao atualizar sugestões."); }
     }
     async function filterSugestoes(clickedButton) { if (!clickedButton || clickedButton.classList.contains('active')) return; const offset = parseInt(clickedButton.getAttribute('data-offset'), 10); if (isNaN(offset)) return; currentSuggestionFilterOffset = offset;
@@ -1683,11 +1571,9 @@
                         confs.sort((a, b) => (a.isCapitao === b.isCapitao) ? a.nome.localeCompare(b.nome) : (a.isCapitao ? -1 : 1));
                         confs.forEach((conf) => {
                             const li = document.createElement('li'); const span = document.createElement('span'); span.textContent = conf.nome + (conf.isCapitao ? ' (C)' : ''); if(conf.isCapitao) span.style.fontWeight = 'bold'; li.appendChild(span);
-
                             const btnsDiv = document.createElement('div');
                             const capBtn = document.createElement('button'); capBtn.className = 'toggle-capitao-btn'; capBtn.textContent = conf.isCapitao ? 'Rem. Capitão' : 'Tornar Capitão'; capBtn.style.backgroundColor = conf.isCapitao ? '#ffc107' : '#6c757d'; capBtn.style.borderColor = conf.isCapitao ? '#e0a800' : '#5a6268'; capBtn.onclick = (e) => toggleCapitaoStatus(conf.id, dateOrig, horario, !conf.isCapitao, e.target); btnsDiv.appendChild(capBtn);
                             const remBtn = document.createElement('button'); remBtn.className = 'remove-btn'; remBtn.textContent = 'Remover'; remBtn.onclick = (e) => removerConfirmacao(conf.id, dateOrig, horario, conf.nome, e.target); btnsDiv.appendChild(remBtn);
-
                             li.appendChild(btnsDiv); ul.appendChild(li);
                         }); blockDiv.appendChild(ul);
                     } else { blockDiv.appendChild(document.createElement('p')).textContent = 'Sem confirmações.'; }
@@ -1772,53 +1658,50 @@
         const container = document.getElementById('calendarioContainer'); const selectMes = document.getElementById('mesSelect'); const currentSelectedMonth = selectMes?.value; if (!container || !selectMes) { console.error("Calendar elements missing."); return; }
         container.innerHTML = '<p style="text-align:center; padding: 20px; color:#777;">Carregando calendário...</p>'; const resumoBtn = document.getElementById('resumoBtn');
         try {
+             // Fetch availability, ensure events are loaded (use cache)
              const [disponibilidadeDocs] = await Promise.all([ getDocs(query(disponibilidadeCollectionRef, orderBy("dataOriginal"), orderBy("horario"), orderBy("nome"))),
                   allEventosData.length > 0 ? Promise.resolve() : loadDatas()
              ]);
 
+            // Populate month dropdown
             const datasPorMes = {}; allEventosData.forEach(e => { if (e?.dataOriginal?.length >= 7) { const key = e.dataOriginal.substring(0, 7); if (!datasPorMes[key]) datasPorMes[key] = []; if (!datasPorMes[key].includes(e.dataOriginal)) { datasPorMes[key].push(e.dataOriginal); } } });
             const availableMonths = Object.keys(datasPorMes).sort(); selectMes.innerHTML = '';
             if (availableMonths.length === 0) { selectMes.innerHTML = '<option value="">Sem eventos</option>'; container.innerHTML = '<p style="text-align:center; padding: 20px; color:#777;">Crie um evento para ver o calendário.</p>'; currentMonthAvailability.clear(); if (resumoBtn) resumoBtn.disabled = true; return; }
             availableMonths.forEach(key => { const opt = document.createElement('option'); opt.value = key; const [y, m] = key.split('-').map(Number); opt.textContent = capitalize(new Date(Date.UTC(y, m - 1, 1)).toLocaleDateString('pt-PT', { timeZone: 'UTC', month: 'long', year: 'numeric' })); selectMes.appendChild(opt); });
             const monthToDisplay = currentSelectedMonth && availableMonths.includes(currentSelectedMonth) ? currentSelectedMonth : availableMonths[availableMonths.length - 1]; selectMes.value = monthToDisplay; if (resumoBtn) resumoBtn.disabled = false;
 
+            // Process availability for the selected month
             currentMonthAvailability.clear(); const [anoNum, mesNum] = monthToDisplay.split('-').map(Number);
-
             disponibilidadeDocs.forEach(doc => { const d = doc.data();
                  if (d?.dataOriginal?.startsWith(monthToDisplay) && d.horario && d.nome) {
                      const eventInfo = eventosDataMap.get(d.dataOriginal);
-                     if (eventInfo && eventInfo.estado !== 'cancelado') { // Only process for active events
+                     if (eventInfo && eventInfo.estado !== 'cancelado') {
                          if (!currentMonthAvailability.has(d.dataOriginal)) { currentMonthAvailability.set(d.dataOriginal, new Map()); } const dateMap = currentMonthAvailability.get(d.dataOriginal); if (!dateMap.has(d.horario)) { dateMap.set(d.horario, []); } dateMap.get(d.horario).push({ id: doc.id, nome: d.nome, isCapitao: d.isCapitao === true });
                      }
                  } });
 
             // Render Calendar Grid
             container.innerHTML = '';
-            const firstD = new Date(Date.UTC(anoNum, mesNum - 1, 1)); const lastD = new Date(Date.UTC(anoNum, mesNum, 0)); let startDay = firstD.getUTCDay(); startDay = (startDay === 0) ? 6 : startDay - 1; // 0=Mon, 6=Sun
-
+            const firstD = new Date(Date.UTC(anoNum, mesNum - 1, 1)); const lastD = new Date(Date.UTC(anoNum, mesNum, 0)); let startDay = firstD.getUTCDay(); startDay = (startDay === 0) ? 6 : startDay - 1;
             const daysInGrid = []; for (let i = 0; i < startDay; i++) daysInGrid.push(null);
             for (let i = 1; i <= lastD.getUTCDate(); i++) daysInGrid.push(new Date(Date.UTC(anoNum, mesNum - 1, i)));
             while (daysInGrid.length % 7 !== 0) daysInGrid.push(null);
-
             const headerDiv = document.createElement('div'); headerDiv.className = 'calendar-header'; ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'].forEach(dn => headerDiv.appendChild(document.createElement('div')).textContent = dn); container.appendChild(headerDiv);
-
             const gridDiv = document.createElement('div'); gridDiv.className = 'calendar'; container.appendChild(gridDiv);
             daysInGrid.forEach(dtObj => { const dayDiv = document.createElement('div'); if (dtObj) {
                  const dayNum = dtObj.getUTCDate(); const iso = `${dtObj.getUTCFullYear()}-${String(dtObj.getUTCMonth() + 1).padStart(2, '0')}-${String(dayNum).padStart(2, '0')}`; dayDiv.className = 'day'; const numHdr = document.createElement('div'); numHdr.className = 'day-number-header'; numHdr.textContent = dayNum; dayDiv.appendChild(numHdr);
-
                  const eventoDoDia = eventosDataMap.get(iso); const isEvt = !!eventoDoDia; const isCanceled = eventoDoDia?.estado === 'cancelado';
                  if (isEvt) { dayDiv.classList.add('has-event'); if (isCanceled) { dayDiv.classList.add('is-canceled'); } }
                  else { dayDiv.classList.add('day-empty'); }
-
                  const dayAvail = currentMonthAvailability.get(iso);
-                 if (!isCanceled && dayAvail?.size > 0) { // Show availability only if event is active
+                 if (!isCanceled && dayAvail?.size > 0) {
                      Array.from(dayAvail.keys()).sort().forEach(horario => {
                          const confs = dayAvail.get(horario) || []; if (confs.length > 0) {
                              const hHdr = document.createElement('div'); hHdr.className = 'horario-group-header'; hHdr.textContent = horario; dayDiv.appendChild(hHdr);
                              const ul = document.createElement('ul'); ul.className = 'nomes horario-nomes-list';
                              confs.sort((a, b) => (a.isCapitao === b.isCapitao) ? a.nome.localeCompare(b.nome) : (a.isCapitao ? -1 : 1));
                              confs.forEach(c => { const li = document.createElement('li'); const span = document.createElement('span'); span.textContent = c.nome + (c.isCapitao ? ' (C)' : ''); if(c.isCapitao) span.style.fontWeight='bold'; li.appendChild(span); ul.appendChild(li); }); dayDiv.appendChild(ul);
-                         } }); } } else { // Placeholder cell
+                         } }); } } else {
                  dayDiv.className = 'day day-placeholder'; } gridDiv.appendChild(dayDiv); });
         } catch (e) { console.error("Error rendering calendar:", e); container.innerHTML = `<p style="color: red; text-align:center; padding: 20px;">Erro ao carregar calendário: ${e.message}</p>`; selectMes.innerHTML = '<option value="">Erro</option>'; currentMonthAvailability.clear(); if (resumoBtn) resumoBtn.disabled = true; }
     }
@@ -1829,21 +1712,16 @@
     function closeSugestoesPopup() { const modal = document.getElementById('popupSugestoesContainer'); if (!modal) return; modal.classList.remove('visible'); modal.addEventListener('transitionend', () => { if (!modal.classList.contains('visible')) modal.style.display = 'none'; }, { once: true }); }
 
 
-    // --- ****** UPDATED Functions for Popup de Estatísticas de Pessoas ****** ---
+    // --- Funções para Popup de Estatísticas Gerais ---
     function openStatsPessoasPopup() {
         const modal = document.getElementById('popupStatsPessoasContainer');
         if (!modal) return;
-        // Show loading indicator immediately
         const contentArea = document.getElementById('statsPessoasContentArea');
         if(contentArea) contentArea.innerHTML = '<p>Carregando e calculando estatísticas...</p>';
-
         modal.style.display = 'flex';
         setTimeout(() => modal.classList.add('visible'), 10);
-
-        // Start calculation *after* showing the modal with loading text
-        renderStatsPessoas();
+        renderStatsPessoas(); // Call calculation function
     }
-
     function closeStatsPessoasPopup() {
         const modal = document.getElementById('popupStatsPessoasContainer');
         if (!modal) return;
@@ -1856,101 +1734,33 @@
             }
         }, { once: true });
     }
-
-    // Helper to parse duration from horario string (e.g., "10h-13h", "14h", "9h30-11h")
-    // Returns duration in hours, or null if parsing fails. Makes assumptions!
-    function parseHorarioDuration(horarioStr) {
-        if (!horarioStr || typeof horarioStr !== 'string') return null;
-        horarioStr = horarioStr.toLowerCase().replace(/\s+/g, ''); // Normalize: "10h-13h" or "9h30-11h"
-
-        const timeParts = horarioStr.split('-');
-        let startTime = null, endTime = null;
-
-        const parseTime = (timeStr) => {
-            const match = timeStr.match(/(\d{1,2})(?:h(\d{1,2})?)?/);
-            if (!match) return null;
-            const hour = parseInt(match[1], 10);
-            const minute = match[2] ? parseInt(match[2], 10) : 0;
-            if (isNaN(hour) || isNaN(minute) || hour < 0 || hour > 23 || minute < 0 || minute > 59) return null;
-            return hour + minute / 60.0; // Time in hours (float)
-        };
-
-        startTime = parseTime(timeParts[0]);
-        if (timeParts.length > 1) {
-            endTime = parseTime(timeParts[1]);
-        } else {
-             // Assume 1 hour duration if only start time is given (e.g., "14h")
-             if (startTime !== null) endTime = startTime + 1;
-        }
-
-
-        if (startTime !== null && endTime !== null) {
-            if (endTime <= startTime) {
-                 const diff = endTime - startTime;
-                 return diff > 0 ? diff : 1.0; // Default 1h if same time or ends earlier
-            }
-            return endTime - startTime;
-        }
-
-        return null; // Parsing failed
-    }
-
-
     async function renderStatsPessoas() {
         const contentArea = document.getElementById('statsPessoasContentArea');
         if (!contentArea) return;
-
         try {
-            // Ensure necessary base data is loaded (should be from window.onload)
+            // Ensure necessary base data is loaded
             if (allPessoas.length === 0) await loadNomes();
-            if (allEventosData.length === 0) await loadDatas();
+            if (eventosDataMap.size === 0) await loadDatas(); // Use map check
 
-            // 1. Fetch ALL relevant availability data
-            console.log("Fetching availability data for stats...");
+            console.log("Fetching availability data for general stats...");
             const disponibilidadeSnapshot = await getDocs(query(disponibilidadeCollectionRef));
             const allDisponibilidade = disponibilidadeSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            console.log(`Fetched ${allDisponibilidade.length} availability records.`);
+            console.log(`Fetched ${allDisponibilidade.length} availability records for general stats.`);
 
-            // 2. Process and Aggregate Data
-            const stats = {
-                totalEscalas: 0,
-                totalEscalasCanceladas: 0,
-                totalHoras: 0,
-                countByMonth: {}, // { "YYYY-MM": { count: N, uniquePeople: Set(), canceled: N } }
-                countByWeek: {},  // { "Week String": { count: N, uniquePeople: Set(), canceled: N } }
-                countByWeekday: {}, // { "Weekday": { count: N, uniquePeople: Set() } }
-                countByHorario: {}, // { "Horario": { count: N, uniquePeople: Set() } }
-                countByPerson: {},  // { "Name": { count: N, hours: N } }
-                countByDate: {},    // { "YYYY-MM-DD": { count: N, uniquePeople: Set() } }
-                countByHorarioFull: {} // { "Horario": { count: N, uniquePeople: Set() } } // Needed for separate stat
-            };
-
+            // Process and Aggregate Data
+            const stats = { totalEscalas: 0, totalEscalasCanceladas: 0, totalHoras: 0, countByMonth: {}, countByWeek: {}, countByWeekday: {}, countByHorario: {}, countByPerson: {}, countByDate: {}, countByHorarioFull: {} };
             const uniquePeopleAvailableOverall = new Set();
             const peopleWithAnyEscala = new Set();
 
             allDisponibilidade.forEach(disp => {
-                if (!disp.dataOriginal || !disp.nome || !disp.horario) {
-                    console.warn("Skipping availability record with missing data:", disp);
-                    return;
-                }
-
+                if (!disp.dataOriginal || !disp.nome || !disp.horario) { console.warn("Skipping availability record with missing data:", disp); return; }
                 const evento = eventosDataMap.get(disp.dataOriginal);
                 const isEventoAtivo = evento && evento.estado !== 'cancelado';
-
-                 uniquePeopleAvailableOverall.add(disp.nome);
-
+                uniquePeopleAvailableOverall.add(disp.nome);
                 if (isEventoAtivo) {
                     stats.totalEscalas++;
                     peopleWithAnyEscala.add(disp.nome);
-
-                    const monthKey = disp.dataOriginal.substring(0, 7);
-                    const weekKey = disp.semana || `Semana de ${disp.dataOriginal}`;
-                    const weekdayKey = disp.diasemana || 'Dia Desconhecido';
-                    const horarioKey = disp.horario;
-                    const dateKey = disp.dataOriginal;
-                    const personKey = disp.nome;
-
-                    // Init counters
+                    const monthKey = disp.dataOriginal.substring(0, 7); const weekKey = disp.semana || `Semana de ${disp.dataOriginal}`; const weekdayKey = disp.diasemana || 'Dia Desconhecido'; const horarioKey = disp.horario; const dateKey = disp.dataOriginal; const personKey = disp.nome;
                     if (!stats.countByMonth[monthKey]) stats.countByMonth[monthKey] = { count: 0, uniquePeople: new Set(), canceled: 0 };
                     if (!stats.countByWeek[weekKey]) stats.countByWeek[weekKey] = { count: 0, uniquePeople: new Set(), canceled: 0 };
                     if (!stats.countByWeekday[weekdayKey]) stats.countByWeekday[weekdayKey] = { count: 0, uniquePeople: new Set() };
@@ -1958,186 +1768,162 @@
                     if (!stats.countByPerson[personKey]) stats.countByPerson[personKey] = { count: 0, hours: 0 };
                     if (!stats.countByDate[dateKey]) stats.countByDate[dateKey] = { count: 0, uniquePeople: new Set() };
                     if (!stats.countByHorarioFull[horarioKey]) stats.countByHorarioFull[horarioKey] = { count: 0, uniquePeople: new Set() };
-
-                    // Increment counts
-                    stats.countByMonth[monthKey].count++;
-                    stats.countByMonth[monthKey].uniquePeople.add(personKey);
-                    stats.countByWeek[weekKey].count++;
-                    stats.countByWeek[weekKey].uniquePeople.add(personKey);
-                    stats.countByWeekday[weekdayKey].count++;
-                    stats.countByWeekday[weekdayKey].uniquePeople.add(personKey);
-                    stats.countByHorario[horarioKey].count++;
-                    stats.countByHorario[horarioKey].uniquePeople.add(personKey);
+                    stats.countByMonth[monthKey].count++; stats.countByMonth[monthKey].uniquePeople.add(personKey);
+                    stats.countByWeek[weekKey].count++; stats.countByWeek[weekKey].uniquePeople.add(personKey);
+                    stats.countByWeekday[weekdayKey].count++; stats.countByWeekday[weekdayKey].uniquePeople.add(personKey);
+                    stats.countByHorario[horarioKey].count++; stats.countByHorario[horarioKey].uniquePeople.add(personKey);
                     stats.countByPerson[personKey].count++;
-                    stats.countByDate[dateKey].count++;
-                    stats.countByDate[dateKey].uniquePeople.add(personKey);
-                    stats.countByHorarioFull[horarioKey].count++;
-                    stats.countByHorarioFull[horarioKey].uniquePeople.add(personKey);
-
-                    // Calculate and add hours
+                    stats.countByDate[dateKey].count++; stats.countByDate[dateKey].uniquePeople.add(personKey);
+                    stats.countByHorarioFull[horarioKey].count++; stats.countByHorarioFull[horarioKey].uniquePeople.add(personKey);
                     const duration = parseHorarioDuration(disp.horario);
-                    if (duration !== null) {
-                        stats.countByPerson[personKey].hours += duration;
-                        stats.totalHoras += duration;
-                    } else {
-                        console.warn(`Could not parse duration for horario: ${disp.horario} on ${disp.dataOriginal}`);
-                    }
-
+                    if (duration !== null) { stats.countByPerson[personKey].hours += duration; stats.totalHoras += duration; } else { console.warn(`Could not parse duration for horario: ${disp.horario} on ${disp.dataOriginal}`); }
                 } else {
                     stats.totalEscalasCanceladas++;
-
-                     const monthKey = disp.dataOriginal.substring(0, 7);
-                     const weekKey = disp.semana || `Semana de ${disp.dataOriginal}`;
-
-                     if (stats.countByMonth[monthKey]) {
-                         stats.countByMonth[monthKey].canceled = (stats.countByMonth[monthKey].canceled || 0) + 1;
-                     }
-                      if (stats.countByWeek[weekKey]) {
-                         stats.countByWeek[weekKey].canceled = (stats.countByWeek[weekKey].canceled || 0) + 1;
-                     }
+                     const monthKey = disp.dataOriginal.substring(0, 7); const weekKey = disp.semana || `Semana de ${disp.dataOriginal}`;
+                     if (stats.countByMonth[monthKey]) { stats.countByMonth[monthKey].canceled = (stats.countByMonth[monthKey].canceled || 0) + 1; }
+                     if (stats.countByWeek[weekKey]) { stats.countByWeek[weekKey].canceled = (stats.countByWeek[weekKey].canceled || 0) + 1; }
                 }
-            }); // End forEach disp
+            });
 
-            // 3. Calculate Derived Statistics & Prepare Output
-            let statsHTML = `<h4>Resumo Geral (Eventos Ativos)</h4>`;
-            statsHTML += `<ul style="list-style: disc; padding-left: 20px;">`;
+            // Prepare Output HTML
+            let statsHTML = `<h4>Resumo Geral (Eventos Ativos)</h4><ul style="list-style: disc; padding-left: 20px;">`;
             statsHTML += `<li>Total de Pessoas Registradas: <strong>${allPessoas.length}</strong></li>`;
             statsHTML += `<li>Total de Escalas Ativas Registradas: <strong>${stats.totalEscalas}</strong></li>`;
-            statsHTML += `<li>Total Estimado de Horas Escalonadas (Eventos Ativos): <strong>${stats.totalHoras.toFixed(1)}h</strong> (Baseado na duração do horário)</li>`;
+            statsHTML += `<li>Total Estimado de Horas Escalonadas (Eventos Ativos): <strong>${stats.totalHoras.toFixed(1)}h</strong></li>`;
             statsHTML += `<li>Média de Escalas Ativas por Pessoa (que teve alguma escala): <strong>${(peopleWithAnyEscala.size > 0 ? (stats.totalEscalas / peopleWithAnyEscala.size) : 0).toFixed(1)}</strong></li>`;
             const peopleNotScheduled = allPessoas.filter(p => !peopleWithAnyEscala.has(p.nome)).length;
             statsHTML += `<li>Pessoas Registradas SEM Escalas Ativas: <strong>${peopleNotScheduled}</strong></li>`;
-             statsHTML += `<li>Total de Registros de Disponibilidade para Eventos Cancelados/Inexistentes: <strong>${stats.totalEscalasCanceladas}</strong></li>`;
-            statsHTML += `</ul>`;
-
-            // -- Per Month Stats --
+            statsHTML += `<li>Registros de Disponibilidade para Eventos Cancelados/Inexistentes: <strong>${stats.totalEscalasCanceladas}</strong></li></ul>`;
             statsHTML += `<h4 style="margin-top: 1.5em;">Estatísticas Mensais (Eventos Ativos)</h4>`;
             const sortedMonths = Object.keys(stats.countByMonth).sort();
-            if (sortedMonths.length > 0) {
-                statsHTML += `<ul style="list-style: none; padding-left: 0;">`;
-                sortedMonths.forEach(month => {
-                    const data = stats.countByMonth[month];
-                    const [y, m] = month.split('-');
-                    const monthName = capitalize(new Date(Date.UTC(y, m - 1, 1)).toLocaleDateString('pt-PT', { timeZone: 'UTC', month: 'long', year: 'numeric' }));
-                    statsHTML += `<li style="margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px dotted #ccc;"><strong>${monthName}:</strong> `;
-                    statsHTML += ` ${data.count} escalas, ${data.uniquePeople.size} pessoas distintas.`;
-                    if (data.canceled > 0) {
-                         statsHTML += ` <span style="color: #e74c3c;">(${data.canceled} registros para eventos cancelados neste mês)</span>`;
-                    }
-                    statsHTML += `</li>`;
-                });
-                statsHTML += `</ul>`;
-            } else {
-                statsHTML += `<p>Nenhuma escala ativa encontrada para análise mensal.</p>`;
-            }
-
-            // -- Per Week Stats --
+            if (sortedMonths.length > 0) { statsHTML += `<ul style="list-style: none; padding-left: 0;">`; sortedMonths.forEach(month => { const data = stats.countByMonth[month]; const [y, m] = month.split('-'); const monthName = capitalize(new Date(Date.UTC(y, m - 1, 1)).toLocaleDateString('pt-PT', { timeZone: 'UTC', month: 'long', year: 'numeric' })); statsHTML += `<li style="margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px dotted #ccc;"><strong>${monthName}:</strong> ${data.count} escalas, ${data.uniquePeople.size} pessoas distintas.`; if (data.canceled > 0) { statsHTML += ` <span style="color: #e74c3c;">(${data.canceled} regs. cancelados)</span>`; } statsHTML += `</li>`; }); statsHTML += `</ul>`; } else { statsHTML += `<p>Nenhuma escala ativa encontrada.</p>`; }
             statsHTML += `<h4 style="margin-top: 1.5em;">Estatísticas Semanais (Eventos Ativos)</h4>`;
-            const sortedWeeks = Object.keys(stats.countByWeek).sort((a, b) => {
-                const dateA = a.match(/\d{4}-\d{2}-\d{2}/)?.[0] || a;
-                const dateB = b.match(/\d{4}-\d{2}-\d{2}/)?.[0] || b;
-                return dateA.localeCompare(dateB);
-            });
-            if (sortedWeeks.length > 0) {
-                 statsHTML += `<ul style="list-style: none; padding-left: 0;">`;
-                sortedWeeks.forEach(week => {
-                    const data = stats.countByWeek[week];
-                    statsHTML += `<li style="margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px dotted #ccc;"><strong>${week}:</strong> `;
-                    statsHTML += `${data.count} escalas, ${data.uniquePeople.size} pessoas distintas.`;
-                     if (data.canceled > 0) {
-                         statsHTML += ` <span style="color: #e74c3c;">(${data.canceled} registros para eventos cancelados nesta semana)</span>`;
-                    }
-                    statsHTML += `</li>`;
-                });
-                statsHTML += `</ul>`;
-            } else {
-                statsHTML += `<p>Nenhuma escala ativa encontrada para análise semanal.</p>`;
-            }
-
-             // -- Per Weekday Stats --
+            const sortedWeeks = Object.keys(stats.countByWeek).sort((a, b) => { const dateA = a.match(/\d{4}-\d{2}-\d{2}/)?.[0] || a; const dateB = b.match(/\d{4}-\d{2}-\d{2}/)?.[0] || b; return dateA.localeCompare(dateB); });
+            if (sortedWeeks.length > 0) { statsHTML += `<ul style="list-style: none; padding-left: 0;">`; sortedWeeks.forEach(week => { const data = stats.countByWeek[week]; statsHTML += `<li style="margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px dotted #ccc;"><strong>${week}:</strong> ${data.count} escalas, ${data.uniquePeople.size} pessoas distintas.`; if (data.canceled > 0) { statsHTML += ` <span style="color: #e74c3c;">(${data.canceled} regs. cancelados)</span>`; } statsHTML += `</li>`; }); statsHTML += `</ul>`; } else { statsHTML += `<p>Nenhuma escala ativa encontrada.</p>`; }
             statsHTML += `<h4 style="margin-top: 1.5em;">Escalas Ativas por Dia da Semana</h4>`;
             const sortedWeekdays = Object.keys(stats.countByWeekday).sort((a, b) => DIAS_SEMANA_NOMES_COMPLETOS.indexOf(a) - DIAS_SEMANA_NOMES_COMPLETOS.indexOf(b));
-            if (sortedWeekdays.length > 0) {
-                statsHTML += `<ul style="list-style: disc; padding-left: 20px;">`;
-                sortedWeekdays.forEach(day => {
-                    const data = stats.countByWeekday[day];
-                    statsHTML += `<li><strong>${day}:</strong> ${data.count} escalas, ${data.uniquePeople.size} pessoas distintas</li>`;
-                });
-                statsHTML += `</ul>`;
-            } else {
-                statsHTML += `<p>Nenhuma escala ativa encontrada.</p>`;
-            }
-
-             // -- Per Horario Stats --
+            if (sortedWeekdays.length > 0) { statsHTML += `<ul style="list-style: disc; padding-left: 20px;">`; sortedWeekdays.forEach(day => { const data = stats.countByWeekday[day]; statsHTML += `<li><strong>${day}:</strong> ${data.count} escalas, ${data.uniquePeople.size} pessoas distintas</li>`; }); statsHTML += `</ul>`; } else { statsHTML += `<p>Nenhuma escala ativa encontrada.</p>`; }
             statsHTML += `<h4 style="margin-top: 1.5em;">Escalas Ativas por Horário</h4>`;
             const sortedHorarios = Object.entries(stats.countByHorario).sort(([,a], [,b]) => b.count - a.count);
-             if (sortedHorarios.length > 0) {
-                statsHTML += `<ul style="list-style: disc; padding-left: 20px;">`;
-                sortedHorarios.forEach(([horario, data]) => {
-                    statsHTML += `<li><strong>${horario}:</strong> ${data.count} escalas, ${data.uniquePeople.size} pessoas distintas</li>`;
-                });
-                statsHTML += `</ul>`;
-            } else {
-                statsHTML += `<p>Nenhuma escala ativa encontrada.</p>`;
-            }
-
-            // -- Per Person Stats --
+            if (sortedHorarios.length > 0) { statsHTML += `<ul style="list-style: disc; padding-left: 20px;">`; sortedHorarios.forEach(([horario, data]) => { statsHTML += `<li><strong>${horario}:</strong> ${data.count} escalas, ${data.uniquePeople.size} pessoas distintas</li>`; }); statsHTML += `</ul>`; } else { statsHTML += `<p>Nenhuma escala ativa encontrada.</p>`; }
             statsHTML += `<h4 style="margin-top: 1.5em;">Escalas Ativas por Pessoa</h4>`;
             const sortedPeople = Object.entries(stats.countByPerson).sort(([,a], [,b]) => b.count - a.count || a.hours - b.hours);
-             if (sortedPeople.length > 0) {
-                statsHTML += `<ul style="list-style: none; padding-left: 0;">`;
-                sortedPeople.forEach(([name, data]) => {
-                    statsHTML += `<li style="margin-bottom: 5px;"><strong>${name}:</strong> ${data.count} escalas, ~${data.hours.toFixed(1)}h estimadas</li>`;
-                });
-                statsHTML += `</ul>`;
-            } else {
-                statsHTML += `<p>Nenhuma escala ativa encontrada para análise por pessoa.</p>`;
-            }
-
-            // -- Per Date Specific --
-             statsHTML += `<h4 style="margin-top: 1.5em;">Escalas Ativas por Dia Específico (Top 10)</h4>`;
-             const sortedDates = Object.entries(stats.countByDate).sort(([,a], [,b]) => b.count - a.count);
-             if (sortedDates.length > 0) {
-                 statsHTML += `<ul style="list-style: disc; padding-left: 20px;">`;
-                 sortedDates.slice(0, 10).forEach(([date, data]) => {
-                     statsHTML += `<li><strong>${formatarDataParaExibicao(date)}:</strong> ${data.count} escalas, ${data.uniquePeople.size} pessoas distintas</li>`;
-                 });
-                 if (sortedDates.length > 10) statsHTML += `<li>... (e mais ${sortedDates.length - 10} datas)</li>`;
-                 statsHTML += `</ul>`;
-             } else {
-                 statsHTML += `<p>Nenhuma escala ativa encontrada.</p>`;
-             }
-
-
-            // --- LIMITATIONS / IMPOSSIBLE STATS ---
-            statsHTML += `<hr style="margin: 2em 0 1em 0;">`;
-            statsHTML += `<h4 style="color: #777;">Estatísticas Não Calculadas</h4>`;
-            statsHTML += `<p style="font-size: 0.9em; color: #777;">As seguintes estatísticas solicitadas não puderam ser calculadas devido a dados ausentes no schema atual do Firebase ('disponibilidade', 'eventosData', 'pessoas'):</p>`;
-            statsHTML += `<ul style="font-size: 0.85em; color: #777; list-style: circle; padding-left: 20px;">`;
-            statsHTML += `<li>Percentual de disponibilidade (requer definição clara e possivelmente dados sobre *todos* os eventos oferecidos vs. marcados)</li>`;
-            statsHTML += `<li>Horas não cobertas (requer dados sobre a *necessidade* de escala vs. quem foi escalado)</li>`;
-            statsHTML += `<li>Escalas alteradas (requer histórico de alterações)</li>`;
-            statsHTML += `<li>Comparecimento / Atraso / Escalas cumpridas (requer dados de check-in/check-out)</li>`;
-            statsHTML += `<li>Confirmação de escala (requer status de confirmação)</li>`;
-            statsHTML += `<li>Escalas de última hora (requer timestamp de adição da escala)</li>`;
-            statsHTML += `<li>Escalas por tipo de atividade/cargo/função/localização (requer esses campos)</li>`;
-            statsHTML += `<li>Escalas por faixa etária (requer idade das pessoas)</li>`;
-            statsHTML += `<li>Sobrecarga de escalas (requer número ideal de pessoas por slot)</li>`;
-            statsHTML += `<li>Ajustes solicitados (requer log de solicitações)</li>`;
-            statsHTML += `<li>Escalas em feriados (requer lista de feriados para comparar)</li>`;
-            statsHTML += `<li>Dados sobre cancelamento por pessoa (requer mais detalhes ou ligação pessoa->evento cancelado)</li>`;
-            statsHTML += `<li>Muitas outras estatísticas baseadas em percentuais complexos, histórico, ou dados não presentes...</li>`;
-            statsHTML += `</ul>`;
-
-            // 4. Display the HTML
+            if (sortedPeople.length > 0) { statsHTML += `<ul style="list-style: none; padding-left: 0;">`; sortedPeople.forEach(([name, data]) => { statsHTML += `<li style="margin-bottom: 5px;"><strong>${name}:</strong> ${data.count} escalas, ~${data.hours.toFixed(1)}h estimadas</li>`; }); statsHTML += `</ul>`; } else { statsHTML += `<p>Nenhuma escala ativa encontrada.</p>`; }
+            statsHTML += `<h4 style="margin-top: 1.5em;">Escalas Ativas por Dia Específico (Top 10)</h4>`;
+            const sortedDates = Object.entries(stats.countByDate).sort(([,a], [,b]) => b.count - a.count);
+            if (sortedDates.length > 0) { statsHTML += `<ul style="list-style: disc; padding-left: 20px;">`; sortedDates.slice(0, 10).forEach(([date, data]) => { statsHTML += `<li><strong>${formatarDataParaExibicao(date)}:</strong> ${data.count} escalas, ${data.uniquePeople.size} pessoas distintas</li>`; }); if (sortedDates.length > 10) statsHTML += `<li>... (e mais ${sortedDates.length - 10} datas)</li>`; statsHTML += `</ul>`; } else { statsHTML += `<p>Nenhuma escala ativa encontrada.</p>`; }
+            statsHTML += `<hr style="margin: 2em 0 1em 0;"><h4 style="color: #777;">Estatísticas Não Calculadas</h4><p style="font-size: 0.9em; color: #777;">As seguintes estatísticas solicitadas não puderam ser calculadas:</p><ul style="font-size: 0.85em; color: #777; list-style: circle; padding-left: 20px;">`;
+            statsHTML += `<li>Percentual de disponibilidade</li><li>Horas não cobertas</li><li>Escalas alteradas</li><li>Comparecimento / Atraso / Escalas cumpridas</li><li>Confirmação de escala</li><li>Escalas de última hora</li><li>Escalas por tipo de atividade/cargo/função/localização</li><li>Escalas por faixa etária</li><li>Sobrecarga de escalas</li><li>Ajustes solicitados</li><li>Escalas em feriados</li><li>Dados sobre cancelamento por pessoa</li><li>Etc. (requerem dados adicionais)</li></ul>`;
             contentArea.innerHTML = statsHTML;
-
-        } catch (error) {
-            console.error("Erro ao gerar estatísticas de pessoas:", error);
-            contentArea.innerHTML = `<p style="color: red;">Erro ao carregar e calcular estatísticas: ${error.message}</p>`;
-        }
+        } catch (error) { console.error("Erro ao gerar estatísticas gerais:", error); contentArea.innerHTML = `<p style="color: red;">Erro ao carregar estatísticas: ${error.message}</p>`; }
     }
-    // --- ****** FIM Funções Popup Estatísticas ****** ---
+    // --- FIM Funções Popup Estatísticas Gerais ---
+
+
+    // --- Funções para Popup de Estatísticas INDIVIDUAIS ---
+    function openPersonStatsPopup(personId, personName) {
+        const modal = document.getElementById('popupPersonStatsContainer');
+        const titleEl = document.getElementById('personStatsPopupTitle');
+        const contentArea = document.getElementById('personStatsContentArea');
+        if (!modal || !titleEl || !contentArea) { console.error("Elementos do popup de estatísticas individuais não encontrados."); return; }
+        titleEl.textContent = `Estatísticas: ${personName}`;
+        contentArea.innerHTML = '<p>Carregando e calculando estatísticas...</p>';
+        modal.style.display = 'flex';
+        setTimeout(() => modal.classList.add('visible'), 10);
+        renderPersonStats(personName);
+    }
+
+    function closePersonStatsPopup() {
+        const modal = document.getElementById('popupPersonStatsContainer');
+        if (!modal) return;
+        modal.classList.remove('visible');
+        modal.addEventListener('transitionend', () => {
+            if (!modal.classList.contains('visible')) {
+                modal.style.display = 'none';
+                const contentArea = document.getElementById('personStatsContentArea');
+                const titleEl = document.getElementById('personStatsPopupTitle');
+                if (contentArea) contentArea.innerHTML = '<p>Carregando...</p>';
+                if (titleEl) titleEl.textContent = 'Estatísticas Individuais';
+            }
+        }, { once: true });
+    }
+
+    async function renderPersonStats(personName) {
+        const contentArea = document.getElementById('personStatsContentArea');
+        if (!contentArea) return;
+        try {
+            // Ensure base data is loaded
+             if (eventosDataMap.size === 0) await loadDatas();
+
+            console.log(`Fetching availability for ${personName}...`);
+            const q = query(disponibilidadeCollectionRef, where("nome", "==", personName));
+            const personDisponibilidadeSnapshot = await getDocs(q);
+            const personDisponibilidade = personDisponibilidadeSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            console.log(`Found ${personDisponibilidade.length} records for ${personName}.`);
+
+            if (personDisponibilidade.length === 0) { contentArea.innerHTML = '<p>Nenhum registro de disponibilidade encontrado para esta pessoa.</p>'; return; }
+
+            // Process Person's Data
+            const personStats = { totalActiveScales: 0, totalCanceledScales: 0, totalEstimatedHours: 0, scalesByMonth: {}, scalesByWeek: {}, scalesByWeekday: {}, scalesByHorario: {}, teamworkScales: 0, scalesOnWeekends: 0 };
+
+             // Fetch all availability data again for teamwork check - Consider optimization if performance is an issue
+             console.log("Fetching *all* availability for teamwork check (individual stats)...");
+             const allDisponibilidadeSnapshot = await getDocs(query(disponibilidadeCollectionRef));
+             const allDisponibilidadeMap = new Map(); // Map: "date|horario" -> Set of names
+             allDisponibilidadeSnapshot.forEach(doc => {
+                 const d = doc.data();
+                 if (d.dataOriginal && d.horario && d.nome) {
+                    const key = `${d.dataOriginal}|${d.horario}`;
+                    if (!allDisponibilidadeMap.has(key)) allDisponibilidadeMap.set(key, new Set());
+                    allDisponibilidadeMap.get(key).add(d.nome);
+                 }
+             });
+             console.log("Finished teamwork check processing.");
+
+            personDisponibilidade.forEach(disp => {
+                const evento = eventosDataMap.get(disp.dataOriginal);
+                const isEventoAtivo = evento && evento.estado !== 'cancelado';
+                if (isEventoAtivo) {
+                    personStats.totalActiveScales++;
+                    const monthKey = disp.dataOriginal.substring(0, 7); const weekKey = disp.semana || `Semana de ${disp.dataOriginal}`; const weekdayKey = disp.diasemana || 'Dia Desconhecido'; const horarioKey = disp.horario;
+                    personStats.scalesByMonth[monthKey] = (personStats.scalesByMonth[monthKey] || 0) + 1;
+                    personStats.scalesByWeek[weekKey] = (personStats.scalesByWeek[weekKey] || 0) + 1;
+                    personStats.scalesByWeekday[weekdayKey] = (personStats.scalesByWeekday[weekdayKey] || 0) + 1;
+                    personStats.scalesByHorario[horarioKey] = (personStats.scalesByHorario[horarioKey] || 0) + 1;
+                    const duration = parseHorarioDuration(disp.horario);
+                    if (duration !== null) personStats.totalEstimatedHours += duration;
+                    const slotKey = `${disp.dataOriginal}|${disp.horario}`;
+                    if (allDisponibilidadeMap.has(slotKey) && allDisponibilidadeMap.get(slotKey).size > 1) personStats.teamworkScales++;
+                    if (weekdayKey === 'Sábado' || weekdayKey === 'Domingo') personStats.scalesOnWeekends++;
+                } else {
+                    personStats.totalCanceledScales++;
+                }
+            });
+
+            // Build Output HTML
+            let statsHTML = `<h4>Resumo de ${personName} (Eventos Ativos)</h4><ul style="list-style: disc; padding-left: 20px;">`;
+            statsHTML += `<li>Total de Escalas Ativas: <strong>${personStats.totalActiveScales}</strong></li>`;
+            statsHTML += `<li>Total Estimado de Horas (Escalas Ativas): <strong>${personStats.totalEstimatedHours.toFixed(1)}h</strong></li>`;
+            statsHTML += `<li>Escalas com Colegas (mesmo horário): <strong>${personStats.teamworkScales}</strong></li>`;
+            statsHTML += `<li>Escalas em Fins de Semana (Sáb/Dom): <strong>${personStats.scalesOnWeekends}</strong></li>`;
+            statsHTML += `<li>Registros para Eventos Cancelados/Inexistentes: <strong>${personStats.totalCanceledScales}</strong></li></ul>`;
+            statsHTML += `<h4>Escalas Ativas por Mês</h4>`;
+            const sortedMonths = Object.keys(personStats.scalesByMonth).sort();
+            if (sortedMonths.length > 0) { statsHTML += `<ul style="list-style: disc; padding-left: 20px;">`; sortedMonths.forEach(month => { const [y, m] = month.split('-'); const monthName = capitalize(new Date(Date.UTC(y, m - 1, 1)).toLocaleDateString('pt-PT', { timeZone: 'UTC', month: 'long', year: 'numeric' })); statsHTML += `<li><strong>${monthName}:</strong> ${personStats.scalesByMonth[month]} escalas</li>`; }); statsHTML += `</ul>`; } else { statsHTML += `<p>Nenhuma escala ativa.</p>`; }
+            statsHTML += `<h4>Escalas Ativas por Semana (Últimas 10)</h4>`;
+            const sortedWeeks = Object.keys(personStats.scalesByWeek).sort((a, b) => { const dateA = a.match(/\d{4}-\d{2}-\d{2}/)?.[0] || a; const dateB = b.match(/\d{4}-\d{2}-\d{2}/)?.[0] || b; return dateA.localeCompare(dateB); });
+            if (sortedWeeks.length > 0) { statsHTML += `<ul style="list-style: disc; padding-left: 20px;">`; const weeksToShow = sortedWeeks.slice(-10); weeksToShow.forEach(week => { statsHTML += `<li><strong>${week}:</strong> ${personStats.scalesByWeek[week]} escalas</li>`; }); if (sortedWeeks.length > 10) statsHTML += `<li>... (e mais ${sortedWeeks.length - 10} semanas)</li>`; statsHTML += `</ul>`; } else { statsHTML += `<p>Nenhuma escala ativa.</p>`; }
+            statsHTML += `<h4>Escalas Ativas por Dia da Semana</h4>`;
+            const sortedWeekdays = Object.keys(personStats.scalesByWeekday).sort((a, b) => DIAS_SEMANA_NOMES_COMPLETOS.indexOf(a) - DIAS_SEMANA_NOMES_COMPLETOS.indexOf(b));
+            if (sortedWeekdays.length > 0) { statsHTML += `<ul style="list-style: disc; padding-left: 20px;">`; sortedWeekdays.forEach(day => { statsHTML += `<li><strong>${day}:</strong> ${personStats.scalesByWeekday[day]} escalas</li>`; }); statsHTML += `</ul>`; } else { statsHTML += `<p>Nenhuma escala ativa.</p>`; }
+            statsHTML += `<h4>Escalas Ativas por Horário</h4>`;
+            const sortedHorarios = Object.entries(personStats.scalesByHorario).sort(([,a], [,b]) => b - a);
+            if (sortedHorarios.length > 0) { statsHTML += `<ul style="list-style: disc; padding-left: 20px;">`; sortedHorarios.forEach(([horario, count]) => { statsHTML += `<li><strong>${horario}:</strong> ${count} escalas</li>`; }); statsHTML += `</ul>`; } else { statsHTML += `<p>Nenhuma escala ativa.</p>`; }
+            statsHTML += `<hr style="margin: 2em 0 1em 0;"><h4 style="color: #777;">Estatísticas Individuais Não Calculadas</h4><p style="font-size: 0.9em; color: #777;">Muitas estatísticas individuais (confirmação, atraso, falta, cancelamentos pela pessoa, alterações, etc.) não podem ser calculadas pois requerem dados adicionais não presentes no sistema.</p>`;
+            contentArea.innerHTML = statsHTML;
+        } catch (error) { console.error(`Erro ao gerar estatísticas para ${personName}:`, error); contentArea.innerHTML = `<p style="color: red;">Erro ao carregar estatísticas para ${personName}: ${error.message}</p>`; }
+    }
+    // --- FIM Funções Popup Estatísticas INDIVIDUAIS ---
 
 
     // --- Inicialização ---
@@ -2153,7 +1939,7 @@
         window.removerNome = removerNome;
         window.filterNomes = filterNomes;
         window.renderCalendario = renderCalendario;
-        window.toggleListVisibility = toggleListVisibility;
+        window.toggleListVisibility = toggleListVisibility; // Corrected version is included above
         window.openPopupResumo = openPopupResumo;
         window.closePopupResumo = closePopupResumo;
         window.removerConfirmacao = removerConfirmacao;
@@ -2162,30 +1948,32 @@
         window.openSugestoesPopup = openSugestoesPopup;
         window.closeSugestoesPopup = closeSugestoesPopup;
         window.filterSugestoes = filterSugestoes;
-        window.openStatsPessoasPopup = openStatsPessoasPopup;   // <-- Stats Popup Func
-        window.closeStatsPessoasPopup = closeStatsPessoasPopup; // <-- Stats Popup Func
+        window.openStatsPessoasPopup = openStatsPessoasPopup;
+        window.closeStatsPessoasPopup = closeStatsPessoasPopup;
+        window.openPersonStatsPopup = openPersonStatsPopup;     // Individual Stats Func
+        window.closePersonStatsPopup = closePersonStatsPopup;   // Individual Stats Func
 
         console.log("Initializing Admin Panel...");
         try {
-            // Load base data
+            // Load base data concurrently
             await Promise.all([
                loadSuggestionRulesFromFirestore(),
                loadNomes(),
                loadDatas()
             ]);
 
-            // Render initial UI elements that depend on base data
+            // Render initial UI elements
             renderActiveRules();
-            renderNomes();
+            renderNomes(); // Includes individual stats button
 
-            // Generate suggestions (depends on rules/dates) and render related UI
-            await gerarEAtualizarSugestoesFirestore(); // Also calls renderSugestoesVisiveis inside
+            // Generate suggestions and render related UI
+            await gerarEAtualizarSugestoesFirestore(); // Includes renderSugestoesVisiveis
 
             // Render other UI elements
             await renderDatasCriadas();
-            await renderCalendario(); // Renders calendar, depends on dates and processes initial availability
+            await renderCalendario(); // Includes processing initial availability
 
-            // Activate default suggestion filter button ('Este Mês')
+            // Activate default suggestion filter button
             const initialButton = document.querySelector('#sugestoesFilterButtons .suggestion-filter-btn[data-offset="0"]');
             if (initialButton) {
                  document.querySelectorAll('#sugestoesFilterButtons .suggestion-filter-btn.active').forEach(b => b.classList.remove('active'));
@@ -2194,19 +1982,20 @@
 
             console.log("Admin Panel Initialization complete.");
 
-        } catch (e) { // Catch errors during the initialization sequence
+        } catch (e) {
             console.error("Error during initial data loading/rendering:", e);
             const errorDiv = document.createElement('div');
             errorDiv.innerHTML = `<p style="color: red; background: #ffebee; border: 1px solid red; padding: 10px; text-align: center; margin: 15px;">Erro ao carregar dados iniciais: ${e.message}. Verifique console (F12).</p>`;
             document.body.insertAdjacentElement('afterbegin', errorDiv);
-        } // End of main try...catch for initialization
+        }
 
-        // Add listeners for closing modals by clicking overlay backdrop AFTER initialization attempt
+        // Add listeners for closing modals by clicking overlay backdrop
         document.getElementById('popupResumoContainer')?.addEventListener('click', (e) => { if(e.target === e.currentTarget) closePopupResumo(); });
         document.getElementById('popupSugestoesContainer')?.addEventListener('click', (e) => { if(e.target === e.currentTarget) closeSugestoesPopup(); });
         document.getElementById('popupStatsPessoasContainer')?.addEventListener('click', (e) => { if(e.target === e.currentTarget) closeStatsPessoasPopup(); });
+        document.getElementById('popupPersonStatsContainer')?.addEventListener('click', (e) => { if(e.target === e.currentTarget) closePersonStatsPopup(); });
 
-    }; // End window.onload function assignment
+    }; // End window.onload
 
   </script>
 
